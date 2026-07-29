@@ -1,0 +1,133 @@
+{
+  "version": "poi.commitment.vectors.v1",
+  "formula": "keccak256(TAG(32) || chainId(uint256 BE,32) || attester(20) || salt(16) || utf8(JCS(payload)))",
+  "spec": "POI_TechSpec_v3.md §4.3 / E1",
+  "note": "기대값은 cast keccak(Foundry)으로 생성. TS·Solidity가 각각 재현해야 한다.",
+  "caseCount": 6,
+  "tags": {
+    "DECISION": {
+      "preimage": "poi.commit.decision.v1",
+      "tag": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee"
+    },
+    "TRIGGER": {
+      "preimage": "poi.commit.trigger.v1",
+      "tag": "0xcbfc5b8f31466964bcb076dc076ecb979575de33a09c3b37262d7c3c505bd47d"
+    },
+    "EVIDENCE": {
+      "preimage": "poi.commit.evidence.v1",
+      "tag": "0xe3a32bed60156b7366c02dc824d4b1bcb895c1caa75b14f075e1f78a5e572529"
+    },
+    "REASON": {
+      "preimage": "poi.commit.reason.v1",
+      "tag": "0x59aaae2f05801baa1db257a2d08a5ca879c0ef1d9f78903b88eceae4a04d5d87"
+    },
+    "NOTE": {
+      "preimage": "poi.commit.note.v1",
+      "tag": "0x40f306b4215bd88d05c24b49009d1e0ac1cf241eb3b26ccc3f86619faa68334a"
+    }
+  },
+  "cases": [
+    {
+      "name": "decision_ko",
+      "description": "한글 UTF-8 + 키 정렬(committedAt < decision)",
+      "tagName": "DECISION",
+      "tag": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee",
+      "chainId": 91342,
+      "attester": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "salt": "0x000102030405060708090a0b0c0d0e0f",
+      "payload": {
+        "decision": "BTC 비중을 40%에서 25%로 줄인다",
+        "committedAt": "2026-07-27T12:00:00Z"
+      },
+      "jcs": "{\"committedAt\":\"2026-07-27T12:00:00Z\",\"decision\":\"BTC 비중을 40%에서 25%로 줄인다\"}",
+      "preimage": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee00000000000000000000000000000000000000000000000000000000000164cef39fd6e51aad88f6f4ce6ab8827279cfffb92266000102030405060708090a0b0c0d0e0f7b22636f6d6d69747465644174223a22323032362d30372d32375431323a30303a30305a222c226465636973696f6e223a2242544320ebb984eca491ec9d8420343025ec9790ec849c20323525eba19c20eca484ec9db8eb8ba4227d",
+      "commitment": "0xd4d655753b4f4d5fef3e83b9d5a0f6ae11a487293eaec24cd956af5eb1ccd978"
+    },
+    {
+      "name": "trigger_ko",
+      "description": "단일 키",
+      "tagName": "TRIGGER",
+      "tag": "0xcbfc5b8f31466964bcb076dc076ecb979575de33a09c3b37262d7c3c505bd47d",
+      "chainId": 91342,
+      "attester": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "salt": "0x000102030405060708090a0b0c0d0e0f",
+      "payload": {
+        "trigger": "30일 실현변동성 60% 초과"
+      },
+      "jcs": "{\"trigger\":\"30일 실현변동성 60% 초과\"}",
+      "preimage": "0xcbfc5b8f31466964bcb076dc076ecb979575de33a09c3b37262d7c3c505bd47d00000000000000000000000000000000000000000000000000000000000164cef39fd6e51aad88f6f4ce6ab8827279cfffb92266000102030405060708090a0b0c0d0e0f7b2274726967676572223a223330ec9dbc20ec8ba4ed9884ebb380eb8f99ec84b12036302520ecb488eab3bc227d",
+      "commitment": "0xc2d7c4e64276af09b7f7d10ad00e0936a46288a7629e5d4784ec03cd326d73da"
+    },
+    {
+      "name": "note_mixed_types",
+      "description": "불리언·숫자·배열(순서 보존)·중첩 객체(키 정렬)",
+      "tagName": "NOTE",
+      "tag": "0x40f306b4215bd88d05c24b49009d1e0ac1cf241eb3b26ccc3f86619faa68334a",
+      "chainId": 91342,
+      "attester": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "salt": "0xfedcba98765432100123456789abcdef",
+      "payload": {
+        "b": true,
+        "n": 1.5,
+        "arr": [
+          3,
+          1,
+          2
+        ],
+        "o": {
+          "z": 1,
+          "a": 2
+        },
+        "s": "x"
+      },
+      "jcs": "{\"arr\":[3,1,2],\"b\":true,\"n\":1.5,\"o\":{\"a\":2,\"z\":1},\"s\":\"x\"}",
+      "preimage": "0x40f306b4215bd88d05c24b49009d1e0ac1cf241eb3b26ccc3f86619faa68334a00000000000000000000000000000000000000000000000000000000000164cef39fd6e51aad88f6f4ce6ab8827279cfffb92266fedcba98765432100123456789abcdef7b22617272223a5b332c312c325d2c2262223a747275652c226e223a312e352c226f223a7b2261223a322c227a223a317d2c2273223a2278227d",
+      "commitment": "0x18108f6a0f8cf9126630cde7efd09ff5b5f6145c7870bf41ce61b2bec0714315"
+    },
+    {
+      "name": "evidence_empty",
+      "description": "빈 객체 — commitment는 0이 아니어야 한다",
+      "tagName": "EVIDENCE",
+      "tag": "0xe3a32bed60156b7366c02dc824d4b1bcb895c1caa75b14f075e1f78a5e572529",
+      "chainId": 91342,
+      "attester": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "salt": "0x000102030405060708090a0b0c0d0e0f",
+      "payload": {},
+      "jcs": "{}",
+      "preimage": "0xe3a32bed60156b7366c02dc824d4b1bcb895c1caa75b14f075e1f78a5e57252900000000000000000000000000000000000000000000000000000000000164cef39fd6e51aad88f6f4ce6ab8827279cfffb92266000102030405060708090a0b0c0d0e0f7b7d",
+      "commitment": "0x9a6e51b69566e7a7ba65e94e14753982ff5af24f7482a30d4e04768ea26d68da"
+    },
+    {
+      "name": "decision_bob",
+      "description": "★ attester만 다름 — decision_ko와 달라야 한다 (B3 복사 공격 차단)",
+      "tagName": "DECISION",
+      "tag": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee",
+      "chainId": 91342,
+      "attester": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+      "salt": "0x000102030405060708090a0b0c0d0e0f",
+      "payload": {
+        "decision": "BTC 비중을 40%에서 25%로 줄인다",
+        "committedAt": "2026-07-27T12:00:00Z"
+      },
+      "jcs": "{\"committedAt\":\"2026-07-27T12:00:00Z\",\"decision\":\"BTC 비중을 40%에서 25%로 줄인다\"}",
+      "preimage": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee00000000000000000000000000000000000000000000000000000000000164ce70997970c51812dc3a010c7d01b50e0d17dc79c8000102030405060708090a0b0c0d0e0f7b22636f6d6d69747465644174223a22323032362d30372d32375431323a30303a30305a222c226465636973696f6e223a2242544320ebb984eca491ec9d8420343025ec9790ec849c20323525eba19c20eca484ec9db8eb8ba4227d",
+      "commitment": "0x4be1f4fbd10f53c163c304a1a9654b0719cde02421bf7a48d6862a8cc662c105"
+    },
+    {
+      "name": "decision_chain1",
+      "description": "★ chainId만 다름 — decision_ko와 달라야 한다 (체인 간 재사용 차단)",
+      "tagName": "DECISION",
+      "tag": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee",
+      "chainId": 1,
+      "attester": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "salt": "0x000102030405060708090a0b0c0d0e0f",
+      "payload": {
+        "decision": "BTC 비중을 40%에서 25%로 줄인다",
+        "committedAt": "2026-07-27T12:00:00Z"
+      },
+      "jcs": "{\"committedAt\":\"2026-07-27T12:00:00Z\",\"decision\":\"BTC 비중을 40%에서 25%로 줄인다\"}",
+      "preimage": "0x28ad09e955e48576f22a18b5df53db3e7a2c7f26c0a543cac0caab1ed82c69ee0000000000000000000000000000000000000000000000000000000000000001f39fd6e51aad88f6f4ce6ab8827279cfffb92266000102030405060708090a0b0c0d0e0f7b22636f6d6d69747465644174223a22323032362d30372d32375431323a30303a30305a222c226465636973696f6e223a2242544320ebb984eca491ec9d8420343025ec9790ec849c20323525eba19c20eca484ec9db8eb8ba4227d",
+      "commitment": "0x4d72b447254061a0db552e07342df638bbd6170b74500435215ce9eaf623c68a"
+    }
+  ]
+}

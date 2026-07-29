@@ -1,0 +1,9 @@
+packages:
+  - core
+
+# esbuild 바이너리가 빠지면 설치는 성공해도 Vite가 실행되지 않으므로 설치 단계에서 허용한다.
+allowBuilds:
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
