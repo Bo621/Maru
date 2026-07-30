@@ -133,9 +133,27 @@ test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는�
 test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 나온다", async ({page}) => {
     // 모든 창에 같은 종가를 흘려보낸다. `to`(창 종료) 직전 1분에 닫히는 봉 하나만 돌려주면
     // 창 길이와 무관하게 pickObservedClose가 그 봉을 고른다.
-    // 온체인 결정 10건에 이 값(91,829,000원)을 대입하면 8건은 맞고 2건은 틀린다 —
+    // 아래 시드 10건에 이 값(91,829,000원)을 대입하면 8건은 맞고 2건은 틀린다 —
     // 조건식(threshold·op)이 서로 다르기 때문이다. 창은 이미 닫힌 과거라 이 대응은 불변이다.
+    //
+    // 카운트는 전역이 아니라 이 10개 UID로 스코프한다. 피드는 살아있는 온체인 결정을
+    // 계속 얹으므로, 새로 발행된 결정의 관측 창이 닫혀 판정이 하나 더 붙어도
+    // 이 단언은 영향을 받지 않아야 한다.
     const OBSERVED_CLOSE = 91_829_000;
+    const MATCH_UIDS = [
+        "0x3f592f21a7e5a733d3dd90caeb2f9ec35bffa335b69da7310749694283e16938",
+        "0x5941a398a8338b99d053309cbf5e611486f30e649c9569cfa3a63d5060443888",
+        "0xb1e4628344ade15e9779b4f0398f3d6ddf820b92094c4c84fe8304a68a683b21",
+        "0xe015bb0a57ef32f7fa579a0ed7951555405ea6febdbe63fb4ceece0e468786db",
+        "0x5d2a066cec47c29327e955c11a46ca028fe8a8ecda62cffc8b29bf4441570606",
+        "0x0ae1540a08fd1f55c52918335b57188ef927aabcc69e75f61e44f8321369185c",
+        "0xf34f7a9501a43cd94b74be8cfc7cefede912b05d6e6cca7b0739d4ac5628ef16",
+        "0xcb4793731ac5827850b54431fd3bbda815a13ea38626a3ca060a0ac327599e5a",
+    ];
+    const MISMATCH_UIDS = [
+        "0x475a073966f2abc794e8a8e90e8f6918cbf4d18c3ca1830f2fc8039c463d0d8c",
+        "0x7f810797670284bebd2b89f40ec7fee7c4bed681f2d53bcc7047af144e3b3183",
+    ];
     await page.route("**/api.upbit.com/**", async (route) => {
         const url = new URL(route.request().url());
         const windowEndMs = Date.parse(url.searchParams.get("to") ?? "");
@@ -156,10 +174,15 @@ test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 
 
     // 제품의 명제는 틀린 판단이 그대로 남는다는 것이다.
     // 맞음만 보이면 이 화면은 자랑판이지 증명이 아니다.
-    // 고정 응답이므로 정확한 수를 안다. "0건이 아니다"로는 카드가 사라져도 통과한다.
-    await expect(page.locator("[data-verdict]")).toHaveCount(10);
-    await expect(page.locator('[data-verdict="match"]')).toHaveCount(8);
-    await expect(page.locator('[data-verdict="mismatch"]')).toHaveCount(2);
+    // 시드 10건으로 정확히 스코프하므로 정확한 수를 안다. "0건이 아니다"로는 카드가 사라져도 통과한다.
+    for (const uid of MATCH_UIDS) {
+        await expect(page.locator(`[data-uid="${uid}"] [data-verdict]`)).toHaveCount(1);
+        await expect(page.locator(`[data-uid="${uid}"] [data-verdict="match"]`)).toHaveCount(1);
+    }
+    for (const uid of MISMATCH_UIDS) {
+        await expect(page.locator(`[data-uid="${uid}"] [data-verdict]`)).toHaveCount(1);
+        await expect(page.locator(`[data-uid="${uid}"] [data-verdict="mismatch"]`)).toHaveCount(1);
+    }
 
     // 배지 자체가 출처를 밝히는지 — hover 에만 있으면 온체인 기록으로 읽힌다.
     await expect(page.locator("[data-verdict]").first()).toContainText("화면 재계산");
@@ -167,6 +190,13 @@ test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 
 
     // 전역 고지도 보이는지.
     await expect(page.getByText("판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.")).toBeVisible();
+});
+
+test("S10 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다", async ({page}) => {
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+    await page.goto("/#/write");
+    await expect(page.getByText("판단을 발행하려면 지갑을 연결해 주세요.")).toBeVisible();
 });
 
 test("@smoke S8-실서비스 업비트를 실제로 불러 판정이 뜬다", async ({page}) => {
