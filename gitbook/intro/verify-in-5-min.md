@@ -1,8 +1,8 @@
 # 지갑 없이 5분 확인
 
-**마루의 주장은 "우리를 믿어라"가 아니다. 아래는 전부 직접 확인할 수 있다.**
+**아래 항목은 지갑 없이 직접 확인할 수 있다.**
 
-준비물은 브라우저와 `cast`(Foundry)뿐이다. 지갑도 가스도 필요 없다 — 읽기만 한다.
+준비물은 브라우저와 `cast`(Foundry)뿐이다. 지갑도 가스도 필요 없다. 읽기만 한다.
 
 ```bash
 export RPC=https://sepolia-rpc.giwa.io/
@@ -18,7 +18,7 @@ export SETTLEMENT_RESOLVER=0x167cf06df663c5ddde9f20a748e724b4fb6c14fa
 https://maru-web-production-0407.up.railway.app/#/feed
 ```
 
-이 화면은 브라우저가 GIWA Sepolia RPC를 직접 읽는다. 백엔드가 없다 — 지갑을
+이 화면은 브라우저가 GIWA Sepolia RPC를 직접 읽는다. 백엔드가 없어서, 지갑을
 연결하지 않아도, `Connect Wallet` 버튼을 누르지 않아도 결정 목록이 그대로 뜬다.
 
 ## 2. 마루가 가리키는 컨트랙트가 실제로 GIWA에 있다
@@ -29,7 +29,7 @@ cast code $SETTLEMENT_RESOLVER --rpc-url $RPC | head -c 20
 ```
 
 둘 다 빈 바이트코드가 아니어야 한다. 익스플로러에서 소스도 검증돼 있다
-(`Pass - Verified`) — 주소는 [배포와 주소](deployed.md)에 있다.
+(`Pass - Verified`). 주소는 [배포와 주소](deployed.md)에 있다.
 
 **마루는 이 주소를 소유하지 않는다.** POI 프로토콜이 배포한 컨트랙트를
 읽기만 한다. `scripts/check_docs_onchain.mjs`가 이 사실을 배포마다 재확인한다
@@ -42,7 +42,7 @@ https://maru-web-production-0407.up.railway.app/#/feed?verified=1&match=2
 ```
 
 이 링크를 열면 도장 검증 지갑만, 그중 활성 정산이 2건 이상인 발행자만 남는다.
-URL을 복사해 새 창에 붙여도 같은 필터가 유지된다 — 조건부 커뮤니티 링크의
+URL을 복사해 새 창에 붙여도 같은 필터가 유지된다. 조건부 커뮤니티 링크의
 최소 형태다. `match`는 이름과 달리 **MATCH 판정 수가 아니라 발행자별 활성
 정산 건수**다. 발행자가 이 조건을 통과하면 그 발행자의 미정산 결정도 함께
 남는다. 왜 그런지는 [무엇이 증명되고 무엇이 안 되나](../problem/what-is-proven.md)에
@@ -66,11 +66,11 @@ cast call $EAS \
 ```
 
 반환 타입을 튜플로 묶고 여섯 번째 필드(`refUID`, bytes32)를 넣은 것에
-주의해라. 이 필드를 빼면 `cast`가 나머지 필드를 한 칸씩 밀어서 디코딩한다 —
+주의해라. 이 필드를 빼면 `cast`가 나머지 필드를 한 칸씩 밀어서 디코딩한다.
 호출은 성공하지만 값이 전부 틀리게 나온다.
 
 마지막 필드(`data`)가 결정 본문의 raw ABI-encoded bytes다. 필드 순서를 손으로
-디코딩할 필요는 없다 — 다음 단계의 verifier CLI가 이미 그 디코딩을 포함해서
+디코딩할 필요는 없다. 다음 단계의 verifier CLI가 이미 그 디코딩을 포함해서
 재계산한다. 여기서 확인할 것은 **attestation이 실제로 존재하고 스키마 UID가
 `0x88990bf8…`인가**뿐이다(두 번째 반환 필드).
 
@@ -95,7 +95,7 @@ node --experimental-strip-types verifier/src/cli.ts \
   0x3f592f21a7e5a733d3dd90caeb2f9ec35bffa335b69da7310749694283e16938 --json
 ```
 
-**기대**: `MATCH` — 등록된 관측값이 재계산과 같다. `MATCH`는 "예측이 맞았다"가
+**기대**: `MATCH`, 즉 등록된 관측값이 재계산과 같다. `MATCH`는 "예측이 맞았다"가
 아니다. 이 구분은 [테스트 구성](../verify/tests.md)과
 [검증기로 잇기](../verify/cli.md)에서 다시 다룬다.
 
@@ -104,7 +104,7 @@ node --experimental-strip-types verifier/src/cli.ts \
 REASON 커밋이 있는 결정을 열면 인용 블록으로 이유 원문이 보인다. 이건 화면이
 `public/reveals/<uid>.REASON.json`의 `(salt, payload)`로 온체인 `reasonCommitment`를
 재계산해 일치할 때만 렌더한 것이다. 파일을 고치면(예: 로컬에서 payload 한 글자
-수정) 표시가 사라진다 — 원문은 커밋의 증거지, 커밋이 원문을 만들지 않는다.
+수정) 표시가 사라진다. 원문은 커밋의 증거일 뿐, 커밋이 원문을 만들지 않는다.
 `verifyReveal`이 정확히 무엇을 증명하는지는 [이유 원문과 해시 대조](../design/reason.md)에
 있다.
 

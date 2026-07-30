@@ -1,7 +1,7 @@
 # 배포와 주소
 
 > 마루는 이 컨트랙트를 배포하지 않았다. POI 프로토콜이 배포했고, 마루는
-> 기존 스키마로 읽고 쓰기만 한다 — [새 컨트랙트 0개](../protocol/no-contracts.md).
+> 기존 스키마로 읽고 쓰기만 한다. 자세한 내용은 [새 컨트랙트 0개](../protocol/no-contracts.md)에 있다.
 
 ## 체인
 
@@ -34,13 +34,13 @@
 https://maru-web-production-0407.up.railway.app     HTTP 200
 ```
 
-Railway 서비스는 POI(`poi-static-production`)와 **별도**다 — 같은 컨트랙트를
+Railway 서비스는 POI(`poi-static-production`)와 **별도**다. 같은 컨트랙트를
 가리키지만 다른 저장소, 다른 배포 파이프라인이다.
 
 ## 배포 블록
 
 `31997246`부터 로그를 읽는다. 공개 RPC가 `eth_getLogs`를 90,000블록 단위로
-제한하므로, 이 블록부터 최신까지 청크로 나눠 읽는다 — 마지막 청크는
+제한하므로, 이 블록부터 최신까지 청크로 나눠 읽는다. 마지막 청크는
 `toBlock: "latest"`를 써야 방금 채굴된 블록을 놓치지 않는다.
 
 ## 주소가 맞는지 스스로 확인하는 검사
