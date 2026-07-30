@@ -17,6 +17,14 @@ describe("해시 라우팅", () => {
             name: "passport",
             address: MIXED_ADDRESS.toLowerCase(),
         });
+        expect(parseRoute(`#/p/${MIXED_ADDRESS}`)).toEqual({
+            name: "passport",
+            address: MIXED_ADDRESS.toLowerCase(),
+        });
+        expect(routeToHash({
+            name: "passport",
+            address: MIXED_ADDRESS.toLowerCase() as `0x${string}`,
+        })).toBe(`#/p/${MIXED_ADDRESS.toLowerCase()}`);
     });
 
     it("결정 상세와 검증 경로를 구분한다", () => {

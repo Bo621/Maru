@@ -3,7 +3,7 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 repo_root="$(cd "$script_dir/.." && pwd -P)"
-source_dir="${CORE_SOURCE:-$(cd "$repo_root/../GIWA/core" && pwd -P)}"
+source_dir="${CORE_SOURCE:-$repo_root/../GIWA/core}"
 target_dir="$repo_root/core"
 
 if [[ ! -f "$source_dir/package.json" || ! -d "$source_dir/src" ]]; then
@@ -19,4 +19,4 @@ rsync -a --delete \
     --exclude .DS_Store \
     "$source_dir/" "$target_dir/"
 
-"$script_dir/check_core_sync.sh"
+"$script_dir/check_core_sync.sh" --write-manifest
