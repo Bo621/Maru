@@ -193,7 +193,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
   font:400 .76rem/1.6 var(--mono);color:var(--ink-soft)}
 .step .ex b{color:var(--ink);font-weight:500}
 
-/* ── S1~S10 시나리오 그리드 ─────────────── */
+/* ── S1~S12 시나리오 그리드 ─────────────── */
 .scen{display:grid;gap:clamp(.8rem,1.6vw,1.2rem);grid-template-columns:repeat(auto-fit,minmax(20rem,1fr));
   margin-top:clamp(1rem,2vw,1.6rem);max-width:min(100%,78rem)}
 .scen div{padding:clamp(.7rem,1.4vw,1rem) 0 0;border-top:1px solid var(--rule)}
@@ -511,16 +511,17 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide dense">
   <div class="tag">// 12 <b>지금 살아 있는 것</b></div>
   <h2>온체인 수치 · 검증기 <em>MATCH</em> · 테스트</h2>
+  <p class="quiet">온체인 수치는 결정이 계속 발행되는 만큼 계속 바뀐다 — 2026-07-31 02:39 KST 기준.</p>
   <div class="tblwrap"><table>
     <tr><td>새로 배포한 컨트랙트</td><td class="hot">0개 — 저장소에 contracts/ 자체가 없다</td></tr>
-    <tr><td>결정 어테스테이션</td><td>14건 · 발행자 지갑 2개</td></tr>
+    <tr><td>결정 어테스테이션</td><td>16건 · 발행자 지갑 2개</td></tr>
     <tr><td>활성 정산</td><td>11건 · 입장 변경 이력(parents) 2건</td></tr>
-    <tr><td>REASON 커밋</td><td>9건 · 도장 검증 스냅샷 10건</td></tr>
-    <tr><td>아직 창이 열린 결정</td><td>3건</td></tr>
+    <tr><td>REASON 커밋</td><td>9건 · 도장 검증 스냅샷 12건</td></tr>
+    <tr><td>아직 창이 열린 결정</td><td>2건</td></tr>
     <tr><td>POI verifier CLI 재검증</td><td class="yes">11건 전부 MATCH</td></tr>
-    <tr><td>단위 테스트 (vitest)</td><td>163개 / 19 파일</td></tr>
-    <tr><td>E2E (Playwright, 실제 체인)</td><td>13개 — 기본 게이트 12 + 실서비스 스모크 1</td></tr>
-    <tr><td>심사 시나리오</td><td>S1~S12 — S1~S10 은 지갑 없이 확인 가능</td></tr>
+    <tr><td>단위 테스트 (vitest)</td><td>171개 / 20 파일</td></tr>
+    <tr><td>E2E (Playwright, 실제 체인)</td><td>14개 — 기본 게이트 13 + 실서비스 스모크 1</td></tr>
+    <tr><td>심사 시나리오</td><td>S1~S12 — 전부 지갑 없이 확인 가능</td></tr>
   </table></div>
   <pre><a href="https://maru-web-production-0407.up.railway.app" target="_blank" rel="noopener"><b>https://maru-web-production-0407.up.railway.app</b></a>  <span style="color:var(--ink-faint)">← HTTP 200 · 지갑 없이 열립니다</span></pre>
 </section>
@@ -528,7 +529,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <!-- 14 ★ 심사자가 5분에 확인하는 법 ─────────── -->
 <section class="slide dense">
   <div class="tag">// 13 <b>심사자가 5분에 확인하는 법</b></div>
-  <h2>S1~S10 — <em>지갑 없이</em></h2>
+  <h2>S1~S12 — <em>지갑 없이</em></h2>
   <div class="scen">
     <div><b>S1</b><span>/#/feed 를 연다 → 여러 지갑의 결정이 시간 역순으로 나열된다</span></div>
     <div><b>S2</b><span>「도장 검증 지갑만」을 켠다 → 검증 스냅샷이 붙은 결정만 남는다</span></div>
@@ -540,8 +541,10 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <div><b>S8</b><span>관측이 끝난 결정에 판정이 붙는다 → 업비트 1분봉 재계산 맞음·틀림, 틀린 것도 숨기지 않는다</span></div>
     <div><b>S9</b><span>팔로우를 누르고 팔로우 탭으로 간다 → 「이 브라우저에만 저장됩니다」 고지가 보인다</span></div>
     <div><b>S10</b><span>「곧 결과 나옴」 탭 → 아직 창이 안 닫힌 판단이 마감 임박 순으로 뜬다</span></div>
+    <div><b>S11</b><span>지갑 없이 「판단 발행」 화면을 연다 → 「판단을 발행하려면 지갑을 연결해 주세요」 안내가 뜬다 — 막다른 길이 아니다</span></div>
+    <div><b>S12</b><span>프로토콜 시연 기록(7건)을 확인한다 → 배지로 구분되고, 필터 없는 피드에서 숨기지 않고 그대로 표시한다</span></div>
   </div>
-  <p class="lede eave">작성(S11~S12)만 GIWA Sepolia 지갑이 필요하다. S12가 핵심이다 — <strong>결과를 알기 전에 고정하는 것 말고는 판단을 올릴 방법이 없다.</strong></p>
+  <p class="lede eave">S1~S12는 전부 지갑 없이 확인된다. 실제 발행(지갑 서명)만 이 열두 개 밖의 별도 흐름이다 — <strong>결과를 알기 전에 고정하는 것 말고는 판단을 올릴 방법이 없다.</strong></p>
 </section>
 
 <!-- 15 한계 ─────────────────────────────────── -->
