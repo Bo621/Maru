@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import type {FeedDecisionRow, FeedRow} from "./feedData";
 import {fetchWindowCandles} from "./upbit";
 import {decideVerdict, OBSERVATION_LAG, planNextAttempt, type Verdict} from "./verdict";
+import {parseVerdictSnapshot, type SnapshotEntry} from "./verdictSnapshot";
 
 /** 로딩·오류 상태에서 넘길 안정된 빈 배열. 매 렌더마다 새 []를 만들면 효과가 무한히 재실행된다. */
 export const NO_VERDICT_ROWS: FeedRow[] = [];
@@ -9,9 +10,30 @@ export const NO_VERDICT_ROWS: FeedRow[] = [];
 /** 아직 판정 못 한 게 남아 있을 때 다시 시도하는 간격. */
 const RETRY_MS = 30_000;
 
+/** 빌드 시점 스냅샷. 첫 렌더에 한 번만 가져온다 — 실패해도 조용히 빈 Map으로 진행한다. */
+function useSnapshot(): Map<string, SnapshotEntry> {
+    const [snapshot, setSnapshot] = useState<Map<string, SnapshotEntry>>(new Map());
+
+    useEffect(() => {
+        let current = true;
+        void fetch("/verdicts.json")
+            .then((response) => (response.ok ? response.text() : null))
+            .catch(() => null)
+            .then((text) => {
+                if (current) setSnapshot(parseVerdictSnapshot(text ?? null));
+            });
+        return () => {
+            current = false;
+        };
+    }, []);
+
+    return snapshot;
+}
+
 export function useVerdicts(rows: FeedRow[]): Map<string, Verdict> {
     const [verdicts, setVerdicts] = useState<Map<string, Verdict>>(new Map());
     const [tick, setTick] = useState(0);
+    const snapshot = useSnapshot();
 
     useEffect(() => {
         let current = true;
@@ -23,9 +45,23 @@ export function useVerdicts(rows: FeedRow[]): Map<string, Verdict> {
 
         const candidates = rows.filter((row): row is FeedDecisionRow =>
             row.kind === "decision" && row.hasExpectedOutcome);
-        // 여유 시간이 지난 것만 조회한다. 미리 조회하면 확정 안 된 봉이 캐시된다.
-        const ready = candidates.filter((row) => wallNow >= row.windowEnd + OBSERVATION_LAG);
-        const notReady = candidates
+
+        // 스냅샷에 있으면 즉시 판정한다 — 네트워크를 안 탄다.
+        const snapshotted = new Map<string, Verdict>();
+        const remaining: FeedDecisionRow[] = [];
+        for (const row of candidates) {
+            const entry = snapshot.get(row.uid.toLowerCase());
+            if (entry) {
+                snapshotted.set(row.uid.toLowerCase(), decideVerdict(row, [entry], wallNow));
+            } else {
+                remaining.push(row);
+            }
+        }
+
+        // 재시도 스케줄은 실시간 조회한 것들만 대상으로 한다.
+        // 스냅샷으로 해결된 행 때문에 재시도가 돌면 안 된다.
+        const ready = remaining.filter((row) => wallNow >= row.windowEnd + OBSERVATION_LAG);
+        const notReady = remaining
             .filter((row) => wallNow < row.windowEnd + OBSERVATION_LAG)
             .map((row) => row.windowEnd);
 
@@ -37,6 +73,7 @@ export function useVerdicts(rows: FeedRow[]): Map<string, Verdict> {
         };
 
         if (ready.length === 0) {
+            setVerdicts(snapshotted);
             schedule(planNextAttempt({
                 notReadyWindowEnds: notReady, hadFetchFailure: false, wallNow, retryMs: RETRY_MS,
             }));
@@ -58,7 +95,10 @@ export function useVerdicts(rows: FeedRow[]): Map<string, Verdict> {
                 .map((result) => result.status === "fulfilled" ? result.value : undefined)
                 .filter((entry) => entry !== undefined);
 
-            setVerdicts(new Map(settled.map((entry) => [entry.uid, entry.verdict])));
+            setVerdicts(new Map([
+                ...snapshotted,
+                ...settled.map((entry) => [entry.uid, entry.verdict] as const),
+            ]));
 
             // 조회 실패만 다시 시도한다. 관측 불가는 영구 조건이므로 재시도하지 않는다 —
             // 안 그러면 겹치는 봉이 없는 창을 페이지 수명 동안 30초마다 조회한다.
@@ -74,7 +114,7 @@ export function useVerdicts(rows: FeedRow[]): Map<string, Verdict> {
             current = false;
             if (timer !== undefined) clearTimeout(timer);
         };
-    }, [rows, tick]);
+    }, [rows, tick, snapshot]);
 
     return verdicts;
 }

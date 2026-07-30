@@ -211,7 +211,7 @@ export function Feed({query}: {query: string}) {
             팔로우는 이 브라우저에만 저장됩니다. 온체인 기록이 아니고, 이 링크를 받은 사람에게는 그 사람의 팔로우 목록이 보입니다.
         </p>}
         <p className="filter-caveat">정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다.</p>
-        <p className="filter-caveat">판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.</p>
+        <p className="filter-caveat">판정은 업비트 1분봉으로 다시 계산한 결과입니다. 관측이 끝난 구간은 배포 시점에 계산해 담아 둔 값이고, 새로 끝난 구간은 이 화면이 조회합니다. 온체인에 기록된 판정이 아닙니다.</p>
 
         <div className="section-heading">
             <p className="eyebrow">LATEST ONCHAIN</p>

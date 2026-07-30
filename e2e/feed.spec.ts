@@ -220,7 +220,23 @@ test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 
     await expect(page.locator("[data-verdict]").first()).toContainText("업비트 1분봉");
 
     // 전역 고지도 보이는지.
-    await expect(page.getByText("판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.")).toBeVisible();
+    await expect(page.getByText(
+        "판정은 업비트 1분봉으로 다시 계산한 결과입니다. 관측이 끝난 구간은 배포 시점에 계산해 담아 둔 값이고, "
+        + "새로 끝난 구간은 이 화면이 조회합니다. 온체인에 기록된 판정이 아닙니다.",
+    )).toBeVisible();
+});
+
+test("S8-보강 업비트를 못 불러도 담아둔 관측값으로 판정이 뜬다", async ({page}) => {
+    await page.route("**/api.upbit.com/**", (route) => route.abort());
+
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+    await expect(page.locator("[data-verdict]")).not.toHaveCount(0);
+
+    // 맞음과 틀림이 둘 다 있어야 한다 — 스냅샷이 실제로 쓰였다는 증거다.
+    // 업비트가 완전히 막혔으니 이 값들은 스냅샷 말고는 나올 수 없다.
+    await expect(page.locator('[data-verdict="match"]')).not.toHaveCount(0);
+    await expect(page.locator('[data-verdict="mismatch"]')).not.toHaveCount(0);
 });
 
 test("S9 팔로우가 실제로 거른다", async ({page}) => {
