@@ -83,6 +83,31 @@ a:focus-visible {
     outline-offset: 3px;
 }
 
+.container-lines {
+    position: relative;
+    isolation: isolate;
+}
+
+.container-lines::before,
+.container-lines::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 1px;
+    background: var(--line-color);
+    pointer-events: none;
+}
+
+.container-lines::before {
+    left: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+}
+
+.container-lines::after {
+    right: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+}
+
 .skip-link {
     position: fixed;
     z-index: 100;
@@ -259,7 +284,17 @@ a:focus-visible {
     display: grid;
     gap: var(--space-3);
     padding: var(--space-6);
-    background: var(--paper-raised);
+    background:
+        linear-gradient(var(--line-strong), var(--line-strong)) left top / var(--fg-corner) 1px no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) left top / 1px var(--fg-corner) no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) right top / var(--fg-corner) 1px no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) right top / 1px var(--fg-corner) no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) left bottom / var(--fg-corner) 1px no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) left bottom / 1px var(--fg-corner) no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) right bottom / var(--fg-corner) 1px no-repeat,
+        linear-gradient(var(--line-strong), var(--line-strong)) right bottom / 1px var(--fg-corner) no-repeat,
+        repeating-linear-gradient(135deg, transparent 0 11px, var(--texture) 11px 12px),
+        var(--paper-raised);
     border: 1px solid var(--line-color);
 }
 
@@ -450,6 +485,13 @@ a:focus-visible {
     color: var(--ink-faint);
 }
 
+.filter-caveat::before {
+    content: "한계 / ";
+    color: var(--seal);
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
 .reset-link,
 .text-link,
 .back-link {
@@ -535,44 +577,9 @@ a:focus-visible {
     font-size: 0.78rem;
 }
 
-.passport-list {
-    margin: var(--space-12) 0 0;
-    padding: 0;
-    list-style: none;
-    border-bottom: 1px solid var(--rule-strong);
-}
-
-.passport-list li {
-    display: grid;
-    grid-template-columns: 7rem 1fr;
-    gap: var(--space-6);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--rule-strong);
-}
-
-.passport-list a {
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.passport-list p,
 .simple-status {
     color: var(--ink-soft);
     font-size: 0.82rem;
-}
-
-.passport-state {
-    color: var(--ink-soft);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-}
-
-.passport-state--overdue {
-    color: var(--seal);
-}
-
-.passport-state--settled {
-    color: var(--green);
 }
 
 .decision-header {
@@ -723,7 +730,6 @@ pre {
         margin: var(--space-6) 0;
     }
 
-    .passport-list li,
     .verify-step {
         grid-template-columns: 1fr;
         gap: var(--space-3);
@@ -731,17 +737,6 @@ pre {
 
     .site-footer {
         flex-direction: column;
-    }
-}
-
-@keyframes row-enter {
-    from {
-        opacity: 0;
-        transform: translateY(0.75rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -757,6 +752,20 @@ pre {
     100% {
         transform: rotate(-9deg);
         opacity: 0.45;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    [data-scroll-reveal] .card {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+        transition-delay: calc(var(--row-index, 0) * 40ms);
+    }
+
+    [data-scroll-reveal] .card[data-revealed] {
+        opacity: 1;
+        transform: none;
     }
 }
 

@@ -43,8 +43,10 @@ export default function App() {
 
     return <>
         <a className="skip-link" href="#main-content">본문으로 건너뛰기</a>
-        <Header route={route} />
-        {page}
+        <div className="container-lines">
+            <Header route={route} />
+            {page}
+        </div>
         <footer className="site-footer">
             <p>Maru는 POI 프로토콜 위의 읽기 전용 소비자 화면입니다. 컨트랙트는 수정하지 않습니다.</p>
             <a href={routeToHash({name: "feed", query: ""})}>필터 없는 피드</a>

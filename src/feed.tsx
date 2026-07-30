@@ -1,8 +1,10 @@
+import {useEffect, useRef} from "react";
 import {filterFeedItems, parseFeedFilter, serializeFeedFilter, type FeedFilter} from "./filter";
 import type {FeedRow} from "./feedData";
 import {routeToHash} from "./router";
 import {useFeedRows} from "./useFeedRows";
 import {DecisionCard, ErrorCard} from "./card";
+import {observeReveals} from "./reveal-on-scroll";
 
 function setFilter(filter: FeedFilter): void {
     window.location.hash = routeToHash({name: "feed", query: serializeFeedFilter(filter)});
@@ -47,6 +49,12 @@ function FilterBar({filter}: {filter: FeedFilter}) {
 }
 
 function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
+    const listRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!listRef.current) return undefined;
+        return observeReveals(listRef.current);
+    }, [rows]);
+
     if (rows.length === 0) {
         return <div className="empty-state">
             <p className="eyebrow">NO MATCHING RECORDS</p>
@@ -55,7 +63,7 @@ function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
             <a className="text-link" href="#/feed">조건 지우기 →</a>
         </div>;
     }
-    return <div className="feed-list">{rows.map((row, index) =>
+    return <div className="feed-list" ref={listRef} data-scroll-reveal>{rows.map((row, index) =>
         row.kind === "decision"
             ? <DecisionCard key={row.uid} row={row} index={index} now={now} />
             : <ErrorCard key={row.uid} row={row} index={index} />
