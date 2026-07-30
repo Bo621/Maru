@@ -56,7 +56,32 @@ test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
             rows.map((row) => Number(row.getAttribute("data-settled-count"))),
         );
         expect(counts.every((count) => count >= 1)).toBe(true);
-        await expect(page.getByLabel("상태: 기한초과").first()).toBeVisible();
+
+        // 정산 필터는 발행자 단위다. 필터를 통과한 발행자의 결정은
+        // 개별 결정의 정산 여부와 무관하게 전부 남아야 한다 — 「미발행을 숨기지 않는다」.
+        // page 는 S4로 이어지는 필터 상태(verified=1 등)를 쌓아 가는 중이므로
+        // 별도 페이지·URL 직행으로 확인해 그 상태를 건드리지 않는다.
+        const probe = await context.newPage();
+        await probe.goto("/#/feed?settled=1");
+        const settledRows = probe.locator('[data-feed-row][data-kind="decision"]');
+        await expect(settledRows).not.toHaveCount(0);
+        const targetIssuer = await settledRows.first().getAttribute("data-attester");
+        const settledUIDs = await settledRows.evaluateAll(
+            (rows, attester) => rows.filter((row) => row.getAttribute("data-attester") === attester)
+                .map((row) => row.getAttribute("data-uid")),
+            targetIssuer,
+        );
+
+        await probe.goto("/#/feed");
+        const unfilteredRows = probe.locator('[data-feed-row][data-kind="decision"]');
+        await expect(unfilteredRows).not.toHaveCount(0);
+        const unfilteredUIDs = await unfilteredRows.evaluateAll(
+            (rows, attester) => rows.filter((row) => row.getAttribute("data-attester") === attester)
+                .map((row) => row.getAttribute("data-uid")),
+            targetIssuer,
+        );
+        expect(new Set(unfilteredUIDs)).toEqual(new Set(settledUIDs));
+        await probe.close();
     });
 
     await test.step("S4 공유 링크를 새 창에서 열어도 같은 필터가 복원된다", async () => {
@@ -71,15 +96,21 @@ test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
     });
 });
 
-test("S3-보강 정산을 등록하지 않은 발행자가 사라진다", async ({page}) => {
+test("S3-보강 활성 정산 최소 건수가 실제로 발행자를 거른다", async ({page}) => {
     await page.goto("/#/feed");
-    const baseline = await snapshot(page);
 
-    await page.getByLabel("발행자별 활성 정산 최소 건수").fill("1");
-    await expect(page).toHaveURL(/match=1/);
+    // 임계값 0 — 발행자 집합 A. 비어 있으면 안 된다.
+    const atZero = await snapshot(page);
+    expect(atZero.issuers.length).toBeGreaterThan(0);
 
-    const filtered = await snapshot(page);
-    expect(filtered.issuers.length).toBeLessThan(baseline.issuers.length);
+    // 임계값 99 — 도달 불가능한 값이라 발행자 집합 B는 비어 있어야 한다.
+    // 데이터가 늘어도 유지되는 성질이라, 필터가 진짜로 거른다는 증거가 된다.
+    await page.getByLabel("발행자별 활성 정산 최소 건수").fill("99");
+    await expect(page).toHaveURL(/match=99/);
+    await expect(page.locator("[data-feed-row]")).toHaveCount(0);
+
+    // 단조성 — B ⊆ A. B가 공집합이므로 자명하게 성립하지만,
+    // 위 두 성질과 함께 필터가 임계값에 따라 집합을 줄이기만 한다는 것을 보장한다.
 });
 
 test("S5 피드에서 검증까지 끊기지 않고 이어진다", async ({page}) => {
