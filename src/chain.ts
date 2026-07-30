@@ -7,11 +7,15 @@ const giwaSepolia = defineChain({
     nativeCurrency: {name: "ETH", symbol: "ETH", decimals: 18},
     rpcUrls: {default: {http: [CHAIN.rpcUrl]}},
     blockExplorers: {default: {name: "GIWA Explorer", url: CHAIN.explorer}},
+    contracts: {
+        multicall3: {address: "0xcA11bde05977b3631167028862bE2a173976CA11"},
+    },
 });
 
 export const publicClient = createPublicClient({
     chain: giwaSepolia,
-    transport: http(CHAIN.rpcUrl),
+    transport: http(CHAIN.rpcUrl, {batch: true}),
+    batch: {multicall: true},
 });
 
 export async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
