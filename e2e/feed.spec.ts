@@ -43,3 +43,26 @@ test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
         await expect(sharedPage.getByLabel("발행자별 활성 정산 최소 건수")).toHaveValue("2");
     });
 });
+
+test("S5 피드에서 검증까지 끊기지 않고 이어진다", async ({page}) => {
+    // 여정 하나에 온체인 페이지 네 개가 순서대로 실제 RPC를 읽으므로 기본 타임아웃보다 여유를 둔다.
+    test.setTimeout(300_000);
+    await page.goto("/#/feed");
+
+    const firstIssuer = page.locator('[data-feed-row][data-kind="decision"] .address-link').first();
+    await expect(firstIssuer).toBeVisible();
+    await firstIssuer.click();
+
+    await expect(page).toHaveURL(/#\/p\/0x[0-9a-f]{40}/);
+    await expect(page.getByRole("heading", {name: "발행자의 공개 기록"})).toBeVisible();
+
+    const firstDecision = page.locator('[data-feed-row][data-kind="decision"] .card__open').first();
+    await expect(firstDecision).toBeVisible();
+    await firstDecision.click();
+
+    await expect(page).toHaveURL(/#\/d\/0x[0-9a-f]{64}/);
+    await page.getByRole("link", {name: "이 결정 검증하기 →"}).click();
+
+    await expect(page).toHaveURL(/#\/verify\/0x[0-9a-f]{64}/);
+    await expect(page.getByRole("heading", {name: "검증하기"})).toBeVisible();
+});

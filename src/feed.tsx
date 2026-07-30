@@ -8,31 +8,29 @@ function setFilter(filter: FeedFilter): void {
     window.location.hash = routeToHash({name: "feed", query: serializeFeedFilter(filter)});
 }
 
-function FilterPanel({filter}: {filter: FeedFilter}) {
+function FilterBar({filter}: {filter: FeedFilter}) {
     const update = (patch: Partial<FeedFilter>) => setFilter({...filter, ...patch});
-    return <aside className="filter-panel" aria-labelledby="filter-title">
-        <p className="eyebrow">VIEW CONDITIONS</p>
-        <h2 id="filter-title">열람 조건</h2>
-        <label className="check-control">
+    return <section className="filter-bar" aria-labelledby="filter-title">
+        <h2 id="filter-title" className="visually-hidden">열람 조건</h2>
+        <label className="chip">
             <input
                 type="checkbox"
                 checked={filter.verifiedOnly}
                 onChange={(event) => update({verifiedOnly: event.target.checked})}
             />
-            <span><strong>도장 검증 지갑만</strong><small>결정 시점의 검증 스냅샷 기준</small></span>
+            <span>도장 검증 지갑만</span>
         </label>
-        <label className="check-control">
+        <label className="chip">
             <input
                 type="checkbox"
                 checked={filter.settledOnly}
                 onChange={(event) => update({settledOnly: event.target.checked})}
             />
-            <span><strong>활성 정산이 있는 발행자만</strong><small>철회된 정산은 포함하지 않음</small></span>
+            <span>활성 정산이 있는 발행자만</span>
         </label>
-        <label className="number-control" htmlFor="minimum-settled">
+        <label className="chip chip--number">
             <span>발행자별 활성 정산 최소 건수</span>
             <input
-                id="minimum-settled"
                 type="number"
                 inputMode="numeric"
                 min="0"
@@ -44,9 +42,8 @@ function FilterPanel({filter}: {filter: FeedFilter}) {
                 }}
             />
         </label>
-        <p className="filter-caveat">정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다.</p>
         <a className="reset-link" href="#/feed">조건 지우기</a>
-    </aside>;
+    </section>;
 }
 
 function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
@@ -85,27 +82,26 @@ export function Feed({query}: {query: string}) {
         <div className="truth-notes" role="note">
             <p>이 목록은 조회된 기록의 나열입니다. 순위나 성과 지표가 아닙니다.</p>
             <p>조회된 것이 전부라는 보장은 없습니다.</p>
+            <p>이 피드의 기록은 시연을 위해 발행한 데모 페르소나의 판단입니다.</p>
         </div>
 
-        <div className="feed-layout">
-            <section className="feed-column" aria-label="온체인 결정 피드">
-                <div className="section-heading">
-                    <p className="eyebrow">LATEST ONCHAIN</p>
-                    <h2>결정 기록</h2>
-                    <span>시간 역순 · UTC</span>
-                </div>
-                {state.status === "loading" && <div className="loading-state" data-testid="feed-loading" role="status">
-                    <span className="loading-stamp" aria-hidden="true" />
-                    <div><strong>체인에서 판단을 읽는 중</strong><p>90,000블록 단위로 최신 기록까지 확인합니다.</p></div>
-                </div>}
-                {state.status === "error" && <div className="load-error" role="alert">
-                    <strong>피드를 불러오지 못했습니다.</strong>
-                    <p>{state.message}</p>
-                    <button type="button" onClick={retry}>다시 읽기</button>
-                </div>}
-                {state.status === "success" && <Rows rows={rows} now={state.now} />}
-            </section>
-            <FilterPanel filter={filter} />
+        <FilterBar filter={filter} />
+        <p className="filter-caveat">정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다.</p>
+
+        <div className="section-heading">
+            <p className="eyebrow">LATEST ONCHAIN</p>
+            <h2>결정 기록</h2>
+            <span>시간 역순 · UTC</span>
         </div>
+        {state.status === "loading" && <div className="loading-state" data-testid="feed-loading" role="status">
+            <span className="loading-stamp" aria-hidden="true" />
+            <div><strong>체인에서 판단을 읽는 중</strong><p>90,000블록 단위로 최신 기록까지 확인합니다.</p></div>
+        </div>}
+        {state.status === "error" && <div className="load-error" role="alert">
+            <strong>피드를 불러오지 못했습니다.</strong>
+            <p>{state.message}</p>
+            <button type="button" onClick={retry}>다시 읽기</button>
+        </div>}
+        {state.status === "success" && <Rows rows={rows} now={state.now} />}
     </main>;
 }

@@ -227,14 +227,6 @@ a:focus-visible {
     color: var(--seal);
 }
 
-.feed-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 18rem;
-    align-items: start;
-    gap: clamp(2.5rem, 6vw, 6rem);
-    margin-top: var(--space-16);
-}
-
 .section-heading {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -247,8 +239,7 @@ a:focus-visible {
     margin: 0 0 var(--space-2);
 }
 
-.section-heading h2,
-.filter-panel h2 {
+.section-heading h2 {
     margin: 0;
     font: 700 1.65rem/1.2 var(--font-body);
 }
@@ -411,86 +402,52 @@ a:focus-visible {
     white-space: nowrap;
 }
 
-.filter-panel {
-    position: sticky;
-    top: var(--space-8);
-    padding-top: var(--space-4);
-    border-top: 3px solid var(--ink);
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
-.filter-panel .eyebrow {
-    margin: 0 0 var(--space-2);
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) 0;
+    border-block: 1px solid var(--line-color);
 }
 
-.filter-panel h2 {
-    margin-bottom: var(--space-8);
-}
-
-.check-control {
-    min-height: 4.5rem;
-    display: grid;
-    grid-template-columns: 2.75rem 1fr;
-    align-items: start;
-    padding-block: var(--space-4);
-    border-top: 1px solid var(--rule);
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--line-color);
+    border-radius: 999px;
+    font-size: 0.875rem;
     cursor: pointer;
 }
 
-.check-control input {
-    width: 1.15rem;
-    height: 1.15rem;
-    margin: 0.18rem 0 0;
-    accent-color: var(--seal);
+.chip:has(input:checked) {
+    border-color: var(--seal);
+    color: var(--seal-dark);
 }
 
-.check-control strong,
-.check-control small {
-    display: block;
-}
-
-.check-control strong {
-    font-size: 0.88rem;
-}
-
-.check-control small {
-    margin-top: var(--space-1);
-    color: var(--ink-faint);
-    font-size: 0.72rem;
-}
-
-.number-control {
-    display: grid;
-    grid-template-columns: 1fr 4.5rem;
-    align-items: center;
-    gap: var(--space-4);
-    padding-block: var(--space-4);
-    border-block: 1px solid var(--rule);
-    font-size: 0.82rem;
-    font-weight: 700;
-}
-
-.number-control input {
-    width: 100%;
-    min-height: 2.75rem;
-    padding: var(--space-2);
-    border: 1px solid var(--rule-strong);
-    border-radius: 0;
-    background: var(--paper-raised);
-    font-family: var(--font-mono);
-    text-align: center;
+.chip--number input {
+    width: 3.5rem;
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    background: transparent;
+    text-align: right;
 }
 
 .filter-caveat {
-    margin: var(--space-6) 0;
-    color: var(--ink-soft);
-    font-size: 0.75rem;
-}
-
-.filter-caveat::before {
-    content: "한계 / ";
-    color: var(--seal);
-    font-family: var(--font-mono);
-    font-weight: 500;
+    margin: var(--space-2) 0 0;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
 }
 
 .reset-link,
@@ -715,32 +672,13 @@ pre {
         display: none;
     }
 
-    .feed-intro,
-    .feed-layout {
-        grid-template-columns: 1fr;
-    }
-
     .feed-intro {
+        grid-template-columns: 1fr;
         gap: var(--space-8);
     }
 
     .feed-intro__lead {
         max-width: 42rem;
-    }
-
-    .filter-panel {
-        grid-row: 1;
-        position: static;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0 var(--space-6);
-    }
-
-    .filter-panel .eyebrow,
-    .filter-panel h2,
-    .filter-caveat,
-    .reset-link {
-        grid-column: 1 / -1;
     }
 }
 
@@ -759,8 +697,7 @@ pre {
         font-size: clamp(2.7rem, 15vw, 4.5rem);
     }
 
-    .truth-notes,
-    .filter-panel {
+    .truth-notes {
         grid-template-columns: 1fr;
     }
 
