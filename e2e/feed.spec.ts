@@ -185,6 +185,10 @@ test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 
         "0x475a073966f2abc794e8a8e90e8f6918cbf4d18c3ca1830f2fc8039c463d0d8c",
         "0x7f810797670284bebd2b89f40ec7fee7c4bed681f2d53bcc7047af144e3b3183",
     ];
+    // 스냅샷을 끊어 실시간 조회 경로를 강제한다. 안 끊으면 담아둔 관측값이 우선해
+    // 아래 업비트 목이 통째로 무시되고, 이 테스트는 스냅샷 경로만 두 번 검사하게 된다
+    // (그건 S8-보강의 몫이다). 두 경로가 각자 검사돼야 한쪽이 깨질 때 잡힌다.
+    await page.route("**/verdicts.json", (route) => route.abort());
     await page.route("**/api.upbit.com/**", async (route) => {
         const url = new URL(route.request().url());
         const windowEndMs = Date.parse(url.searchParams.get("to") ?? "");
