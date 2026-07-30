@@ -10,7 +10,7 @@ const OP_SYMBOL: Record<number, string> = {
     5: "≠",
 };
 
-function formatScaled(value: bigint, decimals: number): string {
+export function formatScaled(value: bigint, decimals: number): string {
     const negative = value < 0n;
     const absolute = negative ? -value : value;
     const scale = 10n ** BigInt(decimals);
