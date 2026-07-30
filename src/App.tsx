@@ -72,7 +72,7 @@ export default function App() {
     else if (route.name === "passport") page = <Passport address={route.address} />;
     else if (route.name === "decision") page = <DecisionDetail uid={route.uid} />;
     else if (route.name === "verify") page = <Verify uid={route.uid} />;
-    else if (route.name === "write") page = <Compose session={session} />;
+    else if (route.name === "write") page = <Compose session={session} onConnect={onConnect} />;
     else page = <NotFound raw={route.raw} />;
 
     return <>

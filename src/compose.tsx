@@ -101,7 +101,7 @@ function publishErrorMessage(error: unknown): string {
     return error instanceof Error ? error.message : "발행에 실패했습니다.";
 }
 
-export function Compose({session}: {session?: ComposeSession}) {
+export function Compose({session, onConnect}: {session?: ComposeSession; onConnect: () => void}) {
     const currentPrice = useCurrentPriceKrw();
     const [op, setOp] = useState<0 | 2>(0);
     const [thresholdText, setThresholdText] = useState("");
@@ -114,7 +114,11 @@ export function Compose({session}: {session?: ComposeSession}) {
 
     if (!session) {
         return <main id="main-content" className="page-shell narrow-page">
-            <p className="compose-connect-notice">판단을 발행하려면 지갑을 연결해 주세요.</p>
+            <section className="compose-connect-notice">
+                <p>판단을 발행하려면 지갑을 연결해 주세요.</p>
+                <p>결과를 알기 전에 조건과 관측 구간을 고정해 GIWA Sepolia에 온체인으로 기록합니다.</p>
+                <button type="button" className="wallet-button" onClick={onConnect}>지갑 연결</button>
+            </section>
         </main>;
     }
 
