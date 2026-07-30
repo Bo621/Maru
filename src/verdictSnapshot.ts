@@ -36,7 +36,10 @@ export function parseVerdictSnapshot(text: string | null): Map<string, SnapshotE
         if (typeof value !== "object" || value === null) continue;
         const {startedAt, close} = value as {startedAt?: unknown; close?: unknown};
         if (!isIntegerString(startedAt)) continue;
-        if (typeof close !== "string") continue;
+        // close 도 정수 문자열이어야 한다. 타입만 보면 "abc" 같은 값이 채택되고,
+        // 그 행은 스냅샷으로 해결된 것으로 취급돼 실시간 조회로 떨어지지 않는다.
+        // 판정이 영구히 「관측 불가」로 굳는다.
+        if (!isIntegerString(close)) continue;
         entries.set(uid.toLowerCase(), {startedAt: BigInt(startedAt), close});
     }
     return entries;

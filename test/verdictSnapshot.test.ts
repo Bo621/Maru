@@ -47,4 +47,21 @@ describe("판정 스냅샷 파싱", () => {
         expect(result.has("0xbad")).toBe(false);
         expect(result.get("0xgood")).toEqual({startedAt: 100n, close: "2"});
     });
+
+    // close 를 타입만 검사하면 "abc" 가 채택되고, 그 행은 스냅샷으로 해결된 것으로
+    // 취급돼 실시간 조회로 떨어지지 않는다. 판정이 영구히 「관측 불가」로 굳는다.
+    it("close가 정수 문자열이 아니면 그 항목만 버린다", () => {
+        const text = JSON.stringify({
+            version: "maru.verdict-snapshot.v1",
+            observed: {
+                "0xbad": {startedAt: "100", close: "abc"},
+                "0xempty": {startedAt: "100", close: ""},
+                "0xgood": {startedAt: "100", close: "2"},
+            },
+        });
+        const result = parseVerdictSnapshot(text);
+        expect(result.has("0xbad")).toBe(false);
+        expect(result.has("0xempty")).toBe(false);
+        expect(result.get("0xgood")).toEqual({startedAt: 100n, close: "2"});
+    });
 });
