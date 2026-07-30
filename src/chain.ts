@@ -22,7 +22,7 @@ export async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<
         } catch (error) {
             lastError = error;
             if (attempt < attempts - 1) {
-                await new Promise((resolve) => setTimeout(resolve, 200 * 2 ** attempt));
+                await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
             }
         }
     }

@@ -26,6 +26,7 @@ type DetailState =
 
 export function DecisionDetail({uid}: {uid: Hex}) {
     const [state, setState] = useState<DetailState>({status: "loading"});
+    const [retryKey, setRetryKey] = useState(0);
     useEffect(() => {
         let current = true;
         setState({status: "loading"});
@@ -45,7 +46,8 @@ export function DecisionDetail({uid}: {uid: Hex}) {
         return () => {
             current = false;
         };
-    }, [uid]);
+    }, [uid, retryKey]);
+    const retry = () => setRetryKey((value) => value + 1);
 
     if (state.status === "loading") return <main id="main-content" className="page-shell narrow-page">
         <a className="back-link" href="#/feed">← 공개 피드</a>
@@ -53,7 +55,11 @@ export function DecisionDetail({uid}: {uid: Hex}) {
     </main>;
     if (state.status === "error") return <main id="main-content" className="page-shell narrow-page">
         <a className="back-link" href="#/feed">← 공개 피드</a>
-        <div className="load-error" role="alert"><strong>결정을 열지 못했습니다.</strong><p>{state.message}</p></div>
+        <div className="load-error" role="alert">
+            <strong>결정을 열지 못했습니다.</strong>
+            <p>{state.message}</p>
+            <button type="button" onClick={retry}>다시 읽기</button>
+        </div>
     </main>;
 
     const {decision, settlement, now} = state;

@@ -67,9 +67,9 @@ export function DecisionCard({row, index, now}: {
         <h3 className="card__claim">{conditionSentence(row)}</h3>
 
         <p className="card__window">
-            관측 구간 <time>{formatUtcMinute(row.windowStart)}</time>
+            관측 구간 <time dateTime={utcIso(row.windowStart)}>{formatUtcMinute(row.windowStart)}</time>
             <span aria-hidden="true"> → </span>
-            <time>{formatUtcMinute(row.windowEnd)}</time>
+            <time dateTime={utcIso(row.windowEnd)}>{formatUtcMinute(row.windowEnd)}</time>
         </p>
 
         <footer className="card__foot">

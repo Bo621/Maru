@@ -514,6 +514,10 @@ a:focus-visible {
     max-width: 54rem;
 }
 
+.narrow-page .feed-list {
+    margin-top: var(--space-12);
+}
+
 .profile-header,
 .decision-header,
 .verify-header {
