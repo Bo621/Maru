@@ -22,7 +22,7 @@ function Header({route}: {route: Route}) {
 }
 
 function NotFound({raw}: {raw: string}) {
-    return <main className="page-shell">
+    return <main id="main-content" className="page-shell">
         <section className="empty-state">
             <p className="eyebrow">404 / ROUTE</p>
             <h1>이 경로에는 판단이 없습니다.</h1>

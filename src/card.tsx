@@ -2,6 +2,7 @@ import {type CSSProperties} from "react";
 import type {FeedDecisionRow, FeedErrorRow} from "./feedData";
 import {formatUtcMinute, stateLabel} from "./presentation";
 import {relativeTime} from "./relativeTime";
+import {isPreCommitted} from "./revealVerify";
 import {routeToHash} from "./router";
 import {conditionSentence} from "./sentence";
 import {ZERO_UID} from "./read";
@@ -37,9 +38,17 @@ function Identity({row, now}: {row: FeedDecisionRow; now: bigint}) {
             </a>
             <Verification row={row} />
         </div>
-        <time className="card__when" dateTime={utcIso(row.time)} title={utcIso(row.time)}>
-            {relativeTime(row.time, now)}
-        </time>
+        <span className="card__stamp">
+            <time className="card__when" dateTime={utcIso(row.time)} title={utcIso(row.time)}>
+                {relativeTime(row.time, now)}
+            </time>
+            <span
+                className="card__precommit"
+                data-precommitted={isPreCommitted(row)}
+            >
+                {isPreCommitted(row) ? "관측 구간 전 고정" : "구간 시작 후 고정"}
+            </span>
+        </span>
     </header>;
 }
 
@@ -58,10 +67,6 @@ export function DecisionCard({row, index, now}: {
         {...(row.blockNumber === null ? {} : {"data-block-number": String(row.blockNumber)})}
         style={{"--row-index": Math.min(index, 9)} as CSSProperties}
     >
-        <span className="card__ordinal" aria-hidden="true">
-            {String(index + 1).padStart(2, "0")}
-        </span>
-
         <Identity row={row} now={now} />
 
         <h3 className="card__claim">{conditionSentence(row)}</h3>

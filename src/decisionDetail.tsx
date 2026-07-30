@@ -2,6 +2,7 @@ import {deriveState} from "@poi/core";
 import {useEffect, useState} from "react";
 import type {Hex} from "viem";
 import {formatCondition, formatUtcMinute, stateLabel} from "./presentation";
+import {conditionSentence} from "./sentence";
 import {
     getChainTime,
     readDecision,
@@ -78,7 +79,7 @@ export function DecisionDetail({uid}: {uid: Hex}) {
         <header className="decision-header">
             <p className="eyebrow">ONCHAIN DECISION</p>
             <div className={`state-seal state-seal--large state-seal--${label.tone}`}>{label.short}</div>
-            <h1>{formatCondition(decision)}</h1>
+            <h1>{conditionSentence(decision)}</h1>
             <p className="detail-uid">{uid}</p>
         </header>
         <dl className="detail-grid">
@@ -88,6 +89,7 @@ export function DecisionDetail({uid}: {uid: Hex}) {
             <dd>{decision.verifiedAddressUID === ZERO_UID
                 ? "미검증"
                 : `도장 검증 — ${state.issuerLabel ?? "발급자 라벨 확인 불가"}`}</dd>
+            <dt>조건식</dt><dd>{formatCondition(decision)}</dd>
             <dt>시점 고정</dt><dd>{formatUtcMinute(decision.time)}</dd>
             <dt>관측 구간</dt><dd>{formatUtcMinute(decision.windowStart)} → {formatUtcMinute(decision.windowEnd)}</dd>
             <dt>활성 정산</dt><dd>{settlement.activeHead === ZERO_UID ? "없음" : settlement.activeHead}</dd>

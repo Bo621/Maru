@@ -20,7 +20,7 @@ function FilterBar({filter}: {filter: FeedFilter}) {
                 checked={filter.verifiedOnly}
                 onChange={(event) => update({verifiedOnly: event.target.checked})}
             />
-            <span>도장 검증 지갑만</span>
+            <span>도장 검증 지갑만<small>결정 시점의 검증 스냅샷 기준</small></span>
         </label>
         <label className="chip">
             <input
@@ -28,7 +28,7 @@ function FilterBar({filter}: {filter: FeedFilter}) {
                 checked={filter.settledOnly}
                 onChange={(event) => update({settledOnly: event.target.checked})}
             />
-            <span>활성 정산이 있는 발행자만</span>
+            <span>활성 정산이 있는 발행자만<small>철회된 정산은 포함하지 않음</small></span>
         </label>
         <label className="chip chip--number">
             <span>발행자별 활성 정산 최소 건수</span>

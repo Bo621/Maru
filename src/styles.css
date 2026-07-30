@@ -39,7 +39,6 @@
     --line-color: color-mix(in oklch, var(--ink) 14%, transparent);
     --line-color-field: color-mix(in oklch, var(--paper) 22%, transparent);
     --line-strong: color-mix(in oklch, var(--ink) 28%, transparent);
-    --corner-size: 6px;
 
     /* L자 브래킷과 대각 텍스처 (framed-grid-layout) */
     --fg-corner: 18px;
@@ -210,6 +209,7 @@ a:focus-visible {
     width: var(--page);
     margin-inline: auto;
     padding-block: clamp(3rem, 8vw, 7rem);
+    padding-inline: clamp(1.25rem, 3vw, 3rem);
     background: var(--paper);
     border-radius: var(--shell-radius);
     box-shadow: var(--shell-shadow);
@@ -226,8 +226,7 @@ a:focus-visible {
 .feed-intro h1,
 .profile-header h1,
 .decision-header h1,
-.verify-header h1,
-.empty-state h1 {
+.verify-header h1 {
     margin: var(--space-4) 0 0;
     font: 700 clamp(2.8rem, 6.5vw, 6.3rem)/0.98 var(--font-serif);
     letter-spacing: -0.055em;
@@ -305,16 +304,6 @@ a:focus-visible {
         linear-gradient(var(--line-strong), var(--line-strong)) right bottom / 1px var(--fg-corner) no-repeat,
         repeating-linear-gradient(135deg, transparent 0 11px, var(--texture) 11px 12px),
         var(--paper-raised);
-    border: 1px solid var(--line-color);
-}
-
-.card__ordinal {
-    position: absolute;
-    top: var(--space-3);
-    right: var(--space-4);
-    font: 500 0.75rem/1 var(--font-mono);
-    color: var(--ink-faint);
-    letter-spacing: 0.08em;
 }
 
 .card__identity {
@@ -337,7 +326,14 @@ a:focus-visible {
     min-width: 0;
 }
 
-.card__when {
+.card__stamp {
+    display: grid;
+    justify-items: end;
+    gap: var(--space-1);
+}
+
+.card__when,
+.card__precommit {
     font: 400 0.8125rem/1 var(--font-mono);
     color: var(--ink-faint);
     white-space: nowrap;
@@ -370,7 +366,7 @@ a:focus-visible {
 }
 
 .card--error {
-    border-color: var(--seal);
+    border: 1px solid var(--seal);
 }
 
 .state-seal {
@@ -479,6 +475,15 @@ a:focus-visible {
 .chip:has(input:checked) {
     border-color: var(--seal);
     color: var(--seal-dark);
+}
+
+.chip span {
+    display: grid;
+}
+
+.chip small {
+    color: var(--ink-faint);
+    font-size: 0.68rem;
 }
 
 .chip--number input {
@@ -738,6 +743,10 @@ pre {
     .state-seal--large {
         position: static;
         margin: var(--space-6) 0;
+    }
+
+    .state-seal {
+        width: 4rem;
     }
 
     .verify-step {
