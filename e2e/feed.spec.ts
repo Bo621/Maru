@@ -103,10 +103,15 @@ test("S3-보강 활성 정산 최소 건수가 실제로 발행자를 거른다"
     const atZero = await snapshot(page);
     expect(atZero.issuers.length).toBeGreaterThan(0);
 
-    // 임계값 99 — 도달 불가능한 값이라 발행자 집합 B는 비어 있어야 한다.
-    // 데이터가 늘어도 유지되는 성질이라, 필터가 진짜로 거른다는 증거가 된다.
-    await page.getByLabel("발행자별 활성 정산 최소 건수").fill("99");
-    await expect(page).toHaveURL(/match=99/);
+    // 임계값 = 기준선 최대 활성 정산 건수 + 1 — 실측한 값이라 어떤 발행자도
+    // 넘을 수 없다. 하드코딩한 상수는 실제 최대치가 그 값에 닿으면 거짓이
+    // 되므로, 매 실행마다 라이브 데이터에서 다시 구한다.
+    const counts = await page.locator(DECISION_ROWS).evaluateAll((rows) =>
+        rows.map((row) => Number(row.getAttribute("data-settled-count"))));
+    const threshold = Math.max(...counts) + 1;
+
+    await page.getByLabel("발행자별 활성 정산 최소 건수").fill(String(threshold));
+    await expect(page).toHaveURL(new RegExp(`match=${threshold}`));
     await expect(page.locator("[data-feed-row]")).toHaveCount(0);
 
     // 단조성 — B ⊆ A. B가 공집합이므로 자명하게 성립하지만,
@@ -265,8 +270,17 @@ test("S9 팔로우가 실제로 거른다", async ({page}) => {
 
 test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 순으로 뜬다", async ({page}) => {
     await page.goto("/#/feed?tab=soon");
+    // 로딩이 끝나기 전에 세면 0건으로 오판한다. 성공이든 빈 상태든 로딩 다음이다.
+    await expect(page.locator('[data-testid="feed-loading"]')).toHaveCount(0);
     const rows = page.locator(DECISION_ROWS);
-    await expect(rows).not.toHaveCount(0);
+    const count = await rows.count();
+
+    // 열린 창은 온체인에 유한하고 계속 닫힌다. 언젠가 0건이 될 수 있으므로
+    // 개수를 단언하지 않는다 — 있으면 성질을, 없으면 빈 상태 렌더를 본다.
+    if (count === 0) {
+        await expect(page.locator(".empty-state")).toBeVisible();
+        return;
+    }
 
     // 결과가 이미 나온 판단이 이 탭에 있으면 안 된다. 개수가 아니라 성질을 본다.
     await expect(page.locator(`${DECISION_ROWS} [data-verdict="match"]`)).toHaveCount(0);

@@ -36,7 +36,7 @@ GIWA Sepolia(`91342`)에서 확인할 수 있다. 아래 수치의 유일한 출
 | 이유 원문(REASON) 커밋 | 9건 |
 | 화면 (공개 URL) | [maru-web-production-0407.up.railway.app](https://maru-web-production-0407.up.railway.app) — 지갑 없이 조회·검증 |
 | 오프체인 재검증 | POI verifier CLI, 등록된 11건 전부 `MATCH` |
-| 단위 테스트 | 170개 / 20 파일 |
+| 단위 테스트 | 171개 / 20 파일 |
 | E2E (실제 GIWA Sepolia 상대) | 14개 |
 
 ## 하지 않는 것
