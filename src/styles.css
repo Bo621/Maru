@@ -33,9 +33,11 @@
     --shell-shadow: 0 24px 60px -20px oklch(0.2 0.03 250 / 0.45);
 
     /* 괘선을 장식에서 구조로 (container-lines) */
-    --container-max: 1120px;
-    --container-pad: clamp(20px, 4vw, 48px);
+    /* --container-max used to contradict --page (1120px vs the 74rem/1184px shell);
+       the guides now key off --page directly so they can't drift apart again. */
+    --shell-gutter: 16px;
     --line-color: color-mix(in oklch, var(--ink) 14%, transparent);
+    --line-color-field: color-mix(in oklch, var(--paper) 22%, transparent);
     --line-strong: color-mix(in oklch, var(--ink) 28%, transparent);
     --corner-size: 6px;
 
@@ -88,6 +90,7 @@ a:focus-visible {
     isolation: isolate;
 }
 
+/* Guides flank the floating paper shell out on the dark field, not underneath it. */
 .container-lines::before,
 .container-lines::after {
     content: "";
@@ -96,16 +99,23 @@ a:focus-visible {
     bottom: 0;
     z-index: -1;
     width: 1px;
-    background: var(--line-color);
+    background: var(--line-color-field);
     pointer-events: none;
 }
 
 .container-lines::before {
-    left: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+    left: calc((100% - var(--page)) / 2 - var(--shell-gutter));
 }
 
 .container-lines::after {
-    right: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+    right: calc((100% - var(--page)) / 2 - var(--shell-gutter));
+}
+
+@media (max-width: 36rem) {
+    .container-lines::before,
+    .container-lines::after {
+        display: none;
+    }
 }
 
 .skip-link {
