@@ -52,10 +52,15 @@ function Identity({row, now}: {row: FeedDecisionRow; now: bigint}) {
     </header>;
 }
 
-export function DecisionCard({row, index, now}: {
+export interface CardReason {
+    text: string;
+}
+
+export function DecisionCard({row, index, now, reason}: {
     row: FeedDecisionRow;
     index: number;
     now: bigint;
+    reason?: CardReason;
 }) {
     const label = stateLabel(row.state);
     return <article
@@ -68,6 +73,13 @@ export function DecisionCard({row, index, now}: {
         style={{"--row-index": Math.min(index, 9)} as CSSProperties}
     >
         <Identity row={row} now={now} />
+
+        {reason && <blockquote className="card__reason" data-reason>
+            <p>{reason.text}</p>
+            <footer>
+                <span data-reason-verified>이 문장의 해시가 결정에 기록된 커밋과 일치합니다</span>
+            </footer>
+        </blockquote>}
 
         <h3 className="card__claim">{conditionSentence(row)}</h3>
 

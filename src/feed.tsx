@@ -1,9 +1,12 @@
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {filterFeedItems, parseFeedFilter, serializeFeedFilter, type FeedFilter} from "./filter";
-import type {FeedRow} from "./feedData";
+import {CHAIN} from "./config";
+import type {FeedDecisionRow, FeedRow} from "./feedData";
 import {routeToHash} from "./router";
 import {useFeedRows} from "./useFeedRows";
-import {DecisionCard, ErrorCard} from "./card";
+import {DecisionCard, ErrorCard, type CardReason} from "./card";
+import {loadReasonReveal} from "./revealLoad";
+import {verifyReasonReveal} from "./revealVerify";
 import {observeReveals} from "./reveal-on-scroll";
 
 function setFilter(filter: FeedFilter): void {
@@ -48,7 +51,57 @@ function FilterBar({filter}: {filter: FeedFilter}) {
     </section>;
 }
 
-function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
+/** 로딩·오류 상태에서 넘길 안정된 빈 배열. 매 렌더마다 새 `[]`를 만들면 효과가 무한히 재실행된다. */
+const NO_ROWS: FeedRow[] = [];
+
+/**
+ * payload는 커밋된 임의의 JSON이다. 문자열일 수도, {text}일 수도, null일 수도 있다.
+ * `null`에 `.text`를 찍으면 던진다.
+ */
+function readText(payload: unknown): string | undefined {
+    if (typeof payload === "string") return payload;
+    if (typeof payload !== "object" || payload === null) return undefined;
+    const text = (payload as {text?: unknown}).text;
+    return typeof text === "string" ? text : undefined;
+}
+
+function useReasons(rows: FeedRow[]): Map<string, CardReason> {
+    const [reasons, setReasons] = useState<Map<string, CardReason>>(new Map());
+
+    useEffect(() => {
+        let current = true;
+        const decisions = rows.filter((row): row is FeedDecisionRow => row.kind === "decision");
+        // 상태를 건드리지 않고 빠져나간다. 여기서 setReasons를 부르면 렌더 루프가 된다.
+        if (decisions.length === 0) return undefined;
+
+        // allSettled를 쓴다. 한 건이 터졌다고 나머지 이유가 통째로 사라지면 안 된다.
+        void Promise.allSettled(decisions.map(async (row) => {
+            const file = await loadReasonReveal({uid: row.uid});
+            if (!file) return undefined;
+            const text = readText(verifyReasonReveal(file, row, CHAIN.id));
+            if (!text) return undefined;
+            return [row.uid.toLowerCase(), {text}] as const;
+        })).then((results) => {
+            // 언마운트한 뒤에는 결과를 버린다. 공유 요청은 취소하지 않는다.
+            if (!current) return;
+            setReasons(new Map(results
+                .map((result) => result.status === "fulfilled" ? result.value : undefined)
+                .filter((entry) => entry !== undefined)));
+        });
+
+        return () => {
+            current = false;
+        };
+    }, [rows]);
+
+    return reasons;
+}
+
+function Rows({rows, now, reasons}: {
+    rows: FeedRow[];
+    now: bigint;
+    reasons: Map<string, CardReason>;
+}) {
     const listRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!listRef.current) return undefined;
@@ -65,7 +118,13 @@ function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
     }
     return <div className="feed-list" ref={listRef} data-scroll-reveal>{rows.map((row, index) =>
         row.kind === "decision"
-            ? <DecisionCard key={row.uid} row={row} index={index} now={now} />
+            ? <DecisionCard
+                key={row.uid}
+                row={row}
+                index={index}
+                now={now}
+                reason={reasons.get(row.uid.toLowerCase())}
+            />
             : <ErrorCard key={row.uid} row={row} index={index} />
     )}</div>;
 }
@@ -74,6 +133,7 @@ export function Feed({query}: {query: string}) {
     const filter = parseFeedFilter(query);
     const {state, retry} = useFeedRows();
     const rows = state.status === "success" ? filterFeedItems(state.rows, filter) : [];
+    const reasons = useReasons(state.status === "success" ? state.rows : NO_ROWS);
 
     return <main id="main-content" className="page-shell">
         <header className="feed-intro">
@@ -110,6 +170,6 @@ export function Feed({query}: {query: string}) {
             <p>{state.message}</p>
             <button type="button" onClick={retry}>다시 읽기</button>
         </div>}
-        {state.status === "success" && <Rows rows={rows} now={state.now} />}
+        {state.status === "success" && <Rows rows={rows} now={state.now} reasons={reasons} />}
     </main>;
 }

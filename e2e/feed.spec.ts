@@ -66,3 +66,16 @@ test("S5 피드에서 검증까지 끊기지 않고 이어진다", async ({page}
     await expect(page).toHaveURL(/#\/verify\/0x[0-9a-f]{64}/);
     await expect(page.getByRole("heading", {name: "검증하기"})).toBeVisible();
 });
+
+test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는다", async ({page}) => {
+    await page.goto("/#/feed");
+    await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);
+
+    const reasons = page.locator("[data-reason]");
+    // Task 1이 reveal 파일을 심었으므로 최소 한 건은 반드시 보여야 한다.
+    // 0건도 통과시키면 로딩과 렌더가 통째로 깨져도 초록색이 된다.
+    await expect(reasons).not.toHaveCount(0);
+
+    const count = await reasons.count();
+    await expect(reasons.locator("[data-reason-verified]")).toHaveCount(count);
+});

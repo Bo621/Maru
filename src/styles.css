@@ -340,6 +340,23 @@ a:focus-visible {
     white-space: nowrap;
 }
 
+.card__reason {
+    margin: 0;
+    padding: var(--space-4);
+    background: var(--paper-deep);
+    border-left: 3px solid var(--seal);
+}
+
+.card__reason p {
+    margin: 0 0 var(--space-2);
+    font: 400 1rem/1.7 var(--font-body);
+}
+
+.card__reason footer {
+    font: 400 0.75rem/1.5 var(--font-mono);
+    color: var(--ink-soft);
+}
+
 .card__claim {
     margin: 0;
     font: 400 1.25rem/1.45 var(--font-serif);
