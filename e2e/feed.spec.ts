@@ -286,11 +286,21 @@ test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 
     await expect(page.locator(`${DECISION_ROWS} [data-verdict="match"]`)).toHaveCount(0);
     await expect(page.locator(`${DECISION_ROWS} [data-verdict="mismatch"]`)).toHaveCount(0);
 
-    // 마감 임박 순 = windowEnd 오름차순. ISO 문자열이라 사전순 정렬이 곧 시간순이다.
+    // 배지가 없다는 것만으로는 「창이 아직 열려 있다」가 성립하지 않는다.
+    // 종료 뒤 유예 중이거나 조회에 실패해도 배지가 없다. 종료 시각을 직접 본다.
+    //
+    // <time> 을 순서로 집지 않는다. 카드에는 발행 시각·시작·종료 셋이 있어
+    // 한 번 시작 시각을 종료로 읽은 적이 있다. 전용 속성을 쓴다.
     const ends = await rows.evaluateAll((els) =>
-        els.map((el) => el.querySelectorAll("time")[1]?.getAttribute("datetime") ?? ""));
+        els.map((el) => el.getAttribute("data-window-end") ?? ""));
     expect(ends).not.toContain("");
-    expect(ends).toEqual([...ends].sort());
+
+    const now = Math.floor(Date.now() / 1000);
+    expect(ends.every((value) => Number(value) > now)).toBe(true);
+
+    // 마감 임박 순 = windowEnd 오름차순.
+    const seconds = ends.map(Number);
+    expect(seconds).toEqual([...seconds].sort((left, right) => left - right));
 });
 
 test("S10-보강 탭 3개가 전환되고 URL에 남는다", async ({page}) => {

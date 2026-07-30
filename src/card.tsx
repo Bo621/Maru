@@ -89,6 +89,9 @@ export function DecisionCard({row, index, now, reason, verdict, isFollowing, onT
         data-feed-row
         data-kind="decision"
         data-uid={row.uid.toLowerCase()}
+        // 관측 종료 시각을 속성으로 낸다. 카드 안의 <time> 은 발행 시각·시작·종료
+        // 셋이라 순서로 집으면 틀리기 쉽다 — 실제로 한 번 시작 시각을 종료로 읽었다.
+        data-window-end={row.windowEnd === undefined ? undefined : String(row.windowEnd)}
         data-settled-count={row.settledDecisionCount}
         data-attester={row.attester.toLowerCase()}
         {...(row.blockNumber === null ? {} : {"data-block-number": String(row.blockNumber)})}
