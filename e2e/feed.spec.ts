@@ -219,6 +219,12 @@ test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 
     // 결과가 이미 나온 판단이 이 탭에 있으면 안 된다. 개수가 아니라 성질을 본다.
     await expect(page.locator(`${DECISION_ROWS} [data-verdict="match"]`)).toHaveCount(0);
     await expect(page.locator(`${DECISION_ROWS} [data-verdict="mismatch"]`)).toHaveCount(0);
+
+    // 마감 임박 순 = windowEnd 오름차순. ISO 문자열이라 사전순 정렬이 곧 시간순이다.
+    const ends = await rows.evaluateAll((els) =>
+        els.map((el) => el.querySelectorAll("time")[1]?.getAttribute("datetime") ?? ""));
+    expect(ends).not.toContain("");
+    expect(ends).toEqual([...ends].sort());
 });
 
 test("S10-보강 탭 3개가 전환되고 URL에 남는다", async ({page}) => {
