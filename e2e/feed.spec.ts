@@ -153,7 +153,7 @@ test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는�
     await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);
 
     const reasons = page.locator("[data-reason]");
-    // Task 1이 reveal 파일을 심었으므로 최소 한 건은 반드시 보여야 한다.
+    // 커밋된 reveal 파일이 있으므로 최소 한 건은 반드시 보여야 한다.
     // 0건도 통과시키면 로딩과 렌더가 통째로 깨져도 초록색이 된다.
     await expect(reasons).not.toHaveCount(0);
 
@@ -319,7 +319,7 @@ test("S11 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다
 });
 
 test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({page}) => {
-    // src/protocolFixtures.ts 와 같은 목록 — 체인에서 실측 확인한 5건.
+    // src/protocolFixtures.ts 와 같은 목록 — 체인에서 실측 확인한 7건.
     // 임계값 등 휴리스틱이 아니라 명시적 UID로 판별하므로 여기서도 그대로 나열한다.
     const FIXTURE_UIDS = [
         "0x3f592f21a7e5a733d3dd90caeb2f9ec35bffa335b69da7310749694283e16938",
@@ -327,6 +327,8 @@ test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({pag
         "0xb1e4628344ade15e9779b4f0398f3d6ddf820b92094c4c84fe8304a68a683b21",
         "0xe015bb0a57ef32f7fa579a0ed7951555405ea6febdbe63fb4ceece0e468786db",
         "0x5d2a066cec47c29327e955c11a46ca028fe8a8ecda62cffc8b29bf4441570606",
+        "0xec790597c115c650cf68a1b4c1495a13b4563b0a2fc7f0e2cc9fb1568e18171a",
+        "0x48356af2e29960666f7baf17e6fa46d6fea1a91381d15a256221b3db0f627564",
     ];
     // S8의 MATCH_UIDS 뒤쪽 2건 — 마루가 발행한 결정이라 구분 표시가 없어야 한다.
     const NON_FIXTURE_UIDS = [
@@ -346,7 +348,7 @@ test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({pag
         await expect(row).not.toHaveAttribute("data-fixture", "");
     }
 
-    // 시연 기록이 피드에서 사라지지 않았다 — 5건 전부 렌더된다. 필터로 걸러내지 않는다.
+    // 필터 없는 피드에서 시연 기록을 숨기지 않고 그대로 표시한다 — 7건 전부 렌더된다.
     for (const uid of FIXTURE_UIDS) {
         await expect(page.locator(`[data-uid="${uid}"]`)).toHaveCount(1);
     }
@@ -354,6 +356,9 @@ test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({pag
 
 test("@smoke S8-실서비스 업비트를 실제로 불러 판정이 뜬다", async ({page}) => {
     // 실서비스 확인은 별도로 둔다. 업비트가 죽어도 S8 게이트는 안 깨진다.
+    // 스냅샷을 끊어야 판정이 업비트 응답에서만 나올 수 있다 — 안 끊으면 업비트가
+    // 완전히 죽어도 담아둔 관측값으로 초록색이 뜬다.
+    await page.route("**/verdicts.json", (route) => route.abort());
     await page.goto("/#/feed");
     await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
     await expect(page.locator("[data-verdict]")).not.toHaveCount(0);

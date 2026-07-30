@@ -13,6 +13,8 @@ export const PROTOCOL_FIXTURE_UIDS: ReadonlySet<string> = new Set([
     "0xb1e4628344ade15e9779b4f0398f3d6ddf820b92094c4c84fe8304a68a683b21",
     "0xe015bb0a57ef32f7fa579a0ed7951555405ea6febdbe63fb4ceece0e468786db",
     "0x5d2a066cec47c29327e955c11a46ca028fe8a8ecda62cffc8b29bf4441570606",
+    "0xec790597c115c650cf68a1b4c1495a13b4563b0a2fc7f0e2cc9fb1568e18171a",
+    "0x48356af2e29960666f7baf17e6fa46d6fea1a91381d15a256221b3db0f627564",
 ]);
 
 export function isProtocolFixture(uid: string): boolean {

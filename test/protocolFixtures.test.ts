@@ -2,11 +2,11 @@ import {describe, expect, it} from "vitest";
 import {isProtocolFixture, PROTOCOL_FIXTURE_UIDS} from "../src/protocolFixtures";
 
 describe("isProtocolFixture", () => {
-    it("체인에서 실측 확인한 5건 전부 true를 돌려준다", () => {
+    it("체인에서 실측 확인한 7건 전부 true를 돌려준다", () => {
         for (const uid of PROTOCOL_FIXTURE_UIDS) {
             expect(isProtocolFixture(uid)).toBe(true);
         }
-        expect(PROTOCOL_FIXTURE_UIDS.size).toBe(5);
+        expect(PROTOCOL_FIXTURE_UIDS.size).toBe(7);
     });
 
     it("마루가 발행한 UID는 false를 돌려준다", () => {

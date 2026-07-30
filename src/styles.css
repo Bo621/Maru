@@ -58,7 +58,7 @@ body {
     margin: 0;
     min-width: 20rem;
     color: var(--ink);
-    /* 반복 괘선을 배경에서 걷어낸다. 컨테이너 경계선으로 대체한다 (Task 12) */
+    /* 반복 괘선을 배경에서 걷어낸다. 컨테이너 경계선으로 대체한다 */
     background: var(--field);
     font: 400 1rem/1.65 var(--font-body);
     font-kerning: normal;

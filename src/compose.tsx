@@ -144,6 +144,8 @@ export function Compose({session, onConnect}: {session?: ComposeSession; onConne
     const previewWindow = alignWindow(Math.floor(Date.now() / 1000), preset.durationSeconds, preset.delaySeconds);
     // 이 구간은 온체인 발행·정산은 정상 동작한다 — 다만 화면이 봉을 못 가져와 판정을 못 낸다.
     // 막지 않고 미리 알린다(원칙: 막다른 길을 만들지 않는다).
+    // 지금은 프리셋만 제공하고 셋 다 상한(200분) 아래라 이 경로는 화면에서 도달할 수 없다.
+    // 판별은 순수 함수로 분리해 뒀으니, 나중에 구간 직접 입력 UI를 붙이면 그대로 쓰인다.
     const beyondJudgeRange = exceedsJudgeableRange(previewWindow);
     const canPublish = threshold !== undefined && phase !== "publishing";
 

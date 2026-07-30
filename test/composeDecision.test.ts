@@ -118,7 +118,7 @@ describe("결정 필드 구성", () => {
         expect(fields[2]).toBe(ZERO); // verifiedAddressUID — 미검증
     });
 
-    it("결정과 트리거 커밋은 0이 아니다 (I1)", () => {
+    it("결정과 트리거 커밋은 컨트랙트가 0을 거부하므로 0이 아니다", () => {
         const fields = buildDecisionFields(base);
         expect(fields[3]).not.toBe(ZERO);
         expect(fields[4]).not.toBe(ZERO);
