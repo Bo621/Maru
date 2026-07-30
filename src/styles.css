@@ -223,6 +223,7 @@ a:focus-visible {
     padding-bottom: clamp(2.5rem, 6vw, 5rem);
 }
 
+.empty-state h1,
 .feed-intro h1,
 .profile-header h1,
 .decision-header h1,
