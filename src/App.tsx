@@ -1,10 +1,22 @@
+import {useState} from "react";
+import type {Address, WalletClient} from "viem";
 import {DecisionDetail} from "./decisionDetail";
 import {Feed} from "./feed";
 import {Passport} from "./passport";
 import {routeToHash, useRoute, type Route} from "./router";
 import {Verify} from "./verify";
+import {connect, walletNotice} from "./wallet";
 
-function Header({route}: {route: Route}) {
+function formatAddress(address: Address): string {
+    return `${address.slice(0, 6)}…${address.slice(-4)}`;
+}
+
+function Header({route, session, onConnect, connectNotice}: {
+    route: Route;
+    session?: {address: Address};
+    onConnect: () => void;
+    connectNotice?: string;
+}) {
     const feedActive = route.name === "feed";
     return <header className="site-header">
         <div className="site-header__inner">
@@ -16,8 +28,14 @@ function Header({route}: {route: Route}) {
                 <a href="#/feed" aria-current={feedActive ? "page" : undefined}>공개 피드</a>
                 <a href="https://github.com/Bo621/POI" target="_blank" rel="noreferrer">프로토콜 원본 ↗</a>
             </nav>
-            <span className="network-mark">GIWA SEPOLIA · 91342</span>
+            <div className="site-header__meta">
+                <span className="network-mark">GIWA SEPOLIA · 91342</span>
+                <button type="button" className="wallet-button" onClick={onConnect}>
+                    {session ? formatAddress(session.address) : "지갑 연결"}
+                </button>
+            </div>
         </div>
+        {connectNotice && <p className="wallet-notice" role="status">{connectNotice}</p>}
     </header>;
 }
 
@@ -34,6 +52,19 @@ function NotFound({raw}: {raw: string}) {
 
 export default function App() {
     const route = useRoute();
+    const [session, setSession] = useState<{address: Address; client: WalletClient} | undefined>();
+    const [connectNotice, setConnectNotice] = useState<string>();
+
+    const onConnect = async () => {
+        setConnectNotice(undefined);
+        try {
+            setSession(await connect());
+        } catch (error) {
+            // 안내만 한다. 읽기 화면은 건드리지 않는다.
+            setConnectNotice(walletNotice(error));
+        }
+    };
+
     let page;
     if (route.name === "feed") page = <Feed query={route.query} />;
     else if (route.name === "passport") page = <Passport address={route.address} />;
@@ -44,7 +75,7 @@ export default function App() {
     return <>
         <a className="skip-link" href="#main-content">본문으로 건너뛰기</a>
         <div className="container-lines">
-            <Header route={route} />
+            <Header route={route} session={session} onConnect={onConnect} connectNotice={connectNotice} />
             {page}
         </div>
         <footer className="site-footer">

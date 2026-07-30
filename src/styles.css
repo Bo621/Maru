@@ -205,6 +205,36 @@ a:focus-visible {
     letter-spacing: 0.14em;
 }
 
+.site-header__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.wallet-button {
+    min-height: 2.75rem;
+    padding-inline: var(--space-4);
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: 500 0.8rem/1 var(--font-mono);
+    cursor: pointer;
+}
+
+.wallet-button:hover {
+    border-color: var(--seal);
+    color: var(--seal-dark);
+}
+
+.wallet-notice {
+    width: var(--page);
+    margin-inline: auto;
+    padding-block: var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    text-align: right;
+}
+
 .page-shell {
     width: var(--page);
     margin-inline: auto;
