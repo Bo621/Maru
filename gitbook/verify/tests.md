@@ -6,7 +6,7 @@ pnpm exec playwright install --with-deps chromium  # 깨끗한 clone 이면 브�
 pnpm test              # vitest + core 동기화
 pnpm build              # 타입 + 번들
 pnpm test:e2e           # Playwright, 실제 GIWA Sepolia 상대
-pnpm check:onchain      # 문서 ↔ 온체인
+pnpm check:onchain      # .env.example 의 배포 주소·스키마를 온체인과 대조
 ```
 
 한 번에 실행하려면 `./scripts/run_all_tests.sh`. 이 스크립트는 Playwright
@@ -87,7 +87,7 @@ Playwright는 로컬 anvil이 아니라 **실제 GIWA Sepolia**를 상대로 돈
 
 ```bash
 ./scripts/run_all_tests.sh          # 실패하면 종료코드 1
-./scripts/check_docs_onchain.sh     # 문서 ↔ 온체인
+./scripts/check_docs_onchain.sh     # .env.example 의 배포 주소·스키마를 온체인과 대조
 grep -c "0x0f25917176a405bb9022e5b417e0d57348b30f89" dist/assets/*.js
 ```
 

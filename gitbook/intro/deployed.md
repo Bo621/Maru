@@ -45,6 +45,9 @@ Railway 서비스는 POI(`poi-static-production`)와 **별도**다. 같은 컨�
 
 ## 주소가 맞는지 스스로 확인하는 검사
 
+검사 대상은 `.env.example` 에 적힌 배포 블록·EAS·리졸버 둘·스키마 둘이다.
+**이 백서 본문의 문자열이 온체인과 같은지는 검사하지 않는다.**
+
 ```bash
 node scripts/check_docs_onchain.mjs
 ```
