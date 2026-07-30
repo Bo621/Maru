@@ -10,8 +10,19 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-STAGE="${ROOT_DIR}/.railway-deploy"
 SERVICE="${RAILWAY_SERVICE:-maru-web}"
+PROJECT="${RAILWAY_PROJECT:-maru}"
+ENVIRONMENT="${RAILWAY_ENVIRONMENT:-production}"
+
+# 스테이징은 반드시 저장소 **바깥**이어야 한다.
+# `railway up` 은 git 루트를 기준으로 업로드하며 .gitignore 를 적용한다.
+# 저장소 안에 두면 두 가지가 동시에 터진다:
+#   1) 저장소의 railway.json(pnpm install --frozen-lockfile)이 이겨서 원격 pnpm 빌드를 탄다
+#      -> Nixpacks corepack 이 pnpm 11 을 못 돌린다(ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING)
+#   2) .gitignore 의 `dist/` 때문에 정작 올려야 할 빌드 산출물이 걸러진다
+# 실제로 1)로 첫 배포가 실패했다.
+STAGE="$(mktemp -d "${TMPDIR:-/tmp}/maru-railway-XXXXXX")"
+trap 'rm -rf "${STAGE}"' EXIT
 
 echo "== 1. 빌드"
 cd "${ROOT_DIR}"
@@ -61,8 +72,12 @@ if [[ ! -f "${STAGE}/dist/index.html" ]]; then
     exit 1
 fi
 
-echo "== 4. 업로드 (service=${SERVICE})"
+echo "== 4. 업로드 (project=${PROJECT} service=${SERVICE})"
 cd "${STAGE}"
+# 저장소 밖에서 실행하므로 디렉터리에 프로젝트 링크가 없다.
+# 링크 없이 `railway up` 을 돌리면 조용히 **새 프로젝트를 만들어** 거기에 배포한다.
+# 실제로 maru-railway-XXXX 라는 유령 프로젝트가 하나 생겼다. 반드시 명시적으로 링크한다.
+railway link -p "${PROJECT}" -s "${SERVICE}" -e "${ENVIRONMENT}"
 # 서비스 이름이 틀리면 railway는 업로드까지 성공하고 조용히 아무것도 배포하지 않는다.
 railway up --service "${SERVICE}" --detach
 
