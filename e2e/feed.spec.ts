@@ -211,7 +211,50 @@ test("S9 팔로우가 실제로 거른다", async ({page}) => {
     expect(new Set(attesters)).toEqual(new Set([firstAttester]));
 });
 
-test("S10 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다", async ({page}) => {
+test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 순으로 뜬다", async ({page}) => {
+    await page.goto("/#/feed?tab=soon");
+    const rows = page.locator(DECISION_ROWS);
+    await expect(rows).not.toHaveCount(0);
+
+    // 결과가 이미 나온 판단이 이 탭에 있으면 안 된다. 개수가 아니라 성질을 본다.
+    await expect(page.locator(`${DECISION_ROWS} [data-verdict="match"]`)).toHaveCount(0);
+    await expect(page.locator(`${DECISION_ROWS} [data-verdict="mismatch"]`)).toHaveCount(0);
+});
+
+test("S10-보강 탭 3개가 전환되고 URL에 남는다", async ({page}) => {
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+    expect(page.url()).not.toMatch(/tab=/);
+
+    await page.getByRole("link", {name: "곧 결과 나옴"}).click();
+    await expect(page).toHaveURL(/tab=soon/);
+    await expect(page.getByRole("link", {name: "곧 결과 나옴"})).toHaveAttribute("aria-current", "page");
+
+    await page.getByRole("link", {name: "전체"}).click();
+    await expect(page).not.toHaveURL(/tab=soon/);
+});
+
+test("S4-보강 탭과 필터가 서로를 지우지 않는다", async ({page, context}) => {
+    await page.goto("/#/feed");
+    await snapshot(page);
+
+    await page.getByLabel("도장 검증 지갑만").click();
+    await expect(page.getByLabel("도장 검증 지갑만")).toBeChecked();
+    await expect(page).toHaveURL(/verified=1/);
+
+    await page.getByRole("link", {name: "곧 결과 나옴"}).click();
+    await expect(page).toHaveURL(/verified=1/);
+    await expect(page).toHaveURL(/tab=soon/);
+
+    const sharedURL = page.url();
+    const sharedPage = await context.newPage();
+    await sharedPage.goto(sharedURL);
+
+    await expect(sharedPage.getByLabel("도장 검증 지갑만")).toBeChecked();
+    await expect(sharedPage.getByRole("link", {name: "곧 결과 나옴"})).toHaveAttribute("aria-current", "page");
+});
+
+test("S11 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다", async ({page}) => {
     await page.goto("/#/feed");
     await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
     await page.goto("/#/write");
