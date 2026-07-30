@@ -383,6 +383,11 @@ a:focus-visible {
     font-size: 0.875rem;
 }
 
+.card__thread {
+    font-size: 0.8125rem;
+    color: var(--seal-dark);
+}
+
 .card--error {
     border: 1px solid var(--seal);
 }
@@ -653,6 +658,39 @@ a:focus-visible {
 
 .detail-grid dd {
     font-size: 0.88rem;
+    overflow-wrap: anywhere;
+}
+
+.thread {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line-color);
+}
+
+.thread__note {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+}
+
+.thread__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+}
+
+.thread__list li {
+    border-left: 2px solid var(--line-color);
+    padding-block: var(--space-2);
+    /* --depth는 인라인 style로 들어온다. 없으면 0으로 떨어진다. */
+    padding-inline-start: calc(var(--space-4) + var(--depth, 0) * var(--space-4));
+}
+
+.thread__missing {
+    color: var(--seal-dark);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     overflow-wrap: anywhere;
 }
 

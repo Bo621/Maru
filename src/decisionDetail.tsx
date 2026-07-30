@@ -1,8 +1,9 @@
 import {deriveState} from "@poi/core";
-import {useEffect, useState} from "react";
+import {type CSSProperties, useEffect, useState} from "react";
 import type {Hex} from "viem";
 import {formatCondition, formatUtcMinute, stateLabel} from "./presentation";
 import {conditionSentence} from "./sentence";
+import {buildThread} from "./thread";
 import {
     getChainTime,
     readDecision,
@@ -13,6 +14,8 @@ import {
     type SettlementState,
 } from "./read";
 import {routeToHash} from "./router";
+
+type ThreadEntry = {uid: Hex; depth: number; resolved: boolean; record?: DecisionRecord};
 
 type DetailState =
     | {status: "loading"}
@@ -49,6 +52,36 @@ export function DecisionDetail({uid}: {uid: Hex}) {
         };
     }, [uid, retryKey]);
     const retry = () => setRetryKey((value) => value + 1);
+
+    const [thread, setThread] = useState<ThreadEntry[]>([]);
+    useEffect(() => {
+        let current = true;
+        setThread([]);
+        void (async () => {
+            const records = new Map<string, DecisionRecord>();
+            let cursor: Hex | undefined = uid;
+            // 부모는 항상 더 이른 결정이므로 체인은 유한하다. 그래도 상한을 둔다.
+            for (let step = 0; cursor && step < 16; step += 1) {
+                try {
+                    const record = await readDecision(cursor);
+                    records.set(cursor.toLowerCase(), record);
+                    cursor = record.parents[0];
+                } catch {
+                    break;
+                }
+            }
+            const nodes = buildThread(uid, (target) => records.get(target.toLowerCase()));
+            if (current) {
+                setThread(nodes.map((node) => ({
+                    ...node,
+                    record: records.get(node.uid.toLowerCase()),
+                })));
+            }
+        })();
+        return () => {
+            current = false;
+        };
+    }, [uid]);
 
     if (state.status === "loading") return <main id="main-content" className="page-shell narrow-page">
         <a className="back-link" href="#/feed">← 공개 피드</a>
@@ -95,6 +128,28 @@ export function DecisionDetail({uid}: {uid: Hex}) {
             <dt>활성 정산</dt><dd>{settlement.activeHead === ZERO_UID ? "없음" : settlement.activeHead}</dd>
             <dt>철회 이력</dt><dd>{settlement.revokeCount > 0 ? "있음" : "없음"}</dd>
         </dl>
+        {thread.length > 1 && <section className="thread" data-thread>
+            <h2>이 발행자의 이전 판단</h2>
+            <p className="thread__note">
+                컨트랙트는 같은 지갑의 더 이른 결정만 부모로 받습니다. 타인에게 다는 답글이 아닙니다.
+            </p>
+            <ol className="thread__list">
+                {thread.map((entry) => <li
+                    key={entry.uid}
+                    data-thread-node
+                    data-depth={entry.depth}
+                    style={{"--depth": entry.depth} as CSSProperties}
+                >
+                    {entry.record
+                        ? <a href={routeToHash({name: "decision", uid: entry.uid})}>
+                            {conditionSentence(entry.record)}
+                        </a>
+                        : <span className="thread__missing">
+                            부모를 불러오지 못했습니다 — {entry.uid}
+                        </span>}
+                </li>)}
+            </ol>
+        </section>}
         <p className="detail-caveat">활성 정산은 결과가 등록됐다는 뜻입니다. 관측값의 정합성은 오프체인 검증에서 확인합니다.</p>
         <a className="verify-link" href={routeToHash({name: "verify", uid})}>이 결정 검증하기 →</a>
     </main>;

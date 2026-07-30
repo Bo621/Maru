@@ -67,6 +67,18 @@ test("S5 피드에서 검증까지 끊기지 않고 이어진다", async ({page}
     await expect(page.getByRole("heading", {name: "검증하기"})).toBeVisible();
 });
 
+test("S6 스레드 배지에서 부모 판단까지 이어진다", async ({page}) => {
+    await page.goto("/#/feed");
+    await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);
+
+    const badge = page.locator("[data-thread-badge]").first();
+    await expect(badge).toBeVisible();
+    await badge.click();
+
+    await expect(page.locator("[data-thread]")).toBeVisible();
+    await expect(page.locator("[data-thread-node]")).not.toHaveCount(1);
+});
+
 test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는다", async ({page}) => {
     await page.goto("/#/feed");
     await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);

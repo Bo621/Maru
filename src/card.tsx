@@ -96,6 +96,13 @@ export function DecisionCard({row, index, now, reason}: {
             >
                 {label.short}
             </span>
+            {row.parents.length > 0 && <a
+                className="card__thread"
+                data-thread-badge
+                href={routeToHash({name: "decision", uid: row.uid})}
+            >
+                이전 판단 {row.parents.length}
+            </a>}
             <span className="card__uid">UID {shortHex(row.uid, 10, 6)}</span>
             <a className="card__open" href={routeToHash({name: "decision", uid: row.uid})}>
                 결정 열기 <span aria-hidden="true">↗</span>
