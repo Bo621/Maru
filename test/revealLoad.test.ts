@@ -115,4 +115,46 @@ describe("REASON 공개 파일 로드", () => {
 
         expect(fetchImpl).toHaveBeenCalledTimes(1);
     });
+
+    it("그 외 비2xx 실패는 캐시하지 않아 다음 호출이 다시 가져온다", async () => {
+        resetRevealCache();
+        const fetchImpl = vi.fn(async () => response({status: 500}));
+
+        await loadReasonReveal({uid: UID, fetchImpl});
+        await loadReasonReveal({uid: UID, fetchImpl});
+
+        expect(fetchImpl).toHaveBeenCalledTimes(2);
+    });
+
+    it("네트워크 실패는 캐시하지 않아 다음 호출이 다시 가져온다", async () => {
+        resetRevealCache();
+        const fetchImpl = vi.fn(async () => {
+            throw new Error("network down");
+        });
+
+        await loadReasonReveal({uid: UID, fetchImpl});
+        await loadReasonReveal({uid: UID, fetchImpl});
+
+        expect(fetchImpl).toHaveBeenCalledTimes(2);
+    });
+
+    it("404는 여전히 캐시되어 다음 호출도 요청하지 않는다", async () => {
+        resetRevealCache();
+        const fetchImpl = vi.fn(async () => response({status: 404}));
+
+        await loadReasonReveal({uid: UID, fetchImpl});
+        await loadReasonReveal({uid: UID, fetchImpl});
+
+        expect(fetchImpl).toHaveBeenCalledTimes(1);
+    });
+
+    it("성공한 로드는 여전히 캐시되어 다음 호출도 요청하지 않는다", async () => {
+        resetRevealCache();
+        const fetchImpl = vi.fn(async () => response({}));
+
+        await loadReasonReveal({uid: UID, fetchImpl});
+        await loadReasonReveal({uid: UID, fetchImpl});
+
+        expect(fetchImpl).toHaveBeenCalledTimes(1);
+    });
 });

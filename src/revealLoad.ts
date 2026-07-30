@@ -37,6 +37,8 @@ export async function loadReasonReveal(options: {
                 // 그 외는 배포가 잘못된 신호이므로 조용히 넘기지 않는다.
                 if (response.status !== 404) {
                     console.warn(`reveal 응답이 ${response.status}입니다: ${key}`);
+                    // 일시적 실패일 수 있다 — 이후 호출이 다시 시도하도록 캐시를 비운다.
+                    inFlight.delete(key);
                 }
                 return undefined;
             }
@@ -53,6 +55,8 @@ export async function loadReasonReveal(options: {
             if (parsed?.version !== REVEAL_VERSION) return undefined;
             return parsed;
         } catch {
+            // 네트워크 실패도 일시적일 수 있다 — 캐시를 비워 재시도를 허용한다.
+            inFlight.delete(key);
             return undefined;
         }
     })();
