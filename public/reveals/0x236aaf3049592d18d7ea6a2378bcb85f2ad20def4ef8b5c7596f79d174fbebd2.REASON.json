@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xA1Cb5CbC9D7a0B7164a1bFE4B19bfe1Bf38BF310",
+  "attestationUID": "0x236aaf3049592d18d7ea6a2378bcb85f2ad20def4ef8b5c7596f79d174fbebd2",
+  "tag": "REASON",
+  "salt": "0x08d737ef070d5e243c84b2652dcb04c5",
+  "payload": "이틀 봐도 90,000은 두꺼운 자리다. 여기까지 밀리면 사는 쪽이 붙는다."
+}

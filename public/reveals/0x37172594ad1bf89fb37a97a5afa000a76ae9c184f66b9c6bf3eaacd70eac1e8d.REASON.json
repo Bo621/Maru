@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xA1Cb5CbC9D7a0B7164a1bFE4B19bfe1Bf38BF310",
+  "attestationUID": "0x37172594ad1bf89fb37a97a5afa000a76ae9c184f66b9c6bf3eaacd70eac1e8d",
+  "tag": "REASON",
+  "salt": "0x89dfadf23ba4a65fcdbdb0bf7d8c34bd",
+  "payload": "92,000 뚫고 올라와서 지금 92,197이다. 두 시간이면 이 자리 밑으로 다시 빠질 이유는 안 보인다."
+}

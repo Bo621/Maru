@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xca89C0F26C99B89F2638649D9b597cA264c7Af5c",
+  "attestationUID": "0x13806f9d5728dd93a044d75f2b8f545d9b1bc31ba13b89246f51fa98330bffaf",
+  "tag": "REASON",
+  "salt": "0x7a92e5c73a48213c1f5027ce58a7b670",
+  "payload": "위로는 93,500이 계속 막았다. 하루 만에 거기까지 뚫고 갈 힘은 아직 아니다."
+}
