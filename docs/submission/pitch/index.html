@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>마루 — GASOK Track 02</title>
+<style>
+:root{
+  --paper:oklch(.965 .018 82);
+  --paper-deep:oklch(.925 .028 78);
+  --paper-raised:oklch(.985 .012 84);
+  --ink:oklch(.235 .035 248);
+  --ink-soft:oklch(.43 .028 248);
+  --ink-faint:oklch(.58 .022 248);
+  --rule:oklch(.79 .025 78);
+  --rule-strong:oklch(.60 .035 248);
+  --seal:oklch(.55 .195 29);
+  --seal-dark:oklch(.42 .16 29);
+  --green:oklch(.43 .09 155);
+  --blue:oklch(.45 .1 248);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --body:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --display:"Gowun Batang","Batang",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* 한국어 조판 — 어절 중간에서 끊지 않는다 */
+h1,h2,h3,h4,p,td,th,figcaption,.lede,.claim,.note,.k{word-break:keep-all;overflow-wrap:anywhere}
+html,body{height:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font:400 clamp(15px,1.05vw,18px)/1.65 var(--body);
+  font-variant-numeric:tabular-nums;
+  overflow:hidden;
+}
+
+/* ── 슬라이드 ───────────────────────────────── */
+.deck{height:100dvh;position:relative}
+.slide:focus{outline:none}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  padding:clamp(2.5rem,5vw,5.5rem) clamp(2rem,7vw,9rem) 5.5rem;
+  overflow-y:auto;
+  animation:rise .5s cubic-bezier(.16,1,.3,1);
+}
+.slide[data-on]{display:flex;flex-direction:column;justify-content:center}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none}}
+
+.tag{
+  font:500 clamp(.7rem,.82vw,.8rem)/1 var(--mono);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--seal-dark);margin-bottom:clamp(1rem,2.2vw,2rem);
+  display:flex;align-items:baseline;gap:.9em;
+}
+.tag b{color:var(--ink-faint);font-weight:500}
+
+h1{font:700 clamp(2.1rem,4.6vw,4rem)/1.12 var(--display);letter-spacing:-.02em}
+h2{font:700 clamp(1.55rem,3.1vw,2.7rem)/1.2 var(--display);letter-spacing:-.015em;max-width:26ch;text-wrap:balance}
+.lede{margin-top:clamp(1.1rem,2.2vw,1.8rem);max-width:56ch;color:var(--ink-soft);font-size:1.05em}
+.lede strong{color:var(--ink);font-weight:600}
+em{color:var(--seal-dark);font-style:normal;font-weight:600}
+.quiet{color:var(--ink-faint);font-size:.85em;line-height:1.6}
+.mono{font-family:var(--mono);font-size:.9em}
+
+.eave{position:relative;padding-top:1.15rem}
+.eave::before{content:"";position:absolute;top:0;left:0;width:4.5rem;height:2px;background:var(--seal);opacity:.75}
+
+/* ── 표 ─────────────────────────────────────── */
+table{border-collapse:collapse;width:100%;max-width:min(100%,72rem);margin-top:clamp(1.2rem,2.4vw,2rem);font-size:.94em}
+th,td{text-align:left;padding:.72em .9em;border-bottom:1px solid var(--rule);vertical-align:top}
+th{color:var(--ink-faint);font:500 .8em/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+.yes{color:var(--green)}
+.no{color:var(--ink-faint)}
+.hot{color:var(--seal-dark);font-weight:600}
+
+/* ── 도표 ───────────────────────────────────── */
+figure{margin-top:clamp(1.3rem,2.6vw,2.2rem)}
+figcaption{margin-top:.9rem;color:var(--ink-faint);font-size:.82em;max-width:56ch}
+svg{width:100%;height:auto;max-width:min(100%,78rem);display:block}
+.s-lab{font:500 12px var(--mono);fill:var(--ink-faint);letter-spacing:.06em}
+.s-txt{font:400 13px var(--body);fill:var(--ink)}
+.s-hot{font:600 13px var(--body);fill:var(--seal-dark)}
+.s-line{stroke:var(--rule-strong);stroke-width:1}
+
+pre{
+  margin-top:clamp(1.2rem,2.4vw,1.9rem);padding:1.15rem 1.35rem;
+  background:var(--paper-deep);border-left:2px solid var(--seal);
+  font:400 clamp(.76rem,.95vw,.9rem)/1.75 var(--mono);
+  overflow-x:auto;color:var(--ink-soft);max-width:min(100%,72rem);
+}
+pre b{color:var(--ink);font-weight:500}
+pre i{color:var(--seal-dark);font-style:normal}
+
+.cols{display:grid;gap:clamp(1.4rem,3vw,3rem);grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));margin-top:clamp(1.3rem,2.6vw,2.2rem);max-width:min(100%,72rem)}
+.cols h3{font:600 .95em/1.4 var(--body);color:var(--seal-dark);margin-bottom:.5rem}
+
+/* ── 크롬 ───────────────────────────────────── */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;height:3.4rem;
+  display:flex;align-items:center;gap:1.4rem;
+  padding:0 clamp(2rem,7vw,9rem);
+  border-top:1px solid var(--rule-strong);background:var(--paper-raised);
+  font:500 .72rem/1 var(--mono);letter-spacing:.1em;color:var(--ink-faint);
+}
+.bar .brand{color:var(--ink);font-family:var(--display);font-weight:700;letter-spacing:0}
+.bar .n{margin-left:auto;color:var(--ink);min-width:5ch;text-align:right}
+.bar .n .tot{color:var(--ink-faint)}
+.prog{position:fixed;left:0;bottom:0;height:2px;background:var(--seal);transition:width .45s cubic-bezier(.16,1,.3,1);z-index:2}
+.nav{position:fixed;bottom:.7rem;right:clamp(2rem,7vw,9rem);display:flex;gap:.4rem}
+.nav button{
+  width:2rem;height:2rem;border:1px solid var(--rule-strong);background:transparent;
+  color:var(--ink-faint);font:400 1rem/1 var(--mono);cursor:pointer;
+  transition:color .18s,border-color .18s;
+}
+.nav button:hover{color:var(--seal-dark);border-color:var(--seal)}
+.nav button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* 표지 */
+.cover{justify-content:center}
+.cover .brandmark{
+  display:inline-grid;place-items:center;width:2.6rem;height:2.6rem;
+  border:2px solid var(--seal);color:var(--seal-dark);
+  font:700 1.15rem/1 var(--display);transform:rotate(-3deg);margin-bottom:1.4rem;
+}
+.cover h1{font-size:clamp(3rem,8vw,7rem);line-height:.98}
+.cover .sub{font:400 clamp(1rem,1.8vw,1.5rem)/1.4 var(--display);color:var(--ink-soft);margin-top:.4rem}
+.cover .meta{margin-top:clamp(2.5rem,5vw,4.5rem);font:500 .8rem/1.9 var(--mono);letter-spacing:.12em;color:var(--ink-faint)}
+.cover .claim{margin-top:clamp(1.6rem,3vw,2.6rem);font:400 clamp(1.05rem,2.1vw,1.7rem)/1.5 var(--body);max-width:28ch;color:var(--ink)}
+
+a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px}
+.tblwrap{max-width:100%}
+.slide.dense table{font-size:.87em;margin-top:clamp(.9rem,1.8vw,1.4rem)}
+.slide.dense th,.slide.dense td{padding:.5em .75em}
+.slide.dense .lede{font-size:.98em;margin-top:clamp(.8rem,1.6vw,1.2rem)}
+@media (max-width:900px){.tblwrap{overflow-x:auto}}
+
+/* ── 스크린샷 + 주석 ── */
+.shots{display:grid;gap:clamp(1.2rem,2.6vw,2.6rem);grid-template-columns:minmax(0,42%) minmax(0,1fr);
+  margin-top:clamp(1rem,2vw,1.6rem);max-width:min(100%,76rem);align-items:start}
+.shot{position:relative;border:1px solid var(--rule-strong);background:var(--paper-raised);overflow:hidden;
+  box-shadow:0 18px 40px -22px oklch(0.2 0.03 250 / 0.35)}
+.shot img{width:100%;display:block;max-height:52vh;object-fit:cover;object-position:top}
+.shot figcaption{position:absolute;right:0;top:0;
+  font:500 .62rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--paper);background:var(--seal);padding:.34em .6em;z-index:1}
+.marks{display:flex;flex-direction:column;gap:clamp(.7rem,1.35vw,1rem)}
+.mark{position:relative;padding-left:2.2rem}
+.mark::before{content:attr(data-n);position:absolute;left:0;top:.1em;
+  width:1.5rem;height:1.5rem;display:grid;place-items:center;
+  border:1px solid var(--seal);color:var(--seal-dark);
+  font:500 .66rem/1 var(--mono)}
+.mark h4{font:600 .96em/1.45 var(--body);color:var(--ink);margin-bottom:.3rem}
+.mark p{color:var(--ink-soft);font-size:.85em;line-height:1.6}
+.mark p b{color:var(--ink);font-weight:600}
+
+/* ── 지표 블록 ───────────── */
+.stats{display:grid;gap:clamp(.9rem,2vw,1.6rem);grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+  margin-top:clamp(1.1rem,2.2vw,1.8rem);max-width:min(100%,74rem)}
+.stat{border-left:2px solid var(--seal);padding:.15rem 0 .15rem .9rem}
+.stat .n{display:block;font:700 clamp(1.5rem,2.9vw,2.4rem)/1.05 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.stat .k{display:block;margin-top:.4rem;color:var(--ink-soft);font-size:.84em;line-height:1.5}
+.stat .s{display:block;margin-top:.3rem;color:var(--ink-faint);font:400 .7rem/1.4 var(--mono)}
+
+/* ── 출처 ───────────────────────────────── */
+.src{margin-top:clamp(1rem,2vw,1.5rem);padding-top:.7rem;border-top:1px solid var(--rule);
+  color:var(--ink-faint);font:400 .72rem/1.7 var(--mono);max-width:min(100%,74rem)}
+.src b{color:var(--ink-soft);font-weight:500}
+
+/* ── 전/후 대조 ─────────────────── */
+.ba{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  margin-top:clamp(1.1rem,2.2vw,1.8rem);max-width:min(100%,74rem);border:1px solid var(--rule-strong)}
+.ba > div{padding:clamp(.9rem,1.8vw,1.4rem)}
+.ba > div + div{border-left:1px solid var(--rule-strong)}
+.ba h4{font:500 .72rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8rem}
+.ba .b4 h4{color:var(--ink-faint)} .ba .af h4{color:var(--seal-dark)}
+.ba p{font-size:.92em;line-height:1.7;color:var(--ink-soft)}
+.ba p + p{margin-top:.55rem}
+.ba .af{background:color-mix(in oklch, var(--seal) 8%, var(--paper-raised))}
+.ba strong{color:var(--ink);font-weight:600}
+
+/* ── 3단계 ────────────────────── */
+.steps{display:grid;gap:clamp(1rem,2.2vw,2rem);grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
+  margin-top:clamp(1.2rem,2.4vw,2rem);max-width:min(100%,74rem)}
+.step{position:relative;padding-top:1.5rem;border-top:1px solid var(--rule-strong)}
+.step::before{content:attr(data-n);position:absolute;top:-.72rem;left:0;
+  background:var(--paper);padding-right:.6rem;
+  font:500 .72rem/1 var(--mono);letter-spacing:.14em;color:var(--seal-dark)}
+.step h4{font:600 1.02em/1.4 var(--body);color:var(--ink);margin-bottom:.5rem}
+.step p{color:var(--ink-soft);font-size:.88em;line-height:1.65}
+.step .ex{margin-top:.7rem;padding:.6rem .75rem;background:var(--paper-deep);border-left:2px solid var(--rule-strong);
+  font:400 .76rem/1.6 var(--mono);color:var(--ink-soft)}
+.step .ex b{color:var(--ink);font-weight:500}
+
+/* ── S1~S10 시나리오 그리드 ─────────────── */
+.scen{display:grid;gap:clamp(.8rem,1.6vw,1.2rem);grid-template-columns:repeat(auto-fit,minmax(20rem,1fr));
+  margin-top:clamp(1rem,2vw,1.6rem);max-width:min(100%,78rem)}
+.scen div{padding:clamp(.7rem,1.4vw,1rem) 0 0;border-top:1px solid var(--rule)}
+.scen div b{display:block;color:var(--seal-dark);font:600 .78em/1.4 var(--mono);letter-spacing:.05em;margin-bottom:.3rem}
+.scen div span{color:var(--ink-soft);font-size:.88em;line-height:1.6}
+
+/* ── 신뢰 경계 3단 박스 ─────────────── */
+.trust{display:flex;flex-direction:column;gap:0;margin-top:clamp(1.2rem,2.4vw,2rem);max-width:min(100%,78rem)}
+.trust > div{padding:clamp(.9rem,1.8vw,1.3rem) clamp(1.2rem,2.2vw,1.6rem);border:1px solid var(--rule-strong)}
+.trust > div + div{border-top:0}
+.trust .t1{background:color-mix(in oklch, var(--seal) 9%, var(--paper-raised));border-color:var(--seal)}
+.trust .t3{border-style:dashed}
+.trust h4{font:600 .78em/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
+.trust .t1 h4{color:var(--seal-dark)}
+.trust .t3 h4{color:var(--ink-faint)}
+.trust p{font-size:.9em;color:var(--ink-soft);line-height:1.6}
+.trust .t3 p{color:var(--ink-faint)}
+
+/* ── 인쇄 / PDF ──────────────────────────────── */
+@media print {
+  @page { size: 297mm 167mm; margin: 0; }
+  html, body { height: auto; overflow: visible; background: var(--paper); }
+  body { font-size: 11pt; }
+  .deck { height: auto; }
+  .slide,
+  .slide[data-on] {
+    display: flex !important;
+    position: relative;
+    inset: auto;
+    min-height: 167mm;
+    padding: 14mm 18mm;
+    overflow: visible;
+    animation: none;
+    justify-content: center;
+    break-after: page;
+    page-break-after: always;
+  }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .bar, .nav, .prog { display: none !important; }
+  figure, table, pre, .cols, .shots, .shot, .stats, .ba, .steps, .scen, .trust { break-inside: avoid; page-break-inside: avoid; }
+  svg { max-width: 100%; }
+  .shot img { max-height: 92mm; object-fit: cover; object-position: top; }
+  a { text-decoration: none; }
+}
+
+@media(max-width:760px){
+  .slide{padding:2rem 1.2rem 5.2rem}
+  h2{max-width:none}
+  figure{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  svg{min-width:620px}
+  td:first-child{white-space:normal}
+  .bar{gap:.8rem;font-size:.62rem;padding:0 1.2rem}
+  .nav{right:1.2rem}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck">
+
+<!-- 1 표지 ─────────────────────────────────── -->
+<section class="slide cover" data-on>
+  <div class="tag">// GASOK · TRACK 02 CONSUMER / SOCIAL</div>
+  <span class="brandmark">마</span>
+  <h1>마루</h1>
+  <p class="sub">대청마루 — 사람들이 모여 앉아 판단을 나누는 곳</p>
+  <p class="claim">결과를 알기 전에 고정한 판단이, <em>맞았는지까지</em> 보이는 소셜 피드</p>
+  <div class="meta">GIWA SEPOLIA · CHAIN 91342<br>2026.07</div>
+</section>
+
+<!-- 2 한 장으로 ─────────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 01 <b>한 장으로</b></div>
+  <h2>결과를 알기 전에 고정한 판단이, <em>맞았는지까지</em> 보인다</h2>
+  <p class="lede">여러 지갑의 판단이 시간 역순으로 흐른다. 관측 구간이 끝나면 업비트 1분봉 재계산으로 <strong>맞음·틀림이 함께 뜬다.</strong> 틀린 판단도 지워지지 않는다.</p>
+  <div class="steps">
+    <div class="step" data-n="STEP 01">
+      <h4>고정한다</h4>
+      <p>기존 POI 스키마에 지갑으로 직접 attest한다. 관측 구간은 결정 시점에 미리 선언된다.</p>
+      <div class="ex">“비트코인 원화 종가가<br><b>91,727,000원</b>을 넘는다”</div>
+    </div>
+    <div class="step" data-n="STEP 02">
+      <h4>흐른다</h4>
+      <p>피드는 여러 지갑의 판단을 시간 역순으로 나열한다. 순위나 추천 알고리즘이 아니다.</p>
+      <div class="ex">전체 · 팔로우 · 곧 결과 나옴<br>세 개의 탭</div>
+    </div>
+    <div class="step" data-n="STEP 03">
+      <h4>대조한다</h4>
+      <p>구간이 끝나면 화면이 업비트 1분봉으로 재계산해 맞음·틀림을 표시한다. 발행자가 정할 수 없다.</p>
+      <div class="ex">등록완료 · 화면 재계산 맞음<br>업비트 1분봉 91,727,000원</div>
+    </div>
+  </div>
+  <p class="src"><b>이 판단은 지금 체인에 있는 실제 기록이다.</b> 결정 <code>0x3f592f21…e16938</code> — GIWA Sepolia에서 지갑 없이 열어 볼 수 있다.</p>
+</section>
+
+<!-- 3 문제 ─────────────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 02 <b>문제</b></div>
+  <h2>스크린샷은 <em>증명이 아니다</em></h2>
+  <p class="lede">트레이더 커뮤니티에서 수익률은 스크린샷과 평판으로 오간다. <strong>포토샵도 되고, 맞은 것만 골라 올리는 것도 된다.</strong></p>
+  <div class="tblwrap"><table>
+    <tr><td>수익률 캡처</td><td class="no">사후 편집·합성 가능</td></tr>
+    <tr><td>SNS 예측 게시글</td><td class="no">지우면 그만, 맞은 것만 남길 수 있다</td></tr>
+    <tr><td>평판·팔로워 수</td><td class="no">과거 발언 전체를 대조할 방법이 없다</td></tr>
+  </table></div>
+</section>
+
+<!-- 4 기존 방식이 막지 못하는 것 ────────────── -->
+<section class="slide">
+  <div class="tag">// 03 <b>기존 방식이 막지 못하는 것</b></div>
+  <h2>남는 건 <em>사후 서사</em>다</h2>
+  <p class="lede">결과를 본 뒤에는 누구나 이렇게 말할 수 있다 — <em>“나는 그럴 줄 알았다.”</em> 캡처·게시글·평판 중 어느 것도 <strong>이 말이 결과 전에 있었는지</strong>를 증명하지 않는다.</p>
+  <div class="ba">
+    <div class="b4">
+      <h4>지금</h4>
+      <p>맞힌 판단은 캡처로 남기고, 틀린 판단은 지운다. <strong>지운 사람과 안 지운 사람이 화면에서 구별되지 않는다.</strong></p>
+      <p>새 구독자는 결국 “요즘 잘 맞힌다더라”는 <strong>평판</strong>으로 고른다.</p>
+    </div>
+    <div class="af">
+      <h4>마루 이후</h4>
+      <p>판단은 결과를 알기 전에 온체인에 고정된다. <strong>발행자가 나중에 지우거나 고칠 수 없다.</strong></p>
+      <p>관측 구간이 끝나면 맞음·틀림이 <strong>화면 재계산으로</strong> 붙는다. 틀린 것도 피드에 그대로 남는다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 해법 ─────────────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 04 <b>해법</b></div>
+  <h2>결과 전에 <em>조건과 관측 구간을 고정</em>한다</h2>
+  <figure>
+  <svg viewBox="0 0 900 210" role="img" aria-label="T0 결정 커밋, T1 관측 구간 종료, T2 결과 등록으로 이어지는 타임라인">
+    <line class="s-line" x1="40" y1="96" x2="860" y2="96"/>
+    <g>
+      <circle cx="120" cy="96" r="7" fill="var(--seal)"/>
+      <text class="s-lab" x="120" y="70" text-anchor="middle">T0</text>
+      <text class="s-hot" x="120" y="134" text-anchor="middle">판단 고정</text>
+      <text class="s-txt" x="120" y="156" text-anchor="middle" font-size="12">지표·조건·관측 구간</text>
+      <text class="s-txt" x="120" y="174" text-anchor="middle" font-size="12">미리 선언</text>
+    </g>
+    <rect x="127" y="88" width="366" height="16" fill="color-mix(in oklch, var(--seal) 16%, transparent)"/>
+    <text class="s-lab" x="310" y="82" text-anchor="middle">관측 구간</text>
+    <g>
+      <circle cx="500" cy="96" r="7" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+      <text class="s-lab" x="500" y="70" text-anchor="middle">T1</text>
+      <text class="s-txt" x="500" y="134" text-anchor="middle">구간 종료</text>
+      <text class="s-txt" x="500" y="156" text-anchor="middle" font-size="12">관측값 확정</text>
+    </g>
+    <g>
+      <circle cx="760" cy="96" r="7" fill="var(--green)"/>
+      <text class="s-lab" x="760" y="70" text-anchor="middle">T2</text>
+      <text class="s-txt" x="760" y="134" text-anchor="middle">맞음·틀림 표시</text>
+      <text class="s-txt" x="760" y="156" text-anchor="middle" font-size="12">발행자가 아니라</text>
+      <text class="s-hot" x="760" y="174" text-anchor="middle" font-size="12">화면이 재계산</text>
+    </g>
+    <path d="M505 96 L753 96" class="s-line" stroke-dasharray="3 5"/>
+  </svg>
+  <figcaption>이 잠금은 POI 프로토콜의 컨트랙트가 강제한다. 마루는 그 위에서 시간 역순 피드로 보여주고, 구간 종료 후 맞음·틀림을 대조해 표시한다.</figcaption>
+  </figure>
+</section>
+
+<!-- 6 ★ SNS 최소 조건 ─────────────────────────── -->
+<section class="slide" id="s6">
+  <div class="tag">// 05 <b>SNS 의 최소 조건과 우리의 답</b></div>
+  <h2>로그인 · 작성 · 팔로우 · 추천 피드 — <em>각각 무엇으로 답했나</em></h2>
+  <div class="tblwrap"><table>
+    <tr><th>최소 조건</th><th>무엇으로 답했나</th></tr>
+    <tr><td>로그인</td><td class="hot">지갑 연결(EIP-1193) — 별도 계정·비밀번호 없음</td></tr>
+    <tr><td>작성</td><td class="hot">기존 decision 스키마에 attest — 새 컨트랙트 불필요</td></tr>
+    <tr><td>팔로우</td><td>브라우저 로컬 저장 — <span class="no">온체인이 아니다. 화면에 그렇게 밝힌다</span></td></tr>
+    <tr><td>추천 피드</td><td><span class="no">만들지 않았다.</span> 시간 역순 나열 + 조건부 필터(도장 검증·정산 건수)로 대신한다</td></tr>
+  </table></div>
+  <p class="lede eave">추천 알고리즘 대신 <strong>필터</strong>를 둔다. 필터는 URL 쿼리에 남아 링크로 공유된다 — 「이 조건으로 거른 피드」를 남에게 보낼 수 있다.</p>
+</section>
+
+<!-- 7 ★ 실제 화면 ① 피드 ─────────────────────── -->
+<section class="slide">
+  <div class="tag">// 06 <b>실제 화면 ① 피드</b></div>
+  <h2>맞음과 <em>틀림이 함께</em> 뜬다</h2>
+  <p class="lede">관측 구간이 끝난 결정에는 업비트 1분봉 재계산 결과가 붙는다. <strong>틀린 판단도 숨기지 않는다.</strong></p>
+  <div class="shots">
+    <figure class="shot">
+      <img src="shots/feed-verdicts.jpg" alt="피드 화면 — 등록완료(화면 재계산 맞음)와 지연등록(화면 재계산 맞음) 인장이 함께 나열된 결정 목록.">
+      <figcaption>LIVE · 지갑 없이 열림</figcaption>
+    </figure>
+    <div class="marks">
+      <div class="mark" data-n="01">
+        <h4>인장이 상태를 말한다</h4>
+        <p><b>등록완료</b>·<b>지연등록</b>이 각 결정 왼쪽에 붙는다. 둘 다 「화면 재계산 맞음」이 함께 표시된다.</p>
+      </div>
+      <div class="mark" data-n="02">
+        <h4>도장 검증과 팔로잉이 나란히</h4>
+        <p>발행자 주소 옆에 <b>도장 검증 — TESTNET FAUCET</b> 라벨과 <b>팔로잉</b> 상태가 함께 보인다.</p>
+      </div>
+      <div class="mark" data-n="03">
+        <h4>UID로 열어 대조한다</h4>
+        <p>각 줄 우측의 <b>결정 열기</b>가 상세 화면으로 이어진다. 관측 구간과 UID가 함께 남는다.</p>
+      </div>
+    </div>
+  </div>
+  <p class="src"><b>지금 열립니다</b> — maru-web-production-0407.up.railway.app · 결정 <code>0x5941a398…443888</code></p>
+</section>
+
+<!-- 8 ★ 실제 화면 ② 이유 원문 ────────────────── -->
+<section class="slide">
+  <div class="tag">// 07 <b>실제 화면 ② 이유 원문</b></div>
+  <h2>해시가 <em>맞을 때만</em> 인용된다</h2>
+  <p class="lede">발행자가 남긴 이유 원문은 인용 블록으로 보인다. <strong>이 문장의 해시가 결정에 기록된 커밋과 일치할 때만</strong> 인용으로 뜬다 — 파일을 고치면 표시가 사라진다.</p>
+  <div class="shots">
+    <figure class="shot">
+      <img src="shots/feed-top.jpg" alt="이유 원문 인용 블록 두 개 — 각 블록 아래 '이 문장의 해시가 결정에 기록된 커밋과 일치합니다' 문구가 붙어 있다. 아직 대기 상태인 결정.">
+      <figcaption>LIVE · 이유 원문 대조</figcaption>
+    </figure>
+    <div class="marks">
+      <div class="mark" data-n="01">
+        <h4>원문은 커밋의 증거지, 커밋이 원문을 만들지 않는다</h4>
+        <p>결정 커밋 시점에는 해시만 온체인에 남는다. 원문 공개 후에야 대조가 가능해진다.</p>
+      </div>
+      <div class="mark" data-n="02">
+        <h4>필터의 한계를 필터 바로 아래 적는다</h4>
+        <p>「정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다」 — 걸러 준다고 보증하지 않는다.</p>
+      </div>
+      <div class="mark" data-n="03">
+        <h4>이 피드의 기록은 데모 페르소나다</h4>
+        <p>필터 위에 <b>「이 피드의 기록은 시연을 위해 발행한 데모 페르소나의 판단입니다」</b>가 먼저 뜬다.</p>
+      </div>
+    </div>
+  </div>
+  <p class="src"><b>지금 열립니다</b> — maru-web-production-0407.up.railway.app</p>
+</section>
+
+<!-- 9 ★ 실제 화면 ③ 곧 결과 나옴 ─────────────── -->
+<section class="slide">
+  <div class="tag">// 08 <b>실제 화면 ③ 곧 결과 나옴</b></div>
+  <h2>기다리는 상태가 <em>그대로</em> 보인다</h2>
+  <p class="lede">아직 관측 구간이 끝나지 않은 판단은 <strong>대기</strong> 인장으로 남는다. 결과를 앞당겨 보여주지 않는다.</p>
+  <div class="shots">
+    <figure class="shot">
+      <img src="shots/feed-soon.jpg" alt="아직 관측 구간이 끝나지 않은 결정 목록. 각 줄에 '대기' 인장과 UID가 보인다.">
+      <figcaption>LIVE · 곧 결과 나옴 탭</figcaption>
+    </figure>
+    <div class="marks">
+      <div class="mark" data-n="01">
+        <h4>대기는 맞음도 틀림도 아니다</h4>
+        <p>구간이 열려 있는 동안은 <b>대기</b>로만 표시한다. 조기 판정을 만들지 않는다.</p>
+      </div>
+      <div class="mark" data-n="02">
+        <h4>이 목록도 순위가 아니다</h4>
+        <p>「이 목록은 조회된 기록의 나열입니다」와 「조회된 것이 전부라는 보장은 없습니다」가 같은 자리에 반복된다.</p>
+      </div>
+      <div class="mark" data-n="03">
+        <h4>구간이 닫히면 같은 UID가 재계산된다</h4>
+        <p>결정 열기로 들어가면 관측 구간 종료 시점의 재계산 규칙이 그대로 적힌다 — 화면이 만들어내지 않는다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 ★ 신뢰 경계 ─────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 09 <b>신뢰 경계</b></div>
+  <h2>무엇이 증명되고 <em>무엇이 안 되나</em></h2>
+  <div class="trust">
+    <div class="t1">
+      <h4>컨트랙트가 강제 — POI 불변식</h4>
+      <p>관측 구간이 커밋 이후여야 한다 · 정산 산술이 관측값과 일치해야 한다 · 입장 변경(parents)의 선후 관계가 지켜져야 한다.</p>
+    </div>
+    <div class="t2" style="border:1px solid var(--rule-strong)">
+      <h4 style="color:var(--ink-soft);font:600 .78em/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem">화면이 재계산해 표시</h4>
+      <p style="font-size:.9em;color:var(--ink-soft);line-height:1.6">맞음·틀림 — 업비트 1분봉으로 재계산한다 · 이유 원문 — 해시가 결정의 커밋과 일치할 때만 인용으로 보인다.</p>
+    </div>
+    <div class="t3">
+      <h4>보장하지 않음</h4>
+      <p>실사용자·활성도(피드 기록은 데모 페르소나다) · 온체인 팔로우(브라우저 로컬 저장) · 관측값 자체의 진실성 · 조회된 기록의 완전성.</p>
+    </div>
+  </div>
+  <p class="lede eave"><strong>검증기 <span class="mono">MATCH</span>는 「예측이 맞았다」가 아니라 「등록된 관측값이 재계산과 같다」다.</strong> 화면이 「틀림」으로 표시한 결정도 검증기에서는 <span class="mono">MATCH</span>다.</p>
+</section>
+
+<!-- 11 ★ 새 컨트랙트 0개 ────────────────────── -->
+<section class="slide dense">
+  <div class="tag">// 10 <b>새 컨트랙트 0개</b></div>
+  <h2>같은 프로토콜, <em>다른 제품 표면</em></h2>
+  <p class="lede">마루는 POI 프로토콜(Track 03 지원) 위에 있다. <strong>새 컨트랙트를 배포하지 않고, 이미 배포된 스키마로만 읽고 쓴다.</strong> 같은 심사팀이 두 지원서를 본다 — 먼저 밝힌다.</p>
+  <div class="tblwrap"><table>
+    <tr><th>소셜 기능</th><th>무엇으로 되나</th><th>새 컨트랙트</th></tr>
+    <tr><td>피드</td><td>readDecisionLogs + 상태 판정</td><td class="yes">불필요</td></tr>
+    <tr><td>작성</td><td>기존 decision 스키마에 attest</td><td class="yes">불필요</td></tr>
+    <tr><td>프로필</td><td>Passport (#/passport/&lt;address&gt;)</td><td class="yes">불필요</td></tr>
+    <tr><td>맞음·틀림</td><td>업비트 1분봉으로 재계산</td><td class="yes">불필요</td></tr>
+    <tr><td>이유 원문 대조</td><td>공개 파일의 salt·payload로 커밋 재계산</td><td class="yes">불필요</td></tr>
+    <tr><td>입장 변경 이력</td><td>parents DAG</td><td class="yes">불필요</td></tr>
+    <tr><td>조건부 열람</td><td>온체인 정산 결과로 필터</td><td class="yes">불필요</td></tr>
+    <tr><td>팔로우</td><td>브라우저 로컬 저장</td><td class="yes">불필요 — 온체인 아님</td></tr>
+    <tr><td>코멘트 인증</td><td>새 스키마·리졸버</td><td class="no">필요 — 이번엔 안 함</td></tr>
+    <tr><td>온체인 팔로우</td><td>새 스키마</td><td class="no">필요 — 이번엔 안 함</td></tr>
+  </table></div>
+  <p class="lede eave">새 컨트랙트가 필요한 칸은 두 개뿐이고, <strong>둘 다 이번 범위 밖이다.</strong> 소셜 표면은 이미 배포된 POI 컨트랙트 4종을 읽고 쓰는 것만으로 선다.</p>
+</section>
+
+<!-- 12 왜 GIWA 인가 ─────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 11 <b>왜 GIWA 인가</b></div>
+  <h2>판단 하나를 <em>원 단위 비용</em>으로 고정한다</h2>
+  <p class="lede">GIWA Sepolia(chainId 91342)의 낮은 L2 비용이 결정 하나마다 온체인에 커밋하는 것을 실용적으로 만든다. 판단을 올리는 비용이 원 단위인 체인에서만 「사람들이 실제로 이걸 쓰는가」를 물을 수 있다.</p>
+  <div class="tblwrap"><table>
+    <tr><td>EAS 프리디플로이</td><td><span class="quiet">Ethereum Attestation Service — 증명 기록 표준. GIWA 기본 탑재</span><br>스키마·발급·철회를 재구현하지 않는다. 새 신뢰 축을 세우지 않는다</td></tr>
+    <tr><td>도장 Verified Address</td><td><span class="quiet">도장 = GIWA 의 온체인 신원 인증</span><br>발행자 주소 옆 「도장 검증 — TESTNET FAUCET」 라벨로 이미 연동돼 화면에 뜬다</td></tr>
+    <tr><td>저비용 L2</td><td>결정 단위 커밋과 소셜 피드 열람의 경제성</td></tr>
+  </table></div>
+  <p class="lede eave">POI가 이미 이 체인 위에서 증명 레이어를 돌린다. 마루는 그 위에 <strong>사람이 보는 표면</strong>만 올린다 — 새 신뢰 가정을 추가하지 않는다.</p>
+</section>
+
+<!-- 13 ★ 지금 살아 있는 것 ──────────────────── -->
+<section class="slide dense">
+  <div class="tag">// 12 <b>지금 살아 있는 것</b></div>
+  <h2>온체인 수치 · 검증기 <em>MATCH</em> · 테스트</h2>
+  <div class="tblwrap"><table>
+    <tr><td>새로 배포한 컨트랙트</td><td class="hot">0개 — 저장소에 contracts/ 자체가 없다</td></tr>
+    <tr><td>결정 어테스테이션</td><td>14건 · 발행자 지갑 2개</td></tr>
+    <tr><td>활성 정산</td><td>11건 · 입장 변경 이력(parents) 2건</td></tr>
+    <tr><td>REASON 커밋</td><td>9건 · 도장 검증 스냅샷 10건</td></tr>
+    <tr><td>아직 창이 열린 결정</td><td>3건</td></tr>
+    <tr><td>POI verifier CLI 재검증</td><td class="yes">11건 전부 MATCH</td></tr>
+    <tr><td>단위 테스트 (vitest)</td><td>163개 / 19 파일</td></tr>
+    <tr><td>E2E (Playwright, 실제 체인)</td><td>13개 — 기본 게이트 12 + 실서비스 스모크 1</td></tr>
+    <tr><td>심사 시나리오</td><td>S1~S12 — S1~S10 은 지갑 없이 확인 가능</td></tr>
+  </table></div>
+  <pre><a href="https://maru-web-production-0407.up.railway.app" target="_blank" rel="noopener"><b>https://maru-web-production-0407.up.railway.app</b></a>  <span style="color:var(--ink-faint)">← HTTP 200 · 지갑 없이 열립니다</span></pre>
+</section>
+
+<!-- 14 ★ 심사자가 5분에 확인하는 법 ─────────── -->
+<section class="slide dense">
+  <div class="tag">// 13 <b>심사자가 5분에 확인하는 법</b></div>
+  <h2>S1~S10 — <em>지갑 없이</em></h2>
+  <div class="scen">
+    <div><b>S1</b><span>/#/feed 를 연다 → 여러 지갑의 결정이 시간 역순으로 나열된다</span></div>
+    <div><b>S2</b><span>「도장 검증 지갑만」을 켠다 → 검증 스냅샷이 붙은 결정만 남는다</span></div>
+    <div><b>S3</b><span>「발행자별 활성 정산 최소 건수」를 올린다 → 정산이 적은 발행자가 사라진다</span></div>
+    <div><b>S4</b><span>URL 을 복사해 새 창에 붙인다 → 같은 필터가 유지된다</span></div>
+    <div><b>S5</b><span>발행자 → Passport → 결정 상세 → 「검증하기」 → 오프체인 재현까지 이어진다</span></div>
+    <div><b>S6</b><span>스레드 배지가 붙은 결정을 누른다 → parents DAG(입장 변경 이력)로 이어진다</span></div>
+    <div><b>S7</b><span>이유 원문이 인용 블록으로 보이고, 해시가 맞는 것에만 일치 표시가 붙는다</span></div>
+    <div><b>S8</b><span>관측이 끝난 결정에 판정이 붙는다 → 업비트 1분봉 재계산 맞음·틀림, 틀린 것도 숨기지 않는다</span></div>
+    <div><b>S9</b><span>팔로우를 누르고 팔로우 탭으로 간다 → 「이 브라우저에만 저장됩니다」 고지가 보인다</span></div>
+    <div><b>S10</b><span>「곧 결과 나옴」 탭 → 아직 창이 안 닫힌 판단이 마감 임박 순으로 뜬다</span></div>
+  </div>
+  <p class="lede eave">작성(S11~S12)만 GIWA Sepolia 지갑이 필요하다. S12가 핵심이다 — <strong>결과를 알기 전에 고정하는 것 말고는 판단을 올릴 방법이 없다.</strong></p>
+</section>
+
+<!-- 15 한계 ─────────────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 14 <b>한계</b></div>
+  <h2>실사용자 없음 · 데모 페르소나 · <em>로컬 팔로우</em></h2>
+  <p class="lede"><strong>피드의 기록은 시연용 데모 페르소나다.</strong> 실사용자·활성도 수치는 없다. 화면에도 이 사실을 먼저 표시한다 — 감추지 않는다.</p>
+  <div class="tblwrap"><table>
+    <tr><td>실사용자</td><td class="no">없다. 발행자 2개 지갑은 시연을 위해 직접 발행한 데모 페르소나다</td></tr>
+    <tr><td>팔로우</td><td class="no">브라우저 로컬 저장이다. 온체인이 아니다</td></tr>
+    <tr><td>검증기 MATCH</td><td>「예측이 맞았다」가 아니라 「등록된 관측값이 재계산과 같다」다</td></tr>
+    <tr><td>순위·점수·리더보드</td><td class="no">만들지 않았다 — 만들지 않기로 한 것이다. 선택 기록으로 순위를 만들면 거짓말이 된다</td></tr>
+  </table></div>
+</section>
+
+<!-- 16 다음 30일 ────────────────────────────── -->
+<section class="slide">
+  <div class="tag">// 15 <b>다음 30일</b></div>
+  <h2>성공 기준</h2>
+  <p class="lede">지금 없는 것은 기술이 아니라 사용자다. 증명 레이어는 이미 테스트넷에서 돈다. 남은 질문은 <strong>판단을 올리는 비용이 원 단위인 체인에서, 사람들이 틀릴 수도 있는 판단을 공개적으로 고정하는가</strong>다.</p>
+  <div class="stats">
+    <div class="stat"><span class="n">10명</span><span class="k">30일 안에 사용자 10명이<br>각 3건 이상 발행</span></div>
+    <div class="stat"><span class="n">50%+</span><span class="k">그중 절반 이상이 관측 구간<br>종료 후에도 지워지지 않고 남음</span></div>
+  </div>
+  <p class="lede eave">등록률이 낮으면 <em>미발행 노출이 사용자에게 위협으로 작동한다는 뜻</em>이고, 설계를 다시 봐야 한다.</p>
+</section>
+
+</main>
+
+<div class="bar">
+  <span class="brand">마루</span>
+  <span>MARU</span>
+  <span class="n"><span id="cur">01</span><span class="tot" id="tot"> / 16</span></span>
+</div>
+<div id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>
+<nav class="nav" aria-label="슬라이드 이동">
+  <button id="prev" aria-label="이전 슬라이드">‹</button>
+  <button id="next" aria-label="다음 슬라이드">›</button>
+</nav>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.getElementById('prog'), cur=document.getElementById('cur');
+const live=document.getElementById('live');
+document.getElementById('tot').textContent=' / '+String(slides.length).padStart(2,'0');
+let i=0;
+function go(n,focus){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(s=>s.removeAttribute('data-on'));
+  const el=slides[i];
+  el.setAttribute('data-on','');
+  prog.style.width=((i+1)/slides.length*100)+'%';
+  cur.textContent=String(i+1).padStart(2,'0');
+  location.hash=i?('#'+(i+1)):'';
+  el.scrollTop=0;
+  const h=el.querySelector('h1,h2');
+  live.textContent=`${i+1} / ${slides.length} — ${h?h.textContent.replace(/\s+/g,' ').trim():''}`;
+  if(focus!==false){el.setAttribute('tabindex','-1');el.focus({preventScroll:true});}
+}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1)}
+  if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(i-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1))||1; if(n-1!==i)go(n-1)});
+go((parseInt(location.hash.slice(1))||1)-1,false);
+</script>
+</body>
+</html>
