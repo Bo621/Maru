@@ -164,4 +164,35 @@ describe("업비트 봉 조회", () => {
 
         expect(fetchImpl).toHaveBeenCalledTimes(1);
     });
+
+    it("동시 실행이 4를 넘지 않는다", async () => {
+        resetCandleCache();
+        let inFlight = 0;
+        let maxInFlight = 0;
+        const fetchImpl = vi.fn(async () => {
+            inFlight++;
+            maxInFlight = Math.max(maxInFlight, inFlight);
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            inFlight--;
+            return response(ROWS);
+        });
+
+        // 서로 다른 창 12개를 동시에 요청한다 — 캐시를 타지 않게 창마다 다르게 잡는다.
+        await Promise.all(Array.from({length: 12}, (_, i) =>
+            fetchWindowCandles({windowStart: BigInt(i * 100), windowEnd: BigInt(i * 100 + 60), fetchImpl})));
+
+        expect(maxInFlight).toBeLessThanOrEqual(4);
+    });
+
+    it("상한에 걸려도 12건 전부 결과를 받는다", async () => {
+        resetCandleCache();
+        const fetchImpl = vi.fn(async () => response(ROWS));
+
+        const results = await Promise.all(Array.from({length: 12}, (_, i) =>
+            fetchWindowCandles({windowStart: BigInt(i * 100), windowEnd: BigInt(i * 100 + 60), fetchImpl})));
+
+        expect(results).toHaveLength(12);
+        expect(results.every((r) => r.ok)).toBe(true);
+        expect(fetchImpl).toHaveBeenCalledTimes(12);
+    });
 });

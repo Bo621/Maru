@@ -9,6 +9,30 @@ const REQUEST_TIMEOUT_MS = 8_000;
 
 const inFlight = new Map<string, Promise<CandleFetch>>();
 
+/** 동시 실행 상한. 업비트 시세 API 한도가 초당 10 근처라 여유를 둔다. */
+const MAX_CONCURRENT_REQUESTS = 4;
+let activeRequests = 0;
+const waiters: Array<() => void> = [];
+
+function acquireSlot(): Promise<void> {
+    if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+        activeRequests++;
+        return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+        waiters.push(() => {
+            activeRequests++;
+            resolve();
+        });
+    });
+}
+
+function releaseSlot(): void {
+    activeRequests--;
+    const next = waiters.shift();
+    if (next) next();
+}
+
 /** 테스트에서 요청 캐시를 비운다. */
 export function resetCandleCache(): void {
     inFlight.clear();
@@ -58,6 +82,8 @@ export async function fetchWindowCandles(options: {
 
     const fetchImpl = options.fetchImpl ?? fetch;
     const request = (async (): Promise<CandleFetch> => {
+        // 캐시된 창은 게이트를 기다리지 않는다 — 위에서 이미 반환됐다. 여기부터가 실제 조회다.
+        await acquireSlot();
         try {
             const to = new Date(Number(options.windowEnd) * 1000).toISOString().replace(/\.\d+Z$/, "Z");
             // minutes+1 은 창 경계가 안 맞을 때를 덮지만, 업비트 상한 200을 넘기면 400이 난다.
@@ -84,6 +110,8 @@ export async function fetchWindowCandles(options: {
             };
         } catch {
             return {ok: false, candles: []};
+        } finally {
+            releaseSlot();
         }
     })();
 
