@@ -1,5 +1,8 @@
 import {useEffect, useRef, useState} from "react";
-import {filterFeedItems, parseFeedFilter, serializeFeedFilter, type FeedFilter} from "./filter";
+import type {Address} from "viem";
+import {filterFeedItems, parseFeedFilter, type FeedFilter} from "./filter";
+import {composeFeedQuery, parseFeedTab, selectTabRows, type FeedTab} from "./feedTab";
+import {FOLLOW_STORAGE_KEY, isFollowing, parseFollows, serializeFollows, toggleFollow} from "./follow";
 import {CHAIN} from "./config";
 import type {FeedDecisionRow, FeedRow} from "./feedData";
 import {routeToHash} from "./router";
@@ -11,12 +14,48 @@ import {observeReveals} from "./reveal-on-scroll";
 import {NO_VERDICT_ROWS, useVerdicts} from "./useVerdicts";
 import type {Verdict} from "./verdict";
 
-function setFilter(filter: FeedFilter): void {
-    window.location.hash = routeToHash({name: "feed", query: serializeFeedFilter(filter)});
+function setFilter(filter: FeedFilter, tab: FeedTab): void {
+    window.location.hash = routeToHash({name: "feed", query: composeFeedQuery(filter, tab)});
 }
 
-function FilterBar({filter}: {filter: FeedFilter}) {
-    const update = (patch: Partial<FeedFilter>) => setFilter({...filter, ...patch});
+const TAB_LABELS: Record<FeedTab, string> = {all: "전체", follow: "팔로우", soon: "곧 결과 나옴"};
+
+function TabBar({filter, tab}: {filter: FeedFilter; tab: FeedTab}) {
+    return <nav className="tab-bar" aria-label="피드 탭">
+        {(["all", "follow", "soon"] as const).map((value) => (
+            <a
+                key={value}
+                className={`tab-bar__item${tab === value ? " tab-bar__item--active" : ""}`}
+                aria-current={tab === value ? "page" : undefined}
+                href={routeToHash({name: "feed", query: composeFeedQuery(filter, value)})}
+            >
+                {TAB_LABELS[value]}
+            </a>
+        ))}
+    </nav>;
+}
+
+/** 팔로우는 브라우저 로컬 저장이다. 저장 실패(사파리 프라이빗 등)는 삼키고 화면 상태만 유지한다. */
+function useFollows(): {follows: Address[]; toggle: (address: Address) => void} {
+    const [follows, setFollows] = useState<Address[]>(
+        () => parseFollows(window.localStorage.getItem(FOLLOW_STORAGE_KEY)),
+    );
+    const toggle = (address: Address) => {
+        setFollows((prev) => {
+            const next = toggleFollow(prev, address);
+            try {
+                window.localStorage.setItem(FOLLOW_STORAGE_KEY, serializeFollows(next));
+            } catch {
+                // 저장 실패는 무시한다. 이번 세션의 화면 상태는 이미 next로 갱신됐다.
+            }
+            return next;
+        });
+    };
+    return {follows, toggle};
+}
+
+function FilterBar({filter, tab}: {filter: FeedFilter; tab: FeedTab}) {
+    const update = (patch: Partial<FeedFilter>) => setFilter({...filter, ...patch}, tab);
     return <section className="filter-bar" aria-labelledby="filter-title">
         <h2 id="filter-title" className="visually-hidden">열람 조건</h2>
         <label className="chip">
@@ -99,11 +138,13 @@ function useReasons(rows: FeedRow[]): Map<string, CardReason> {
     return reasons;
 }
 
-function Rows({rows, now, reasons, verdicts}: {
+function Rows({rows, now, reasons, verdicts, follows, onToggleFollow}: {
     rows: FeedRow[];
     now: bigint;
     reasons: Map<string, CardReason>;
     verdicts: Map<string, Verdict>;
+    follows: Address[];
+    onToggleFollow: (address: Address) => void;
 }) {
     const listRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -128,6 +169,8 @@ function Rows({rows, now, reasons, verdicts}: {
                 now={now}
                 reason={reasons.get(row.uid.toLowerCase())}
                 verdict={verdicts.get(row.uid.toLowerCase())}
+                isFollowing={isFollowing(follows, row.attester)}
+                onToggleFollow={onToggleFollow}
             />
             : <ErrorCard key={row.uid} row={row} index={index} />
     )}</div>;
@@ -135,8 +178,12 @@ function Rows({rows, now, reasons, verdicts}: {
 
 export function Feed({query}: {query: string}) {
     const filter = parseFeedFilter(query);
+    const tab = parseFeedTab(query);
     const {state, retry} = useFeedRows();
-    const rows = state.status === "success" ? filterFeedItems(state.rows, filter) : [];
+    const {follows, toggle} = useFollows();
+    const rows = state.status === "success"
+        ? selectTabRows(filterFeedItems(state.rows, filter), tab, follows, state.now)
+        : [];
     const reasons = useReasons(state.status === "success" ? state.rows : NO_ROWS);
     const verdicts = useVerdicts(state.status === "success" ? state.rows : NO_VERDICT_ROWS);
 
@@ -158,7 +205,11 @@ export function Feed({query}: {query: string}) {
             <p>이 피드의 기록은 시연을 위해 발행한 데모 페르소나의 판단입니다.</p>
         </div>
 
-        <FilterBar filter={filter} />
+        <TabBar filter={filter} tab={tab} />
+        <FilterBar filter={filter} tab={tab} />
+        {tab === "follow" && <p className="filter-caveat">
+            팔로우는 이 브라우저에만 저장됩니다. 온체인 기록이 아니고, 이 링크를 받은 사람에게는 그 사람의 팔로우 목록이 보입니다.
+        </p>}
         <p className="filter-caveat">정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다.</p>
         <p className="filter-caveat">판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.</p>
 
@@ -176,6 +227,13 @@ export function Feed({query}: {query: string}) {
             <p>{state.message}</p>
             <button type="button" onClick={retry}>다시 읽기</button>
         </div>}
-        {state.status === "success" && <Rows rows={rows} now={state.now} reasons={reasons} verdicts={verdicts} />}
+        {state.status === "success" && <Rows
+            rows={rows}
+            now={state.now}
+            reasons={reasons}
+            verdicts={verdicts}
+            follows={follows}
+            onToggleFollow={toggle}
+        />}
     </main>;
 }

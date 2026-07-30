@@ -192,6 +192,25 @@ test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 
     await expect(page.getByText("판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.")).toBeVisible();
 });
 
+test("S9 팔로우가 실제로 거른다", async ({page}) => {
+    await page.goto("/#/feed");
+    const rows = page.locator(DECISION_ROWS);
+    await expect(rows).not.toHaveCount(0);
+
+    const firstAttester = await rows.first().getAttribute("data-attester");
+    expect(firstAttester).not.toBeNull();
+
+    await rows.first().locator(".follow-toggle").click();
+    await page.getByRole("link", {name: "팔로우"}).click();
+
+    await expect(page).toHaveURL(/tab=follow/);
+    const followedRows = page.locator(DECISION_ROWS);
+    await expect(followedRows).not.toHaveCount(0);
+    const attesters = await followedRows.evaluateAll((elements) =>
+        elements.map((element) => element.getAttribute("data-attester")));
+    expect(new Set(attesters)).toEqual(new Set([firstAttester]));
+});
+
 test("S10 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다", async ({page}) => {
     await page.goto("/#/feed");
     await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);

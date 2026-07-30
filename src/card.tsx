@@ -1,4 +1,5 @@
 import {type CSSProperties} from "react";
+import type {Address} from "viem";
 import type {FeedDecisionRow, FeedErrorRow} from "./feedData";
 import {formatUtcMinute, stateLabel} from "./presentation";
 import {relativeTime} from "./relativeTime";
@@ -26,7 +27,12 @@ function Verification({row}: {row: FeedDecisionRow}) {
     </span>;
 }
 
-function Identity({row, now}: {row: FeedDecisionRow; now: bigint}) {
+function Identity({row, now, isFollowing, onToggleFollow}: {
+    row: FeedDecisionRow;
+    now: bigint;
+    isFollowing?: boolean;
+    onToggleFollow?: (attester: Address) => void;
+}) {
     return <header className="card__identity">
         <Avatar address={row.attester} />
         <div className="card__who">
@@ -38,6 +44,15 @@ function Identity({row, now}: {row: FeedDecisionRow; now: bigint}) {
                 {shortHex(row.attester)}
             </a>
             <Verification row={row} />
+            {onToggleFollow && <button
+                type="button"
+                className="follow-toggle"
+                aria-pressed={isFollowing === true}
+                aria-label={isFollowing ? `팔로우 해제 ${row.attester}` : `팔로우 ${row.attester}`}
+                onClick={() => onToggleFollow(row.attester)}
+            >
+                {isFollowing ? "팔로잉" : "팔로우"}
+            </button>}
         </div>
         <span className="card__stamp">
             <time className="card__when" dateTime={utcIso(row.time)} title={utcIso(row.time)}>
@@ -57,12 +72,14 @@ export interface CardReason {
     text: string;
 }
 
-export function DecisionCard({row, index, now, reason, verdict}: {
+export function DecisionCard({row, index, now, reason, verdict, isFollowing, onToggleFollow}: {
     row: FeedDecisionRow;
     index: number;
     now: bigint;
     reason?: CardReason;
     verdict?: Verdict;
+    isFollowing?: boolean;
+    onToggleFollow?: (attester: Address) => void;
 }) {
     const label = stateLabel(row.state);
     return <article
@@ -75,7 +92,7 @@ export function DecisionCard({row, index, now, reason, verdict}: {
         {...(row.blockNumber === null ? {} : {"data-block-number": String(row.blockNumber)})}
         style={{"--row-index": Math.min(index, 9)} as CSSProperties}
     >
-        <Identity row={row} now={now} />
+        <Identity row={row} now={now} isFollowing={isFollowing} onToggleFollow={onToggleFollow} />
 
         {reason && <blockquote className="card__reason" data-reason>
             <p>{reason.text}</p>
