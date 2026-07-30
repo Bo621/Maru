@@ -1,8 +1,12 @@
 import {commitment, generateSalt, metricByName} from "@poi/core";
 import type {Address, Hex} from "viem";
 import {CHAIN} from "./config";
+// 이 상한을 넘는 창은 화면 판정이 영구히 뜨지 않는다(업비트 조회 자체를 안 한다).
+// 프리셋이 넘으면 막다른 길이 된다 — 그래서 upbit.ts 의 상한을 여기서도 쓴다.
+import {MAX_CANDLES as JUDGEABLE_WINDOW_MINUTES} from "./upbit";
 // 인코딩 정의는 read.ts 하나만 둔다. 두 벌이 되면 읽기와 쓰기가 갈라진다.
 export {DECISION_PARAMETERS} from "./read";
+export {JUDGEABLE_WINDOW_MINUTES};
 
 const ZERO_UID = `0x${"0".repeat(64)}` as Hex;
 const PRICE_METRIC = metricByName("BTC_PRICE_KRW_AT_END")!.metricId as Hex;
@@ -14,7 +18,7 @@ const MIN_LEAD_SECONDS = 300;
 export const PRESETS = [
     {label: "5분 뒤부터 10분간", delaySeconds: MIN_LEAD_SECONDS, durationSeconds: 600},
     {label: "10분 뒤부터 1시간", delaySeconds: 600, durationSeconds: 3_600},
-    {label: "1시간 뒤부터 24시간", delaySeconds: 3_600, durationSeconds: 86_400},
+    {label: "1시간 뒤부터 3시간", delaySeconds: 3_600, durationSeconds: 10_800},
 ] as const;
 
 export interface Window {
@@ -49,6 +53,14 @@ export function validateWindow(window: Window, chainNow: number): WindowProblem 
     if (window.start - chainNow > MAX_START_DELAY) return "tooFar";
     if (window.end - window.start > MAX_DURATION) return "tooLong";
     return "ok";
+}
+
+/**
+ * 창이 온체인 규칙(`validateWindow`)은 통과해도 화면이 판정할 봉을 못 가져올 수 있다.
+ * 그런 창은 발행은 되지만 결과 표시가 영구히 "미판정"에 머문다 — 막지 말고 미리 알려야 한다.
+ */
+export function exceedsJudgeableRange(window: Window): boolean {
+    return (window.end - window.start) / 60 > JUDGEABLE_WINDOW_MINUTES;
 }
 
 export interface ComposeInput {

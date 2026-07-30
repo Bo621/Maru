@@ -18,6 +18,7 @@ import {
     buildDecisionFields,
     DECISION_PARAMETERS,
     decisionText,
+    exceedsJudgeableRange,
     newSalts,
     PRESETS,
     validateWindow,
@@ -141,6 +142,9 @@ export function Compose({session, onConnect}: {session?: ComposeSession; onConne
     const preset = PRESETS[presetIndex];
     const threshold = parseThreshold(thresholdText);
     const previewWindow = alignWindow(Math.floor(Date.now() / 1000), preset.durationSeconds, preset.delaySeconds);
+    // 이 구간은 온체인 발행·정산은 정상 동작한다 — 다만 화면이 봉을 못 가져와 판정을 못 낸다.
+    // 막지 않고 미리 알린다(원칙: 막다른 길을 만들지 않는다).
+    const beyondJudgeRange = exceedsJudgeableRange(previewWindow);
     const canPublish = threshold !== undefined && phase !== "publishing";
 
     async function handlePublish() {
@@ -288,6 +292,10 @@ export function Compose({session, onConnect}: {session?: ComposeSession; onConne
                 </p>
                 <p className="mono">발행자 {shortHex(session.address)}</p>
                 {reason.trim() && <p>이유 커밋 포함 — 원문은 발행 뒤 파일로 내려받습니다.</p>}
+                {beyondJudgeRange && <p className="compose-notice" role="status">
+                    이 관측 구간은 화면 판정 범위를 넘습니다. 온체인 발행과 정산은 되지만, 맞고 틀림은
+                    이 화면에 표시되지 않습니다.
+                </p>}
             </section>
 
             {notice && <p className="compose-notice" role="status">{notice}</p>}

@@ -2,8 +2,12 @@ import type {MinuteCandle} from "./verdict";
 
 const ENDPOINT = "https://api.upbit.com/v1/candles/minutes/1";
 const MARKET = "KRW-BTC";
-/** 업비트 한 요청당 상한. 넘는 창은 조회하지 않는다 — 피드에서 페이지네이션까지 돌 이유가 없다. */
-const MAX_CANDLES = 200;
+/**
+ * 업비트 한 요청당 상한이자 화면이 판정할 수 있는 관측 구간의 상한(분).
+ * 넘는 창은 조회하지 않는다 — 피드에서 페이지네이션까지 돌 이유가 없다.
+ * 작성 화면도 이 값을 알아야 한다(`composeDecision.ts`), 그래서 export 한다.
+ */
+export const MAX_CANDLES = 200;
 /** 응답이 안 오면 실패로 떨어뜨린다. 매달려 있으면 재시도조차 안 걸린다. */
 const REQUEST_TIMEOUT_MS = 8_000;
 

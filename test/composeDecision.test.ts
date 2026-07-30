@@ -1,7 +1,15 @@
 import {commitment} from "@poi/core";
 import {describe, expect, it} from "vitest";
 import {decodeAbiParameters, encodeAbiParameters, type Address, type Hex} from "viem";
-import {alignWindow, buildDecisionFields, DECISION_PARAMETERS, PRESETS, validateWindow} from "../src/composeDecision";
+import {
+    alignWindow,
+    buildDecisionFields,
+    DECISION_PARAMETERS,
+    exceedsJudgeableRange,
+    JUDGEABLE_WINDOW_MINUTES,
+    PRESETS,
+    validateWindow,
+} from "../src/composeDecision";
 
 const ATTESTER = `0x${"a1".repeat(20)}` as Address;
 const SALT = `0x${"cd".repeat(16)}` as Hex;
@@ -25,6 +33,26 @@ describe("관측 창 정렬", () => {
             const {start} = alignWindow(1_785_403_457, preset.durationSeconds, preset.delaySeconds);
             expect(start).toBeGreaterThan(1_785_403_457);
         }
+    });
+});
+
+describe("프리셋 판정 범위", () => {
+    // 이 상한을 넘는 프리셋은 화면 판정이 영구히 뜨지 않는다(업비트 조회 자체를 안 한다).
+    // 나중에 누가 프리셋 기간을 늘려도 여기서 잡힌다.
+    it("모든 프리셋이 화면 판정 가능 상한 이하다", () => {
+        for (const preset of PRESETS) {
+            expect(preset.durationSeconds / 60).toBeLessThanOrEqual(JUDGEABLE_WINDOW_MINUTES);
+        }
+    });
+
+    it("상한을 넘는 창은 exceedsJudgeableRange 가 true", () => {
+        const overLimit = JUDGEABLE_WINDOW_MINUTES * 60 + 60;
+        expect(exceedsJudgeableRange({start: 0, end: overLimit})).toBe(true);
+    });
+
+    it("상한 이하인 창은 exceedsJudgeableRange 가 false", () => {
+        const withinLimit = JUDGEABLE_WINDOW_MINUTES * 60;
+        expect(exceedsJudgeableRange({start: 0, end: withinLimit})).toBe(false);
     });
 });
 
