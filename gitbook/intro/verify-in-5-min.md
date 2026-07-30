@@ -3,7 +3,7 @@
 **아래 항목은 지갑 없이 직접 확인할 수 있다.**
 
 준비물은 브라우저, `cast`(Foundry), 그리고 5번 항목을 실행하려면 Git·Node
-22+·pnpm이다. 지갑도 가스도 필요 없다.
+22.6+·pnpm이다. 지갑도 가스도 필요 없다.
 
 **마루는 이 컨트랙트를 배포하거나 소유하지 않는다.** 조회 화면(피드·발행자별
 기록·검증하기)은 읽기만 한다. 판단 발행 화면은 같은 기존 decision 스키마에
@@ -29,7 +29,7 @@ https://maru-web-production-0407.up.railway.app/#/feed
 ```
 
 이 화면은 브라우저가 GIWA Sepolia RPC를 직접 읽는다. 백엔드가 없어서, 지갑을
-연결하지 않아도, `Connect Wallet` 버튼을 누르지 않아도 결정 목록이 그대로 뜬다.
+연결하지 않아도, `지갑 연결` 버튼을 누르지 않아도 결정 목록이 그대로 뜬다.
 
 ## 2. 마루가 가리키는 컨트랙트가 실제로 GIWA에 있다
 
@@ -42,8 +42,9 @@ cast code $SETTLEMENT_RESOLVER --rpc-url $RPC | head -c 20
 (`Pass - Verified`). 주소는 [배포와 주소](deployed.md)에 있다.
 
 **마루는 이 주소를 소유하지 않는다.** POI 프로토콜이 배포한 컨트랙트를
-읽기만 한다. `scripts/check_docs_onchain.mjs`가 이 사실을 배포마다 재확인한다
-(스키마 UID가 등록된 resolver를 가리키는지까지 본다).
+읽기만 한다. `scripts/check_docs_onchain.mjs`는 이 소유 여부를 재확인하지
+않는다 — 배포 코드가 실제로 있는지, 스키마 UID가 등록된 resolver를
+가리키는지만 배포마다 재확인한다.
 
 ## 3. 필터가 URL과 왕복한다
 

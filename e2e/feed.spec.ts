@@ -150,7 +150,8 @@ test("S6 스레드 배지에서 부모 판단까지 이어진다", async ({page}
     await badge.click();
 
     await expect(page.locator("[data-thread]")).toBeVisible();
-    await expect(page.locator("[data-thread-node]")).not.toHaveCount(1);
+    const nodeCount = await page.locator("[data-thread-node]").count();
+    expect(nodeCount).toBeGreaterThanOrEqual(2);
 });
 
 test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는다", async ({page}) => {
@@ -307,7 +308,7 @@ test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 
     expect(seconds).toEqual([...seconds].sort((left, right) => left - right));
 });
 
-test("S10-보강 탭 3개가 전환되고 URL에 남는다", async ({page}) => {
+test("S10-보강 곧 결과 나옴과 전체가 전환되고 URL에 남는다", async ({page}) => {
     await page.goto("/#/feed");
     await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
     expect(page.url()).not.toMatch(/tab=/);
