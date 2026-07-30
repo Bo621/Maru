@@ -1,19 +1,7 @@
 import type {Address} from "viem";
 import type {FeedDecisionRow} from "./feedData";
-import {formatCondition, formatUtcMinute, stateLabel} from "./presentation";
-import {routeToHash} from "./router";
 import {useFeedRows} from "./useFeedRows";
-
-function PassportDecision({row}: {row: FeedDecisionRow}) {
-    const label = stateLabel(row.state);
-    return <li>
-        <span className={`passport-state passport-state--${label.tone}`}>{label.short}</span>
-        <div>
-            <a href={routeToHash({name: "decision", uid: row.uid})}>{formatCondition(row)}</a>
-            <p>{formatUtcMinute(row.time)} · {row.issuerLabel ? `도장 검증 — ${row.issuerLabel}` : "도장 미검증"}</p>
-        </div>
-    </li>;
-}
+import {DecisionCard} from "./card";
 
 export function Passport({address}: {address: Address}) {
     const {state, retry} = useFeedRows(address);
@@ -36,8 +24,13 @@ export function Passport({address}: {address: Address}) {
             <p>{state.message}</p><button type="button" onClick={retry}>다시 읽기</button>
         </div>}
         {state.status === "success" && decisions.length === 0 && <p className="simple-status">표시할 결정 기록이 없습니다.</p>}
-        {decisions.length > 0 && <ul className="passport-list">
-            {decisions.map((row) => <PassportDecision key={row.uid} row={row} />)}
-        </ul>}
+        {decisions.length > 0 && <div className="feed-list">
+            {decisions.map((row, index) => <DecisionCard
+                key={row.uid}
+                row={row}
+                index={index}
+                now={state.status === "success" ? state.now : 0n}
+            />)}
+        </div>}
     </main>;
 }

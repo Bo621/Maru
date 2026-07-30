@@ -1,14 +1,8 @@
-import {type CSSProperties} from "react";
 import {filterFeedItems, parseFeedFilter, serializeFeedFilter, type FeedFilter} from "./filter";
-import type {FeedDecisionRow, FeedErrorRow, FeedRow} from "./feedData";
-import {formatCondition, formatUtcMinute, stateLabel} from "./presentation";
+import type {FeedRow} from "./feedData";
 import {routeToHash} from "./router";
 import {useFeedRows} from "./useFeedRows";
-import {ZERO_UID} from "./read";
-
-function shortHex(value: string, start = 10, end = 6): string {
-    return `${value.slice(0, start)}…${value.slice(-end)}`;
-}
+import {DecisionCard, ErrorCard} from "./card";
 
 function setFilter(filter: FeedFilter): void {
     window.location.hash = routeToHash({name: "feed", query: serializeFeedFilter(filter)});
@@ -55,77 +49,7 @@ function FilterPanel({filter}: {filter: FeedFilter}) {
     </aside>;
 }
 
-function Verification({row}: {row: FeedDecisionRow}) {
-    if (row.verifiedAddressUID === ZERO_UID) {
-        return <span className="verification verification--none">도장 미검증</span>;
-    }
-    return <span className="verification" data-verification>
-        도장 검증 — {row.issuerLabel ?? "발급자 라벨 확인 불가"}
-    </span>;
-}
-
-function DecisionRow({row, index}: {row: FeedDecisionRow; index: number}) {
-    const label = stateLabel(row.state);
-    const animationIndex = Math.min(index, 9);
-    return <article
-        className="feed-row"
-        data-feed-row
-        data-kind="decision"
-        data-settled-count={row.settledDecisionCount}
-        style={{"--row-index": animationIndex} as CSSProperties}
-    >
-        <div className={`state-seal state-seal--${label.tone}`} aria-label={`상태: ${label.short}`}>
-            {label.short}
-        </div>
-        <div className="feed-row__body">
-            <div className="feed-row__identity">
-                <a
-                    className="address-link"
-                    href={routeToHash({name: "passport", address: row.attester})}
-                    aria-label={`발행자 ${row.attester}`}
-                >
-                    {shortHex(row.attester, 10, 4)}
-                </a>
-                <Verification row={row} />
-            </div>
-            <h3>{formatCondition(row)}</h3>
-            <p className="window-line">
-                관측 구간 <time>{formatUtcMinute(row.windowStart)}</time>
-                <span aria-hidden="true"> → </span>
-                <time>{formatUtcMinute(row.windowEnd)}</time>
-            </p>
-            <p className="commit-line">
-                시점 고정 {formatUtcMinute(row.time)} · UID {shortHex(row.uid)}
-            </p>
-        </div>
-        <a className="row-link" href={routeToHash({name: "decision", uid: row.uid})}>
-            결정 열기 <span aria-hidden="true">↗</span>
-        </a>
-    </article>;
-}
-
-function ErrorRow({row, index}: {row: FeedErrorRow; index: number}) {
-    return <article
-        className="feed-row feed-row--error"
-        data-feed-row
-        data-kind="error"
-        style={{"--row-index": Math.min(index, 9)} as CSSProperties}
-    >
-        <div className="state-seal state-seal--error" aria-hidden="true">오류</div>
-        <div className="feed-row__body">
-            <div className="feed-row__identity">
-                <a className="address-link" href={routeToHash({name: "passport", address: row.attester})}>
-                    {shortHex(row.attester, 10, 4)}
-                </a>
-            </div>
-            <h3>결정 기록을 해석하지 못했습니다.</h3>
-            <p className="error-copy" role="alert">{row.error}</p>
-            <p className="commit-line">UID {row.uid}</p>
-        </div>
-    </article>;
-}
-
-function Rows({rows}: {rows: FeedRow[]}) {
+function Rows({rows, now}: {rows: FeedRow[]; now: bigint}) {
     if (rows.length === 0) {
         return <div className="empty-state">
             <p className="eyebrow">NO MATCHING RECORDS</p>
@@ -136,8 +60,8 @@ function Rows({rows}: {rows: FeedRow[]}) {
     }
     return <div className="feed-list">{rows.map((row, index) =>
         row.kind === "decision"
-            ? <DecisionRow key={row.uid} row={row} index={index} />
-            : <ErrorRow key={row.uid} row={row} index={index} />
+            ? <DecisionCard key={row.uid} row={row} index={index} now={now} />
+            : <ErrorCard key={row.uid} row={row} index={index} />
     )}</div>;
 }
 
@@ -179,7 +103,7 @@ export function Feed({query}: {query: string}) {
                     <p>{state.message}</p>
                     <button type="button" onClick={retry}>다시 읽기</button>
                 </div>}
-                {state.status === "success" && <Rows rows={rows} />}
+                {state.status === "success" && <Rows rows={rows} now={state.now} />}
             </section>
             <FilterPanel filter={filter} />
         </div>

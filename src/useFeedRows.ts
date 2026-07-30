@@ -12,7 +12,7 @@ import {
 
 export type FeedLoadState =
     | {status: "loading"}
-    | {status: "success"; rows: FeedRow[]}
+    | {status: "success"; rows: FeedRow[]; now: bigint}
     | {status: "error"; message: string};
 
 export function useFeedRows(attester?: Address): {
@@ -34,8 +34,8 @@ export function useFeedRows(attester?: Address): {
             readDecision,
             readSettlement: readSettlementState,
             readLabel: readVerificationLabel,
-        })).then((rows) => {
-            if (current) setState({status: "success", rows});
+        }).then((rows) => ({rows, now}))).then(({rows, now}) => {
+            if (current) setState({status: "success", rows, now});
         }).catch((cause: unknown) => {
             if (!current) return;
             setState({
