@@ -52,8 +52,9 @@ verifyReasonReveal(file, decision, chainId) → payload | undefined
 isPreCommitted(decision) = decision.time < decision.windowStart
 ```
 
-이 값이 참일 때만 시점 배지를 렌더한다. 해시 일치와 시점은 서로 다른
-근거에서 나오므로, 두 주장을 각각 다른 배지로 나눠 보여준다.
+시점 배지는 항상 렌더하고 값에 따라 문구가 갈린다. 참이면 「관측 구간 전 고정」,
+거짓이면 「구간 시작 후 고정」이다. 해시 일치와 시점은 서로 다른 근거에서 나오므로,
+두 주장을 각각 다른 배지로 나눠 보여준다.
 
 **재사용(replay)은 그대로 가능하다.** 커밋 프리이미지가 결정 UID·부모·구간·지표를
 묶지 않는 탓에, 같은 발행자가 같은 이유를 여러 결정에 커밋할 수 있고 같은

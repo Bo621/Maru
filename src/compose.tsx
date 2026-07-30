@@ -283,7 +283,7 @@ export function Compose({session, onConnect}: {session?: ComposeSession; onConne
             </label>
 
             <section className="compose-preview" aria-label="온체인에 올라갈 내용 미리보기">
-                <p className="eyebrow">미리보기 — 온체인에 정확히 이렇게 올라갑니다</p>
+                <p className="eyebrow">미리보기 — 관측 구간은 발행 시 체인 시각으로 다시 계산됩니다</p>
                 {threshold !== undefined
                     ? <h2>{decisionText(op, threshold)}</h2>
                     : <p className="ink-faint">임계값을 입력해 주세요.</p>}

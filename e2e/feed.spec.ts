@@ -266,6 +266,10 @@ test("S9 팔로우가 실제로 거른다", async ({page}) => {
     const attesters = await followedRows.evaluateAll((elements) =>
         elements.map((element) => element.getAttribute("data-attester")));
     expect(new Set(attesters)).toEqual(new Set([firstAttester]));
+
+    // 팔로우가 온체인 기록으로 오해되면 이 제품이 지키려는 구분이 무너진다.
+    // 고지가 실제로 화면에 보이는지까지 본다.
+    await expect(page.getByText("팔로우는 이 브라우저에만 저장됩니다", {exact: false})).toBeVisible();
 });
 
 test("S10 곧 결과 나옴 탭에는 아직 안 끝난 판단만 마감 임박 순으로 뜬다", async ({page}) => {
