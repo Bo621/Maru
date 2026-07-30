@@ -15,11 +15,12 @@ git clone https://github.com/Bo621/POI.git && cd POI && pnpm install
 export POI_RPC_URL=https://sepolia-rpc.giwa.io/
 export POI_EAS_ADDRESS=0x4200000000000000000000000000000000000021
 export POI_SETTLEMENT_RESOLVER_ADDRESS=0x167cf06df663c5ddde9f20a748e724b4fb6c14fa
-# 이름과 달리 decision 리졸버 주소다: POI VERIFY.md가 그렇게 쓴다
 export POI_METRIC_REGISTRY_ADDRESS=0x0f25917176a405bb9022e5b417e0d57348b30f89
+# 이름과 달리 decision 리졸버 주소다: POI VERIFY.md가 그렇게 쓴다
 export POI_DECISION_SCHEMA_UID=0x88990bf8da2b83b2f68c5783dc1a4375f9f956185c6bafcbd97f7de6d5aa3749
 
-node --experimental-strip-types verifier/src/cli.ts <decisionUID> --json
+export DECISION_UID=0xc054ba9d0d4d8ee3a5ed11044fe35ffb33b77558755e6d36333fc8a1c1b6bbf5
+node --experimental-strip-types verifier/src/cli.ts "$DECISION_UID" --json
 ```
 
 검증기는 온체인 정산을 읽고, 업비트 공개 1분봉으로 관측값을 직접 다시
@@ -28,7 +29,7 @@ node --experimental-strip-types verifier/src/cli.ts <decisionUID> --json
 ## 종료코드의 의미
 
 종료코드와 판정은 별개 축이다. 숫자는 CLI 실행 결과를, 판정은 검증
-결과를 가리킨다(`~/GIWA/verifier/src/cli.ts`).
+결과를 가리킨다(`verifier/src/cli.ts`, POI 저장소 기준 경로).
 
 | 종료코드 | 판정 | 뜻 |
 |---|---|---|

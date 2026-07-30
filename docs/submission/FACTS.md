@@ -1,21 +1,22 @@
 # 검증된 사실표 — 지원서에 쓸 수 있는 수치
 
-> **2026-07-31 실측.** 이 표에 없는 수치는 지원서에 쓰지 않는다.
+> **2026-07-31 02:39 KST 실측.** 이 표에 없는 수치는 지원서에 쓰지 않는다.
 > 「없는 것을 있다고 쓰지 않는다」가 이 프로젝트의 규칙이다.
+> 온체인 수치는 결정이 계속 발행되는 만큼 계속 바뀐다 — 기준 시각을 함께 읽는다.
 
-## 온체인 (GIWA Sepolia · chainId 91342)
+## 온체인 (GIWA Sepolia · chainId 91342) — 2026-07-31 02:39 KST 기준
 
 | | 값 | 확인 방법 |
 |---|---|---|
 | 새로 배포한 컨트랙트 | **0개** | 저장소에 `contracts/` 자체가 없다 |
-| 결정 어테스테이션 | 14건 | `readDecisionLogs` |
+| 결정 어테스테이션 | 16건 | `readDecisionLogs` |
 | 발행자 지갑 | 2개 | 위 로그의 attester |
 | 활성 정산 | 11건 | `readSettlementState` |
 | 입장 변경 이력(parents) | 2건 | 결정의 `parents` |
 | REASON 커밋 | 9건 | 결정의 `reasonCommitment` |
-| 도장 검증 스냅샷 | 10건 | 결정의 `verifiedAddressUID` |
-| 아직 창이 열린 결정 | 3건 | `windowEnd > now` |
-| 프로토콜 시연 기록 | 5건 | `src/protocolFixtures.ts` — 체인에서 실측 확인한 UID 목록, 소비자 판단 아님 |
+| 도장 검증 스냅샷 | 12건 | 결정의 `verifiedAddressUID` |
+| 아직 창이 열린 결정 | 2건 | `windowEnd > now` |
+| 프로토콜 시연 기록 | 7건 | `src/protocolFixtures.ts` — 체인에서 실측 확인한 UID 목록, 소비자 판단 아님 |
 
 ## 독립 검증
 
@@ -56,7 +57,7 @@ https://maru-web-production-0407.up.railway.app     HTTP 200
 | | 값 | 출처 |
 |---|---|---|
 | 구성 | **1인** (대표·풀스택) | 컨트랙트·프론트·검증기 전부 |
-| 대표 경력 | 블록체인·디지털자산·결제·정산 **10년+** (2016.04~) | `~/GIWA/docs/submission/TEAM.md` |
+| 대표 경력 | 블록체인·디지털자산·결제·정산 **10년+** (2016.04~) | [`gitbook/team/team.md`](../../gitbook/team/team.md) |
 
 ## 비용 — 마루 자체 실측이 아니다
 

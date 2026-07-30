@@ -28,7 +28,8 @@ rsync -a --delete --exclude node_modules --exclude dist --exclude .DS_Store \
 ./scripts/check_core_sync.sh
 ```
 
-`~/GIWA/core/src`와 `~/Maru/core/src`의 바이트 해시(SHA-256)를 파일 단위로
+원본 저장소(`../GIWA/core/src`, Maru 저장소와 나란히 clone돼 있어야 한다)와
+로컬 vendoring 복사본(`core/src`)의 바이트 해시(SHA-256)를 파일 단위로
 비교한다. `pnpm test`가 자동으로 비교해 동기화 누락을 잡도록 마지막
 단계로 들어가 있다.
 
@@ -44,5 +45,5 @@ rsync -a --delete --exclude node_modules --exclude dist --exclude .DS_Store \
 ## 복사본을 직접 고치지 마라
 
 `core/`를 직접 수정하면 다음 `pnpm test`에서 `check_core_sync.sh`가 실패한다.
-수정이 필요하면 `~/GIWA/core`에서 고치고 `sync_core.sh`로 다시 끌어온다.
+수정이 필요하면 원본 저장소의 `core`에서 고치고 `sync_core.sh`로 다시 끌어온다.
 원본과 복사본이 갈라지는 순간 두 제품이 같은 결정을 다르게 판정할 수 있다.

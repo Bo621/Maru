@@ -24,14 +24,15 @@ GASOK 2차 제출 · **Track 02 CONSUMER / SOCIAL** · 2026-07
 
 GIWA Sepolia(`91342`)에서 확인할 수 있다. 아래 수치의 유일한 출처는
 [`docs/submission/FACTS.md`](https://github.com/Bo621/Maru/blob/main/docs/submission/FACTS.md)다.
+온체인 수치는 계속 바뀐다 — **2026-07-31 02:39 KST 기준.**
 
 | | |
 |---|---|
 | 새로 배포한 컨트랙트 | **0개** — [자세히](protocol/no-contracts.md) |
-| 결정 어테스테이션 | 14건 |
+| 결정 어테스테이션 | 16건 |
 | 발행자 지갑 | 2개 |
 | 활성 정산 | 11건 |
-| 도장 검증 스냅샷 | 10건 |
+| 도장 검증 스냅샷 | 12건 |
 | 이유 원문(REASON) 커밋 | 9건 |
 | 화면 (공개 URL) | [maru-web-production-0407.up.railway.app](https://maru-web-production-0407.up.railway.app) — 지갑 없이 조회·검증 |
 | 오프체인 재검증 | POI verifier CLI, 등록된 11건 전부 `MATCH` |

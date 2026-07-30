@@ -1,13 +1,17 @@
 # 테스트 구성
 
 ```bash
+pnpm install --frozen-lockfile   # 깨끗한 clone 이면 먼저
 pnpm test              # vitest + core 동기화
 pnpm build              # 타입 + 번들
 pnpm test:e2e           # Playwright, 실제 GIWA Sepolia 상대
 pnpm check:onchain      # 문서 ↔ 온체인
 ```
 
-한 번에 실행하려면 `./scripts/run_all_tests.sh`. 각 명령은 실패 시 0이
+한 번에 실행하려면 `./scripts/run_all_tests.sh`. 다만 이 스크립트는
+**스모크(`@smoke`)를 뺀 기본 게이트만** 돈다 — 업비트 실서비스에 의존하는
+테스트를 배포 전 게이트에 넣으면 업비트가 느릴 때마다 게이트가 막힌다.
+스모크는 따로 `pnpm test:e2e:smoke`로 돌린다. 각 명령은 실패 시 0이
 아닌 코드로 끝나야 한다. 파이프로 감싸 grep 등의 종료코드만 남기면 테스트가
 깨져도 성공으로 끝날 수 있다.
 
@@ -69,7 +73,7 @@ POI에서 새 방어를 넣을 때마다 이 방법으로 확인했고, 실제�
 | S10 / S10-보강 | 곧 결과 나옴 정렬, 탭 3개 전환과 URL 유지 |
 | S4-보강 | 탭과 필터가 서로 공존한다 |
 | S11 | 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다 |
-| S12 | 프로토콜 시연 기록 5건에 구분 표시가 붙고, 필터로 걸러지지 않는다 |
+| S12 | 프로토콜 시연 기록 7건에 구분 표시가 붙고, 필터 없는 피드에서 표시가 사라지지 않는다 |
 | `@smoke` S8-실서비스 | 업비트를 실제로 불러 판정이 뜬다 |
 
 Playwright는 로컬 anvil이 아니라 **실제 GIWA Sepolia**를 상대로 돈다. 공개

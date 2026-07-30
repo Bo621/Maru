@@ -34,6 +34,6 @@ export const FOLLOW_STORAGE_KEY = "maru.local.follows.v1";
 ## 온체인 팔로우를 만들지 않은 이유
 
 새 EAS 스키마와 리졸버가 필요하다. 컨트랙트를 건드리지 않기로 한
-[PLAN.md의 결정](../protocol/no-contracts.md)과 정면으로 부딪힌다. 로컬
+[새 컨트랙트 0개](../protocol/no-contracts.md)의 설계 결정과 정면으로 부딪힌다. 로컬
 팔로우로 대신하고 그 사실을 화면에 밝히는 쪽을 택했다. 자세한 트레이드오프는
 [하지 못한 것](../limits/not-done.md)에 있다.
