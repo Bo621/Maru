@@ -392,6 +392,31 @@ a:focus-visible {
     border: 1px solid var(--seal);
 }
 
+.card__verdict {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font: 500 0.75rem/1.4 var(--font-mono);
+    letter-spacing: 0.02em;
+}
+
+/* 근거를 배지 안에서 읽히게 한다. 온체인 배지와 나란히 서므로 출처가 보여야 한다. */
+.card__verdict small {
+    color: var(--ink-faint);
+    font-size: 0.6875rem;
+}
+
+.card__verdict--match {
+    color: var(--green);
+}
+
+.card__verdict--mismatch {
+    color: var(--seal-dark);
+}
+
 .state-seal {
     width: 5rem;
     aspect-ratio: 1;

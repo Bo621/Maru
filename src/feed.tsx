@@ -8,6 +8,8 @@ import {DecisionCard, ErrorCard, type CardReason} from "./card";
 import {loadReasonReveal} from "./revealLoad";
 import {verifyReasonReveal} from "./revealVerify";
 import {observeReveals} from "./reveal-on-scroll";
+import {NO_VERDICT_ROWS, useVerdicts} from "./useVerdicts";
+import type {Verdict} from "./verdict";
 
 function setFilter(filter: FeedFilter): void {
     window.location.hash = routeToHash({name: "feed", query: serializeFeedFilter(filter)});
@@ -97,10 +99,11 @@ function useReasons(rows: FeedRow[]): Map<string, CardReason> {
     return reasons;
 }
 
-function Rows({rows, now, reasons}: {
+function Rows({rows, now, reasons, verdicts}: {
     rows: FeedRow[];
     now: bigint;
     reasons: Map<string, CardReason>;
+    verdicts: Map<string, Verdict>;
 }) {
     const listRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -124,6 +127,7 @@ function Rows({rows, now, reasons}: {
                 index={index}
                 now={now}
                 reason={reasons.get(row.uid.toLowerCase())}
+                verdict={verdicts.get(row.uid.toLowerCase())}
             />
             : <ErrorCard key={row.uid} row={row} index={index} />
     )}</div>;
@@ -134,6 +138,7 @@ export function Feed({query}: {query: string}) {
     const {state, retry} = useFeedRows();
     const rows = state.status === "success" ? filterFeedItems(state.rows, filter) : [];
     const reasons = useReasons(state.status === "success" ? state.rows : NO_ROWS);
+    const verdicts = useVerdicts(state.status === "success" ? state.rows : NO_VERDICT_ROWS);
 
     return <main id="main-content" className="page-shell">
         <header className="feed-intro">
@@ -155,6 +160,7 @@ export function Feed({query}: {query: string}) {
 
         <FilterBar filter={filter} />
         <p className="filter-caveat">정산이 등록됐다는 뜻이지, 관측값이 맞다는 뜻이 아닙니다.</p>
+        <p className="filter-caveat">판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.</p>
 
         <div className="section-heading">
             <p className="eyebrow">LATEST ONCHAIN</p>
@@ -170,6 +176,6 @@ export function Feed({query}: {query: string}) {
             <p>{state.message}</p>
             <button type="button" onClick={retry}>다시 읽기</button>
         </div>}
-        {state.status === "success" && <Rows rows={rows} now={state.now} reasons={reasons} />}
+        {state.status === "success" && <Rows rows={rows} now={state.now} reasons={reasons} verdicts={verdicts} />}
     </main>;
 }

@@ -7,6 +7,7 @@ import {routeToHash} from "./router";
 import {conditionSentence} from "./sentence";
 import {ZERO_UID} from "./read";
 import {Avatar} from "./avatar";
+import type {Verdict} from "./verdict";
 
 export function shortHex(value: string, start = 10, end = 4): string {
     return `${value.slice(0, start)}…${value.slice(-end)}`;
@@ -56,11 +57,12 @@ export interface CardReason {
     text: string;
 }
 
-export function DecisionCard({row, index, now, reason}: {
+export function DecisionCard({row, index, now, reason, verdict}: {
     row: FeedDecisionRow;
     index: number;
     now: bigint;
     reason?: CardReason;
+    verdict?: Verdict;
 }) {
     const label = stateLabel(row.state);
     return <article
@@ -96,6 +98,14 @@ export function DecisionCard({row, index, now, reason}: {
             >
                 {label.short}
             </span>
+            {verdict && (verdict.kind === "match" || verdict.kind === "mismatch") && <span
+                className={`card__verdict card__verdict--${verdict.kind}`}
+                data-verdict={verdict.kind}
+            >
+                <b>화면 재계산</b>
+                {verdict.kind === "match" ? " 맞음" : " 틀림"}
+                <small>업비트 1분봉 {Number(verdict.observed).toLocaleString("ko-KR")}원</small>
+            </span>}
             {row.parents.length > 0 && <a
                 className="card__thread"
                 data-thread-badge
