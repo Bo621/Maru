@@ -2,13 +2,16 @@
 
 ```bash
 pnpm install --frozen-lockfile   # 깨끗한 clone 이면 먼저
+pnpm exec playwright install --with-deps chromium  # 깨끗한 clone 이면 브라우저도 먼저
 pnpm test              # vitest + core 동기화
 pnpm build              # 타입 + 번들
 pnpm test:e2e           # Playwright, 실제 GIWA Sepolia 상대
 pnpm check:onchain      # 문서 ↔ 온체인
 ```
 
-한 번에 실행하려면 `./scripts/run_all_tests.sh`. 다만 이 스크립트는
+한 번에 실행하려면 `./scripts/run_all_tests.sh`. 이 스크립트는 Playwright
+브라우저가 이미 설치돼 있다고 가정한다 — 깨끗한 clone에서는 위
+`playwright install` 을 먼저 돌려야 한다. 다만 이 스크립트는
 **스모크(`@smoke`)를 뺀 기본 게이트만** 돈다 — 업비트 실서비스에 의존하는
 테스트를 배포 전 게이트에 넣으면 업비트가 느릴 때마다 게이트가 막힌다.
 스모크는 따로 `pnpm test:e2e:smoke`로 돌린다. 각 명령은 실패 시 0이
