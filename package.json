@@ -13,6 +13,7 @@
     "test": "vitest run && pnpm test:core-sync",
     "test:core-sync": "./scripts/check_core_sync.sh",
     "test:e2e": "playwright test",
+    "test:e2e:smoke": "E2E_SMOKE=1 playwright test --grep @smoke",
     "check:onchain": "node scripts/check_docs_onchain.mjs",
     "start": "vite preview --host 0.0.0.0 --port ${PORT:-4173}"
   },

@@ -129,3 +129,49 @@ test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는�
     const count = await reasons.count();
     await expect(reasons.locator("[data-reason-verified]")).toHaveCount(count);
 });
+
+test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 나온다", async ({page}) => {
+    // 모든 창에 같은 종가를 흘려보낸다. `to`(창 종료) 직전 1분에 닫히는 봉 하나만 돌려주면
+    // 창 길이와 무관하게 pickObservedClose가 그 봉을 고른다.
+    // 온체인 결정 10건에 이 값(91,829,000원)을 대입하면 8건은 맞고 2건은 틀린다 —
+    // 조건식(threshold·op)이 서로 다르기 때문이다. 창은 이미 닫힌 과거라 이 대응은 불변이다.
+    const OBSERVED_CLOSE = 91_829_000;
+    await page.route("**/api.upbit.com/**", async (route) => {
+        const url = new URL(route.request().url());
+        const windowEndMs = Date.parse(url.searchParams.get("to") ?? "");
+        const startedAt = new Date(windowEndMs - 60_000).toISOString().replace(/\.\d+Z$/, "");
+        await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            // Chromium 은 fulfill 한 응답에도 CORS 를 적용한다. ACAO 가 없으면 fetch 가 막혀
+            // 판정이 하나도 안 뜨고 테스트가 조용히 실패한다.
+            headers: {"access-control-allow-origin": "*"},
+            body: JSON.stringify([{candle_date_time_utc: startedAt, trade_price: OBSERVED_CLOSE}]),
+        });
+    });
+
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+    await expect(page.locator("[data-verdict]")).not.toHaveCount(0);
+
+    // 제품의 명제는 틀린 판단이 그대로 남는다는 것이다.
+    // 맞음만 보이면 이 화면은 자랑판이지 증명이 아니다.
+    // 고정 응답이므로 정확한 수를 안다. "0건이 아니다"로는 카드가 사라져도 통과한다.
+    await expect(page.locator("[data-verdict]")).toHaveCount(10);
+    await expect(page.locator('[data-verdict="match"]')).toHaveCount(8);
+    await expect(page.locator('[data-verdict="mismatch"]')).toHaveCount(2);
+
+    // 배지 자체가 출처를 밝히는지 — hover 에만 있으면 온체인 기록으로 읽힌다.
+    await expect(page.locator("[data-verdict]").first()).toContainText("화면 재계산");
+    await expect(page.locator("[data-verdict]").first()).toContainText("업비트 1분봉");
+
+    // 전역 고지도 보이는지.
+    await expect(page.getByText("판정은 이 화면이 업비트 1분봉으로 다시 계산한 결과입니다. 온체인에 기록된 판정이 아닙니다.")).toBeVisible();
+});
+
+test("@smoke S8-실서비스 업비트를 실제로 불러 판정이 뜬다", async ({page}) => {
+    // 실서비스 확인은 별도로 둔다. 업비트가 죽어도 S8 게이트는 안 깨진다.
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+    await expect(page.locator("[data-verdict]")).not.toHaveCount(0);
+});
