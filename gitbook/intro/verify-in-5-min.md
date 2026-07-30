@@ -43,8 +43,9 @@ https://maru-web-production-0407.up.railway.app/#/feed?verified=1&match=2
 
 이 링크를 열면 도장 검증 지갑만, 그중 활성 정산이 2건 이상인 발행자만 남는다.
 URL을 복사해 새 창에 붙여도 같은 필터가 유지된다 — 조건부 커뮤니티 링크의
-최소 형태다. `match`는 이름과 달리 **MATCH 판정 수가 아니라 활성 정산 존재
-건수**다. 왜 그런지는 [무엇이 증명되고 무엇이 안 되나](../problem/what-is-proven.md)에
+최소 형태다. `match`는 이름과 달리 **MATCH 판정 수가 아니라 발행자별 활성
+정산 건수**다. 발행자가 이 조건을 통과하면 그 발행자의 미정산 결정도 함께
+남는다. 왜 그런지는 [무엇이 증명되고 무엇이 안 되나](../problem/what-is-proven.md)에
 있다.
 
 ## 4. 화면에 뜬 결정이 실제로 온체인에 있다
@@ -60,9 +61,13 @@ URL을 복사해 새 창에 붙여도 같은 필터가 유지된다 — 조건�
 ```bash
 export EAS=0x4200000000000000000000000000000000000021
 cast call $EAS \
-  "getAttestation(bytes32)(bytes32,bytes32,uint64,uint64,uint64,bool,address,address,bool,bytes)" \
+  "getAttestation(bytes32)((bytes32,bytes32,uint64,uint64,uint64,bytes32,address,address,bool,bytes))" \
   <decisionUID> --rpc-url $RPC
 ```
+
+반환 타입을 튜플로 묶고 여섯 번째 필드(`refUID`, bytes32)를 넣은 것에
+주의해라. 이 필드를 빼면 `cast`가 나머지 필드를 한 칸씩 밀어서 디코딩한다 —
+호출은 성공하지만 값이 전부 틀리게 나온다.
 
 마지막 필드(`data`)가 결정 본문의 raw ABI-encoded bytes다. 필드 순서를 손으로
 디코딩할 필요는 없다 — 다음 단계의 verifier CLI가 이미 그 디코딩을 포함해서

@@ -43,3 +43,7 @@
 
 * [하지 못한 것](limits/not-done.md)
 * [로드맵](limits/roadmap.md)
+
+## 부록
+
+* [용어](appendix/glossary.md)
