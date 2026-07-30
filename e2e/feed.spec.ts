@@ -1,13 +1,37 @@
 import {expect, test} from "@playwright/test";
+import type {Page} from "@playwright/test";
+
+const DECISION_ROWS = '[data-feed-row][data-kind="decision"]';
+
+async function snapshot(page: Page): Promise<{count: number; issuers: string[]; blocks: number[]}> {
+    const rows = page.locator(DECISION_ROWS);
+    await expect(rows).not.toHaveCount(0);
+    const data = await rows.evaluateAll((elements) => elements.map((element) => ({
+        attester: element.getAttribute("data-attester") ?? "",
+        block: element.getAttribute("data-block-number"),
+    })));
+    return {
+        count: data.length,
+        issuers: [...new Set(data.map((item) => item.attester))],
+        // 속성이 없는 행은 건너뛴다. 0으로 읽으면 정렬이 깨진 것처럼 보인다.
+        blocks: data.filter((item) => item.block !== null).map((item) => Number(item.block)),
+    };
+}
 
 test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
     await page.goto("/#/feed");
 
-    await test.step("S1 여러 지갑의 결정을 시간 역순 피드로 보여준다", async () => {
+    const baseline = await test.step("S1 여러 지갑의 결정을 시간 역순 피드로 보여준다", async () => {
         await expect(page.getByRole("heading", {name: "검증된 판단의 공개 피드"})).toBeVisible();
         await expect(page.getByText("이 목록은 조회된 기록의 나열입니다. 순위나 성과 지표가 아닙니다.")).toBeVisible();
         await expect(page.getByText("조회된 것이 전부라는 보장은 없습니다.")).toBeVisible();
         await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);
+
+        const captured = await snapshot(page);
+        expect(captured.issuers.length).toBeGreaterThanOrEqual(2);
+        const descending = [...captured.blocks].sort((left, right) => right - left);
+        expect(captured.blocks).toEqual(descending);
+        return captured;
     });
 
     await test.step("S2 도장 검증 필터를 켜면 검증 라벨이 붙은 결정만 남는다", async () => {
@@ -17,6 +41,9 @@ test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
         const decisionRows = page.locator('[data-feed-row][data-kind="decision"]');
         await expect(decisionRows).not.toHaveCount(0);
         await expect(decisionRows.locator("[data-verification]")).toHaveCount(await decisionRows.count());
+
+        const filtered = await snapshot(page);
+        expect(filtered.count).toBeLessThan(baseline.count);
     });
 
     await test.step("S3 활성 정산 최소 건수를 URL과 피드에 적용한다", async () => {
@@ -42,6 +69,17 @@ test("S1~S4 공개 피드 심사 시나리오", async ({page, context}) => {
         await expect(sharedPage.getByLabel("도장 검증 지갑만")).toBeChecked();
         await expect(sharedPage.getByLabel("발행자별 활성 정산 최소 건수")).toHaveValue("2");
     });
+});
+
+test("S3-보강 정산을 등록하지 않은 발행자가 사라진다", async ({page}) => {
+    await page.goto("/#/feed");
+    const baseline = await snapshot(page);
+
+    await page.getByLabel("발행자별 활성 정산 최소 건수").fill("1");
+    await expect(page).toHaveURL(/match=1/);
+
+    const filtered = await snapshot(page);
+    expect(filtered.issuers.length).toBeLessThan(baseline.issuers.length);
 });
 
 test("S5 피드에서 검증까지 끊기지 않고 이어진다", async ({page}) => {
