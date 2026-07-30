@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xA1Cb5CbC9D7a0B7164a1bFE4B19bfe1Bf38BF310",
+  "attestationUID": "0xf34f7a9501a43cd94b74be8cfc7cefede912b05d6e6cca7b0739d4ac5628ef16",
+  "tag": "REASON",
+  "salt": "0x50bb8e5e96debe386a1b433148519e45",
+  "payload": "오늘 92,000 위를 세 번 건드렸는데 세 번 다 못 지켰다. 10분 안에 뚫을 자리는 아니다."
+}

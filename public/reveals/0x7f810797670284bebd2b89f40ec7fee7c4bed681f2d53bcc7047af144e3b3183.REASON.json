@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xca89C0F26C99B89F2638649D9b597cA264c7Af5c",
+  "attestationUID": "0x7f810797670284bebd2b89f40ec7fee7c4bed681f2d53bcc7047af144e3b3183",
+  "tag": "REASON",
+  "salt": "0x9a0fe36c2091860f43cb8dcce27fe38f",
+  "payload": "오늘 저점 90,888 다시 보러 갈 흐름이다. 이번엔 지지 못 한다고 본다."
+}

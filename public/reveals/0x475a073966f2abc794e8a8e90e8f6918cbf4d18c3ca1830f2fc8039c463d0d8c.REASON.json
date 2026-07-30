@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xca89C0F26C99B89F2638649D9b597cA264c7Af5c",
+  "attestationUID": "0x475a073966f2abc794e8a8e90e8f6918cbf4d18c3ca1830f2fc8039c463d0d8c",
+  "tag": "REASON",
+  "salt": "0x327f65c3420cdf2942704bf1e5addec8",
+  "payload": "7월 26일 95,068 찍고 계속 흘러내렸다. 반등에 거래량이 안 붙어서 10분이면 91,000 깨질 자리로 본다."
+}

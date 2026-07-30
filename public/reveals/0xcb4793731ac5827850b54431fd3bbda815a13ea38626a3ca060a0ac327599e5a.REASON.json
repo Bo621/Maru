@@ -1,0 +1,9 @@
+{
+  "version": "poi.reveal.v1",
+  "chainId": 91342,
+  "attester": "0xA1Cb5CbC9D7a0B7164a1bFE4B19bfe1Bf38BF310",
+  "attestationUID": "0xcb4793731ac5827850b54431fd3bbda815a13ea38626a3ca060a0ac327599e5a",
+  "tag": "REASON",
+  "salt": "0x51e516c4f47ce96401449fb12b984de9",
+  "payload": "아까 올린 뒤로 91,600까지 왔다. 다음 봉은 91,600 위로 수정한다."
+}
