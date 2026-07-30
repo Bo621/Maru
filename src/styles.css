@@ -519,6 +519,23 @@ a:focus-visible {
     color: var(--ink-faint);
 }
 
+/* 경고가 아니라 다른 종류의 기록이라는 표시다 — 도장 배지와 같은 구조,
+   같은 중립 톤(--ink-faint)을 쓴다. 새 색 토큰을 만들지 않는다. */
+.fixture-badge {
+    padding: 0.22rem 0.42rem;
+    color: var(--ink-faint);
+    border-block: 1px solid currentColor;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+}
+
+.fixture-note {
+    margin: 0;
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+}
+
 .error-copy {
     margin: 0;
     color: var(--ink-soft);

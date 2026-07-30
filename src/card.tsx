@@ -4,6 +4,7 @@ import type {FeedDecisionRow, FeedErrorRow} from "./feedData";
 import {formatUtcMinute, stateLabel} from "./presentation";
 import {relativeTime} from "./relativeTime";
 import {isPreCommitted} from "./revealVerify";
+import {isProtocolFixture} from "./protocolFixtures";
 import {routeToHash} from "./router";
 import {conditionSentence} from "./sentence";
 import {ZERO_UID} from "./read";
@@ -44,6 +45,7 @@ function Identity({row, now, isFollowing, onToggleFollow}: {
                 {shortHex(row.attester)}
             </a>
             <Verification row={row} />
+            {isProtocolFixture(row.uid) && <span className="fixture-badge">프로토콜 시연</span>}
             {onToggleFollow && <button
                 type="button"
                 className="follow-toggle"
@@ -90,6 +92,7 @@ export function DecisionCard({row, index, now, reason, verdict, isFollowing, onT
         data-settled-count={row.settledDecisionCount}
         data-attester={row.attester.toLowerCase()}
         {...(row.blockNumber === null ? {} : {"data-block-number": String(row.blockNumber)})}
+        {...(isProtocolFixture(row.uid) ? {"data-fixture": ""} : {})}
         style={{"--row-index": Math.min(index, 9)} as CSSProperties}
     >
         <Identity row={row} now={now} isFollowing={isFollowing} onToggleFollow={onToggleFollow} />
@@ -102,6 +105,9 @@ export function DecisionCard({row, index, now, reason, verdict, isFollowing, onT
         </blockquote>}
 
         <h3 className="card__claim">{conditionSentence(row)}</h3>
+        {isProtocolFixture(row.uid) && <p className="fixture-note">
+            컨트랙트 상태를 보여주려고 발행한 기록입니다. 시세 판단이 아닙니다.
+        </p>}
 
         <p className="card__window">
             관측 구간 <time dateTime={utcIso(row.windowStart)}>{formatUtcMinute(row.windowStart)}</time>

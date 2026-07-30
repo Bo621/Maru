@@ -15,6 +15,7 @@
 | REASON 커밋 | 9건 | 결정의 `reasonCommitment` |
 | 도장 검증 스냅샷 | 10건 | 결정의 `verifiedAddressUID` |
 | 아직 창이 열린 결정 | 3건 | `windowEnd > now` |
+| 프로토콜 시연 기록 | 5건 | `src/protocolFixtures.ts` — 체인에서 실측 확인한 UID 목록, 소비자 판단 아님 |
 
 ## 독립 검증
 

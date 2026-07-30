@@ -318,6 +318,40 @@ test("S11 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다
     await expect(page.getByText("판단을 발행하려면 지갑을 연결해 주세요.")).toBeVisible();
 });
 
+test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({page}) => {
+    // src/protocolFixtures.ts 와 같은 목록 — 체인에서 실측 확인한 5건.
+    // 임계값 등 휴리스틱이 아니라 명시적 UID로 판별하므로 여기서도 그대로 나열한다.
+    const FIXTURE_UIDS = [
+        "0x3f592f21a7e5a733d3dd90caeb2f9ec35bffa335b69da7310749694283e16938",
+        "0x5941a398a8338b99d053309cbf5e611486f30e649c9569cfa3a63d5060443888",
+        "0xb1e4628344ade15e9779b4f0398f3d6ddf820b92094c4c84fe8304a68a683b21",
+        "0xe015bb0a57ef32f7fa579a0ed7951555405ea6febdbe63fb4ceece0e468786db",
+        "0x5d2a066cec47c29327e955c11a46ca028fe8a8ecda62cffc8b29bf4441570606",
+    ];
+    // S8의 MATCH_UIDS 뒤쪽 2건 — 마루가 발행한 결정이라 구분 표시가 없어야 한다.
+    const NON_FIXTURE_UIDS = [
+        "0xf34f7a9501a43cd94b74be8cfc7cefede912b05d6e6cca7b0739d4ac5628ef16",
+        "0xcb4793731ac5827850b54431fd3bbda815a13ea38626a3ca060a0ac327599e5a",
+    ];
+
+    await page.goto("/#/feed");
+    await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
+
+    for (const uid of FIXTURE_UIDS) {
+        await expect(page.locator(`[data-uid="${uid}"]`)).toHaveAttribute("data-fixture", "");
+    }
+    for (const uid of NON_FIXTURE_UIDS) {
+        const row = page.locator(`[data-uid="${uid}"]`);
+        await expect(row).toHaveCount(1);
+        await expect(row).not.toHaveAttribute("data-fixture", "");
+    }
+
+    // 시연 기록이 피드에서 사라지지 않았다 — 5건 전부 렌더된다. 필터로 걸러내지 않는다.
+    for (const uid of FIXTURE_UIDS) {
+        await expect(page.locator(`[data-uid="${uid}"]`)).toHaveCount(1);
+    }
+});
+
 test("@smoke S8-실서비스 업비트를 실제로 불러 판정이 뜬다", async ({page}) => {
     // 실서비스 확인은 별도로 둔다. 업비트가 죽어도 S8 게이트는 안 깨진다.
     await page.goto("/#/feed");
