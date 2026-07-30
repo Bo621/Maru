@@ -909,3 +909,112 @@ pre {
         transition-duration: 0.01ms !important;
     }
 }
+
+.compose-connect-notice {
+    padding-block: var(--space-16);
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+}
+
+.compose-header p {
+    margin: var(--space-1) 0 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.compose-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+}
+
+.compose-form fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    border: 0;
+}
+
+.compose-form legend {
+    width: 100%;
+    margin-bottom: var(--space-2);
+    font: 500 0.7rem/1.4 var(--font-mono);
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+}
+
+.compose-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.compose-field input,
+.compose-field textarea {
+    padding: var(--space-3);
+    border: 1px solid var(--line-color);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: inherit;
+}
+
+.compose-field small {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+}
+
+.compose-preview {
+    padding: var(--space-6);
+    border: 1px solid var(--line-strong);
+    background: var(--paper-deep);
+}
+
+.compose-preview h2 {
+    margin: var(--space-2) 0;
+    font: 700 1.4rem/1.2 var(--font-serif);
+}
+
+.compose-notice,
+.compose-error {
+    padding: var(--space-3);
+    font-size: 0.85rem;
+}
+
+.compose-notice {
+    color: var(--ink-soft);
+    border: 1px solid var(--line-color);
+}
+
+.compose-error {
+    color: var(--seal-dark);
+    border: 1px solid var(--seal);
+}
+
+.compose-submit {
+    min-height: 2.75rem;
+    padding-inline: var(--space-6);
+    align-self: flex-start;
+    border: 1px solid var(--rule-strong);
+    background: var(--ink);
+    color: var(--paper);
+    font: 700 0.85rem/1 var(--font-mono);
+    cursor: pointer;
+}
+
+.compose-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.compose-done {
+    padding-block: var(--space-12);
+    text-align: center;
+}
+
+.compose-done a {
+    display: block;
+    margin-top: var(--space-2);
+}

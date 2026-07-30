@@ -6,6 +6,7 @@ export type Route =
     | {name: "passport"; address: Address}
     | {name: "decision"; uid: Hex}
     | {name: "verify"; uid: Hex}
+    | {name: "write"}
     | {name: "notFound"; raw: string};
 
 const UID_PATTERN = /^0x[0-9a-f]{64}$/i;
@@ -31,6 +32,8 @@ export function parseRoute(hash: string): Route {
         return {name: "verify", uid: verify[1].toLowerCase() as Hex};
     }
 
+    if (hash === "#/write") return {name: "write"};
+
     return {name: "notFound", raw: hash};
 }
 
@@ -40,6 +43,7 @@ export function routeToHash(route: Route): string {
         case "passport": return `#/p/${route.address.toLowerCase()}`;
         case "decision": return `#/d/${route.uid.toLowerCase()}`;
         case "verify": return `#/verify/${route.uid.toLowerCase()}`;
+        case "write": return "#/write";
         case "notFound": return route.raw;
     }
 }

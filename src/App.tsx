@@ -1,5 +1,6 @@
 import {useState} from "react";
 import type {Address, WalletClient} from "viem";
+import {Compose} from "./compose";
 import {DecisionDetail} from "./decisionDetail";
 import {Feed} from "./feed";
 import {Passport} from "./passport";
@@ -26,6 +27,7 @@ function Header({route, session, onConnect, connectNotice}: {
             </a>
             <nav aria-label="주요 메뉴">
                 <a href="#/feed" aria-current={feedActive ? "page" : undefined}>공개 피드</a>
+                <a href="#/write" aria-current={route.name === "write" ? "page" : undefined}>판단 작성</a>
                 <a href="https://github.com/Bo621/POI" target="_blank" rel="noreferrer">프로토콜 원본 ↗</a>
             </nav>
             <div className="site-header__meta">
@@ -70,6 +72,7 @@ export default function App() {
     else if (route.name === "passport") page = <Passport address={route.address} />;
     else if (route.name === "decision") page = <DecisionDetail uid={route.uid} />;
     else if (route.name === "verify") page = <Verify uid={route.uid} />;
+    else if (route.name === "write") page = <Compose session={session} />;
     else page = <NotFound raw={route.raw} />;
 
     return <>

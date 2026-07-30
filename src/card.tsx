@@ -69,6 +69,7 @@ export function DecisionCard({row, index, now, reason, verdict}: {
         className="card"
         data-feed-row
         data-kind="decision"
+        data-uid={row.uid.toLowerCase()}
         data-settled-count={row.settledDecisionCount}
         data-attester={row.attester.toLowerCase()}
         {...(row.blockNumber === null ? {} : {"data-block-number": String(row.blockNumber)})}
