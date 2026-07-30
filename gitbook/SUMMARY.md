@@ -13,6 +13,7 @@
 * [스크린샷으로는 증명되지 않는다](problem/screenshot.md)
 * [SNS의 최소 조건](problem/sns.md)
 * [무엇이 증명되고 무엇이 안 되나](problem/what-is-proven.md)
+* [일반 SNS · POI · 마루 비교](problem/comparison.md)
 
 ## 설계
 
@@ -32,6 +33,14 @@
 
 * [왜 이 체인인가](giwa/why.md)
 * [월렛 탑재 가능성](giwa/wallet.md)
+
+## 팀
+
+* [팀](team/team.md)
+
+## 시장
+
+* [시장](market/market.md)
 
 ## 검증
 

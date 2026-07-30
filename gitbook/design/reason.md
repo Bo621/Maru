@@ -24,7 +24,8 @@ verifyReasonReveal(file, decision, chainId) → payload | undefined
 통제해 아무 글이나 통과시킬 수 있다. 세 값은 신뢰할 수 있는 출처(상수·앱
 설정·온체인 attestation)에서 직접 만들고, 파일에서는 `salt`와 `payload`만
 받는다. 검증 도구가 attester를 파일에서 받지 않고 온체인에서 읽는 것과
-같은 이유다. POI의 CT18(복사 공격) 방어를 그대로 물려받는다.
+같은 이유다. 발행자 주소를 프리이미지에 묶어 다른 사람의 커밋을 복사한
+파일은 거부하는 POI의 방어를 그대로 물려받는다.
 
 ## 두 가지 실패 경로를 다 막는다
 

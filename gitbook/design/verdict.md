@@ -18,7 +18,7 @@ export type Verdict =
 ```
 
 비교는 `@poi/core`의 `evalPredicate`만 쓴다. 여기서 분기를 새로 쓰면
-컨트랙트(I17류 불변식)와 화면이 다른 말을 하게 된다. `decideVerdict`는
+컨트랙트와 같은 술어 계산을 화면이 다시 만들다 어긋날 수 있다. `decideVerdict`는
 지표 가드를 먼저 본다. `BTC_PRICE_KRW_AT_END`가 아닌 지표에 종가를 들이대면
 자신 있게 틀린 판정을 낼 수 있기 때문이다.
 

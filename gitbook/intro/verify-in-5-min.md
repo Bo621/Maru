@@ -2,13 +2,19 @@
 
 **아래 항목은 지갑 없이 직접 확인할 수 있다.**
 
-준비물은 브라우저와 `cast`(Foundry)뿐이다. 지갑도 가스도 필요 없다. 읽기만 한다.
+준비물은 브라우저, `cast`(Foundry), 그리고 5번 항목을 실행하려면 Git·Node
+22+·pnpm이다. 지갑도 가스도 필요 없다. 읽기만 한다.
 
 ```bash
 export RPC=https://sepolia-rpc.giwa.io/
 export DECISION_RESOLVER=0x0f25917176a405bb9022e5b417e0d57348b30f89
 export SETTLEMENT_RESOLVER=0x167cf06df663c5ddde9f20a748e724b4fb6c14fa
+export DECISION_UID=0xc054ba9d0d4d8ee3a5ed11044fe35ffb33b77558755e6d36333fc8a1c1b6bbf5
 ```
+
+아래에서 UID가 필요할 때는 `<decisionUID>`를 그대로 복사하지 말고
+`$DECISION_UID`를 쓴다. 꺾쇠괄호(`<`, `>`)가 든 문자열을 셸에 그대로
+붙여 넣으면 리다이렉션으로 해석돼 실패한다.
 
 ---
 
@@ -62,7 +68,7 @@ URL을 복사해 새 창에 붙여도 같은 필터가 유지된다. 조건부 �
 export EAS=0x4200000000000000000000000000000000000021
 cast call $EAS \
   "getAttestation(bytes32)((bytes32,bytes32,uint64,uint64,uint64,bytes32,address,address,bool,bytes))" \
-  <decisionUID> --rpc-url $RPC
+  "$DECISION_UID" --rpc-url $RPC
 ```
 
 반환 타입을 튜플로 묶고 여섯 번째 필드(`refUID`, bytes32)를 넣은 것에
@@ -91,8 +97,7 @@ export POI_SETTLEMENT_RESOLVER_ADDRESS=$SETTLEMENT_RESOLVER
 export POI_METRIC_REGISTRY_ADDRESS=$DECISION_RESOLVER
 export POI_DECISION_SCHEMA_UID=0x88990bf8da2b83b2f68c5783dc1a4375f9f956185c6bafcbd97f7de6d5aa3749
 
-node --experimental-strip-types verifier/src/cli.ts \
-  0x3f592f21a7e5a733d3dd90caeb2f9ec35bffa335b69da7310749694283e16938 --json
+node --experimental-strip-types verifier/src/cli.ts "$DECISION_UID" --json
 ```
 
 **기대**: `MATCH`, 즉 등록된 관측값이 재계산과 같다. `MATCH`는 "예측이 맞았다"가
@@ -101,10 +106,12 @@ node --experimental-strip-types verifier/src/cli.ts \
 
 ## 6. 이유 원문이 커밋과 대조된다
 
-REASON 커밋이 있는 결정을 열면 인용 블록으로 이유 원문이 보인다. 이건 화면이
-`public/reveals/<uid>.REASON.json`의 `(salt, payload)`로 온체인 `reasonCommitment`를
-재계산해 일치할 때만 렌더한 것이다. 파일을 고치면(예: 로컬에서 payload 한 글자
-수정) 표시가 사라진다. 원문은 커밋의 증거일 뿐, 커밋이 원문을 만들지 않는다.
+REASON 커밋이 있는 결정이라도 이유 원문이 곧바로 보이는 것은 아니다.
+`public/reveals/<uid>.REASON.json`이라는 공개 파일이 따로 있고, 그 파일의
+`(salt, payload)`로 온체인 `reasonCommitment`를 재계산해 일치할 때만 인용
+블록이 렌더된다. 대응하는 파일이 없으면 커밋만 있고 원문은 안 보인다. 파일을
+고치면(예: 로컬에서 payload 한 글자 수정) 표시가 사라진다. 원문은 커밋의
+증거일 뿐, 커밋이 원문을 만들지 않는다.
 `verifyReveal`이 정확히 무엇을 증명하는지는 [이유 원문과 해시 대조](../design/reason.md)에
 있다.
 

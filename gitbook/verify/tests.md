@@ -11,7 +11,7 @@ pnpm check:onchain      # 문서 ↔ 온체인
 아닌 코드로 끝나야 한다. 파이프로 감싸 grep 등의 종료코드만 남기면 테스트가
 깨져도 성공으로 끝날 수 있다.
 
-## 단위 테스트: 163개 / 19 파일
+## 단위 테스트: 170개 / 20 파일
 
 | 파일 | 검사 |
 |---|---|
@@ -22,13 +22,14 @@ pnpm check:onchain      # 문서 ↔ 온체인
 | `read.test.ts` | 90,000블록 로그 청크, 마지막 `latest`, 스키마 가드 |
 | `schemaGuard.test.ts` | 다른 스키마 UID가 결정으로 읽히지 않는지 |
 | `feedData.test.ts` | 실패 행 보존, 정렬 |
-| `revealVerify.test.ts` | tag·chainId·attester를 파일이 정하지 못하는지, CT18류 위조 거부 |
+| `revealVerify.test.ts` | tag·chainId·attester를 파일이 정하지 못하는지, 복사 커밋 위조 거부 |
 | `revealLoad.test.ts` | 404·비2xx·네트워크실패·JSON예외·크기초과·version불일치 |
 | `sentence.test.ts` | 각 연산자 기호, 수치가 한 자리도 안 바뀌는지 |
 | `thread.test.ts` | 부모 체인 조립, 순환 방어, 깊이 계산 |
 | `verdict.test.ts` / `verdictSnapshot.test.ts` | 관측값 선택 규칙, 스냅샷 파싱 실패 시 빈 Map |
 | `relativeTime.test.ts` | 경계값(방금/분/시간/일), 미래 시각 |
-| `composeDecision.test.ts` / `wallet.test.ts` | 발행 입력 검증, 지갑 연결 상태 |
+| `composeDecision.test.ts` / `wallet.test.ts` | 발행 입력 검증, 프리셋이 판정 가능 상한을 넘지 않는지, 지갑 연결 상태 |
+| `protocolFixtures.test.ts` | 프로토콜 시연 기록 UID 판별 |
 | `chain.test.ts` / `presentation.test.ts` / `upbit.test.ts` | 각 모듈 단위 |
 
 ## core 동기화 검사
@@ -51,9 +52,9 @@ filter.ts 의 조건을 하나씩 지우고 pnpm test 를 돌린다
 POI에서 새 방어를 넣을 때마다 이 방법으로 확인했고, 실제로 무의미한
 테스트를 잡아낸 적이 있다. 마루의 `filter.ts`도 같은 방식으로 확인했다.
 
-## E2E: 13개 (실제 GIWA Sepolia 상대)
+## E2E: 14개 (실제 GIWA Sepolia 상대)
 
-기본 게이트 12개 + 실서비스 스모크 1개(`@smoke` 태그, 업비트를 실제로 불러
+기본 게이트 13개 + 실서비스 스모크 1개(`@smoke` 태그, 업비트를 실제로 불러
 판정을 확인).
 
 | 테스트 | 확인 |
@@ -68,6 +69,7 @@ POI에서 새 방어를 넣을 때마다 이 방법으로 확인했고, 실제�
 | S10 / S10-보강 | 곧 결과 나옴 정렬, 탭 3개 전환과 URL 유지 |
 | S4-보강 | 탭과 필터가 서로 공존한다 |
 | S11 | 지갑 없이 피드가 뜨고 작성 화면은 연결을 안내한다 |
+| S12 | 프로토콜 시연 기록 5건에 구분 표시가 붙고, 필터로 걸러지지 않는다 |
 | `@smoke` S8-실서비스 | 업비트를 실제로 불러 판정이 뜬다 |
 
 Playwright는 로컬 anvil이 아니라 **실제 GIWA Sepolia**를 상대로 돈다. 공개
