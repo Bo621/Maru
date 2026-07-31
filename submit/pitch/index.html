@@ -70,6 +70,10 @@ h1{font:700 clamp(2.1rem,4.6vw,4rem)/1.12 var(--display);letter-spacing:-.02em}
 h2{font:700 clamp(2.2rem,4.3vw,3.6rem)/1.25 var(--display);letter-spacing:-.015em;max-width:26ch;text-wrap:balance}
 .lede{margin-top:var(--space-sm);max-width:58ch;color:var(--ink-soft);font-size:1.38em;line-height:1.95;text-wrap:pretty}
 .lede strong{color:var(--ink);font-weight:600}
+.bullets{list-style:none}
+.bullets li{position:relative;padding-left:1.3em}
+.bullets li::before{content:"·";position:absolute;left:0;color:var(--seal-dark);font-weight:700}
+.bullets li+li{margin-top:.4rem}
 em{color:var(--seal-dark);font-style:normal;font-weight:600}
 .quiet{color:var(--ink-faint);font-size:.85em;line-height:1.6}
 .mono{font-family:var(--mono);font-size:.9em}
@@ -280,7 +284,12 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 01 <b>한 장으로</b></div>
   <h2>결과를 알기 전에 고정한 판단이, <em>맞았는지까지</em> 보인다</h2>
-  <p class="lede">여러 지갑의 판단이 시간 역순으로 흐른다. 관측 구간이 끝나면 업비트 1분봉 재계산으로 <strong>맞음·틀림이 함께 뜬다.</strong> 틀린 판단도 지워지지 않는다.</p>
+  <ul class="lede bullets">
+    <li>여러 지갑의 판단 — 시간 역순</li>
+    <li>구간 종료 후 업비트 1분봉 재계산</li>
+    <li><strong>맞음·틀림 동시 표시</strong></li>
+    <li>틀린 판단도 그대로 남음</li>
+  </ul>
   <div class="steps">
     <div class="step" data-n="STEP 01">
       <h4>고정한다</h4>
@@ -305,7 +314,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 02 <b>문제</b></div>
   <h2>스크린샷은 <em>증명이 아니다</em></h2>
-  <p class="lede">트레이더 커뮤니티에서 수익률은 스크린샷과 평판으로 오간다. <strong>포토샵도 되고, 맞은 것만 골라 올리는 것도 된다.</strong></p>
+  <p class="lede">수익률은 스크린샷과 평판으로 오간다. <strong>포토샵도, 맞은 것만 골라 올리는 것도 된다.</strong></p>
   <div class="tblwrap"><table>
     <tr><td>수익률 캡처</td><td class="no">사후 편집·합성 가능</td></tr>
     <tr><td>SNS 예측 게시글</td><td class="no">지우면 그만, 맞은 것만 남길 수 있다</td></tr>
@@ -317,7 +326,10 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 03 <b>기존 방식이 막지 못하는 것</b></div>
   <h2>남는 건 <em>사후 서사</em>다</h2>
-  <p class="lede">결과를 본 뒤에는 누구나 이렇게 말할 수 있다 — <em>“나는 그럴 줄 알았다.”</em> 캡처·게시글·평판 중 어느 것도 <strong>이 말이 결과 전에 있었는지</strong>를 증명하지 않는다.</p>
+  <ul class=”lede bullets”>
+    <li>결과를 본 뒤엔 누구나 말한다 — <em>”나는 그럴 줄 알았다”</em></li>
+    <li>캡처·게시글·평판 — <strong>결과 전에 있었는지</strong> 증명하지 못함</li>
+  </ul>
   <div class="ba">
     <div class="b4">
       <h4>지금</h4>
@@ -378,14 +390,21 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <tr><td>팔로우</td><td>브라우저 로컬 저장 — <span class="no">온체인이 아니다. 화면에 그렇게 밝힌다</span></td></tr>
     <tr><td>추천 피드</td><td><span class="no">만들지 않았다.</span> 시간 역순 나열 + 조건부 필터(도장 검증·정산 건수)로 대신한다</td></tr>
   </table></div>
-  <p class="lede eave">추천 알고리즘 대신 <strong>필터</strong>를 둔다. 필터는 URL 쿼리에 남아 링크로 공유된다 — 「이 조건으로 거른 피드」를 남에게 보낼 수 있다.</p>
+  <ul class="lede eave bullets">
+    <li>추천 알고리즘 대신 <strong>필터</strong> 사용</li>
+    <li>필터 조건은 URL 쿼리에 남아 링크로 공유 가능</li>
+  </ul>
 </section>
 
 <!-- 7 ★ 실제 화면 ① 틀려도 남는다 ─────────────── -->
 <section class="slide">
   <div class="tag">// 06 <b>실제 화면 ① 틀려도 남는다</b></div>
   <h2>이 판단은 <em>틀렸다</em>. 지워지지 않는다</h2>
-  <p class="lede">이유는 결과가 나오기 전에 해시로 잠기고, 판정은 업비트 1분봉으로 화면이 다시 계산한다. 이 결정은 틀렸다. 등록은 그대로 완료됐다.</p>
+  <ul class="lede bullets">
+    <li>이유 — 결과 전에 해시로 잠금</li>
+    <li>판정 — 업비트 1분봉으로 화면 재계산</li>
+    <li>이 결정은 틀렸다. 등록은 완료</li>
+  </ul>
   <div class="shots">
     <figure class="shot">
       <img src="shots/card-mismatch-reason.png" alt="발행자가 남긴 이유 원문, 해시 일치 표시, 화면 재계산 틀림 판정, 등록완료 인장이 함께 붙은 결정 카드.">
@@ -413,7 +432,10 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 07 <b>실제 화면 ② 맞음과 틀림, 같은 화면</b></div>
   <h2>맞은 판단과 틀린 판단이 <em>같은 자리</em>에 선다</h2>
-  <p class="lede">인장 색도, 카드 크기도 다르지 않다. 화면 재계산 결과만 다르게 붙는다.</p>
+  <ul class="lede bullets">
+    <li>인장 색·카드 크기는 같다</li>
+    <li>화면 재계산 결과만 다르게 붙는다</li>
+  </ul>
   <div class="shots">
     <div class="shots-pair">
       <figure class="shot">
@@ -447,7 +469,10 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 08 <b>실제 화면 ③ 시연은 시연이라고 표시한다</b></div>
   <h2>이 카드엔 <em>가격 판단이</em> 없다</h2>
-  <p class="lede">프로토콜 상태를 보여주려고 발행한 기록이다. 화면이 먼저 그렇게 밝힌다.</p>
+  <ul class="lede bullets">
+    <li>프로토콜 상태를 보여주려는 기록</li>
+    <li>화면이 먼저 그 사실을 밝힘</li>
+  </ul>
   <div class="shots">
     <figure class="shot">
       <img src="shots/card-fixture.png" alt="프로토콜 시연 배지, '시세 판단이 아닙니다' 문구, 기한초과 인장이 붙은 결정 카드.">
@@ -495,7 +520,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide dense">
   <div class="tag">// 10 <b>새 컨트랙트 0개</b></div>
   <h2>같은 프로토콜, <em>다른 제품 표면</em></h2>
-  <p class="lede">마루는 POI 프로토콜(Track 03 지원) 위에 있다. <strong>새 컨트랙트를 배포하지 않고, 이미 배포된 스키마로만 읽고 쓴다.</strong> 같은 심사팀이 두 지원서를 함께 본다.</p>
+  <p class="lede">마루는 POI 프로토콜(Track 03 지원) 위에 있다. <strong>새 컨트랙트 없이 이미 배포된 스키마로만 읽고 쓴다.</strong> 같은 심사팀이 두 지원서를 함께 본다.</p>
   <div class="tblwrap"><table>
     <tr><th>소셜 기능</th><th>무엇으로 되나</th><th>새 컨트랙트</th></tr>
     <tr><td>피드</td><td>readDecisionLogs + 상태 판정</td><td class="yes">불필요</td></tr>
@@ -506,23 +531,30 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <tr><td>입장 변경 이력</td><td>parents DAG</td><td class="yes">불필요</td></tr>
     <tr><td>조건부 열람</td><td>온체인 정산 결과로 필터</td><td class="yes">불필요</td></tr>
     <tr><td>팔로우</td><td>브라우저 로컬 저장</td><td class="yes">불필요 — 온체인 아님</td></tr>
-    <tr><td>코멘트 인증</td><td>새 스키마·리졸버</td><td class="no">필요 — 이번엔 안 함</td></tr>
-    <tr><td>온체인 팔로우</td><td>새 스키마</td><td class="no">필요 — 이번엔 안 함</td></tr>
+    <tr><td>코멘트 인증</td><td>새 스키마·리졸버</td><td class="no">다음 범위</td></tr>
+    <tr><td>온체인 팔로우</td><td>새 스키마</td><td class="no">다음 범위</td></tr>
   </table></div>
-  <p class="lede eave">새 컨트랙트가 필요한 칸은 두 개뿐이고, <strong>둘 다 이번 범위 밖이다.</strong> 소셜 표면은 이미 배포된 POI 컨트랙트 4종을 읽고 쓰는 것만으로 선다.</p>
+  <ul class="lede eave bullets">
+    <li>새 컨트랙트 필요 칸 — 2개, <strong>둘 다 다음 범위</strong></li>
+    <li>소셜 표면 — 기존 POI 컨트랙트 4종만으로 구성</li>
+  </ul>
 </section>
 
 <!-- 12 왜 GIWA 인가 ─────────────────────────── -->
 <section class="slide">
   <div class="tag">// 11 <b>왜 GIWA 인가</b></div>
   <h2>판단 하나를 <em>원 단위 비용</em>으로 고정한다</h2>
-  <p class="lede">GIWA Sepolia(chainId 91342)의 낮은 L2 비용이 결정 하나마다 온체인에 커밋하는 것을 실용적으로 만든다. 판단을 올리는 비용이 원 단위인 체인에서만 「사람들이 실제로 이걸 쓰는가」를 물을 수 있다.</p>
+  <p class="lede">GIWA Sepolia(chainId 91342)의 낮은 L2 비용이 결정 단위 온체인 커밋을 실용적으로 만든다. 비용이 원 단위인 체인에서만 「사람들이 실제로 이걸 쓰는가」를 물을 수 있다.</p>
   <div class="tblwrap"><table>
     <tr><td>EAS 프리디플로이</td><td><span class="quiet">Ethereum Attestation Service — 증명 기록 표준. GIWA 기본 탑재</span><br>스키마·발급·철회를 재구현하지 않는다. 새 신뢰 축을 세우지 않는다</td></tr>
     <tr><td>도장 Verified Address</td><td><span class="quiet">도장 = GIWA 의 온체인 신원 인증</span><br>발행자 주소 옆 「도장 검증 — TESTNET FAUCET」 라벨로 이미 연동돼 화면에 뜬다</td></tr>
     <tr><td>저비용 L2</td><td>결정 단위 커밋과 소셜 피드 열람의 경제성</td></tr>
   </table></div>
-  <p class="lede eave">POI가 이미 이 체인 위에서 증명 레이어를 돌린다. 마루는 그 위에 <strong>사람이 보는 표면</strong>만 올린다 — 새 신뢰 가정을 추가하지 않는다.</p>
+  <ul class="lede eave bullets">
+    <li>POI — 이 체인 위에서 증명 레이어 운영 중</li>
+    <li>마루 — 그 위에 <strong>사람이 보는 표면</strong>만 추가</li>
+    <li>새 신뢰 가정 없음</li>
+  </ul>
 </section>
 
 <!-- 13 ★ 지금 살아 있는 것 ──────────────────── -->
@@ -548,22 +580,32 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 13 <b>지금 확인하는 법</b></div>
   <h2>지금 열어서, <em>지갑 없이</em> 확인한다</h2>
-  <p class="lede">데모 페르소나의 판단이 시간 역순으로 뜬다. 로그인도, 지갑 연결도 필요 없다.</p>
+  <ul class="lede bullets">
+    <li>로그인 불필요</li>
+    <li>지갑 연결 불필요</li>
+  </ul>
   <pre><a href="https://maru-web-production-0407.up.railway.app" target="_blank" rel="noopener"><b>https://maru-web-production-0407.up.railway.app</b></a></pre>
   <pre><a href="https://vestat.gitbook.io/maru/" target="_blank" rel="noopener"><b>https://vestat.gitbook.io/maru/</b></a>  <span style="color:var(--ink-faint)">← 백서</span></pre>
-  <p class="lede eave">화면에서 누를 수 있는 것은 전부 지갑 없이 열린다. 발행만 지갑이 필요하다.</p>
+  <ul class="lede eave bullets">
+    <li>클릭 가능한 모든 것 — 지갑 없이 열림</li>
+    <li>발행만 지갑 필요</li>
+  </ul>
 </section>
 
 <!-- 15 한계 ─────────────────────────────────── -->
 <section class="slide">
   <div class="tag">// 14 <b>한계</b></div>
   <h2>실사용자 없음 · 데모 페르소나 · <em>로컬 팔로우</em></h2>
-  <p class="lede"><strong>피드의 기록은 시연용 데모 페르소나다.</strong> 실사용자·활성도 수치는 없다. 화면에도 이 사실을 먼저 표시한다 — 감추지 않는다.</p>
+  <ul class="lede bullets">
+    <li><strong>피드 기록 — 시연용 데모 페르소나</strong></li>
+    <li>실사용자·활성도 수치 없음</li>
+    <li>화면에도 이 사실을 먼저 표시 — 감추지 않음</li>
+  </ul>
   <div class="tblwrap"><table>
     <tr><td>실사용자</td><td class="no">없다. 발행자 2개 지갑은 시연을 위해 직접 발행한 데모 페르소나다</td></tr>
     <tr><td>팔로우</td><td class="no">브라우저 로컬 저장이다. 온체인이 아니다</td></tr>
     <tr><td>검증기 MATCH</td><td>「예측이 맞았다」가 아니라 「등록된 관측값이 재계산과 같다」다</td></tr>
-    <tr><td>순위·점수·리더보드</td><td class="no">만들지 않았다. 발행자가 스스로 고른 기록만으로는 순위가 실제와 달라진다</td></tr>
+    <tr><td>순위·점수·리더보드</td><td class="no">MVP 범위 밖 — 편향 없는 집계 기준을 먼저 정해야 한다</td></tr>
   </table></div>
 </section>
 
@@ -571,14 +613,18 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 <section class="slide">
   <div class="tag">// 15 <b>다음</b></div>
   <h2>다음에 만들 것</h2>
-  <p class="lede">증명 레이어는 이미 돈다. 다음은 <strong>사람이 모이는 층</strong>이다. 아래 셋은 의존하는 것이 서로 다르다.</p>
+  <p class="lede">증명 레이어는 이미 돈다. 다음은 <strong>사람이 모이는 층</strong> — 아래 셋은 의존 대상이 다르다.</p>
   <table>
     <tr><th>단계</th><th>무엇을</th><th>무엇에 달려 있나</th></tr>
     <tr><td>지금 할 수 있는 것</td><td>코멘트 인증 · 온체인 팔로우</td><td class="yes">새 EAS 스키마만 있으면 된다</td></tr>
     <tr><td>오라클이 붙으면</td><td>「활성 정산 있음」을 「독립 판정됨」으로</td><td class="no">POI 쪽 오라클 사양</td></tr>
     <tr><td>월렛 규격이 열리면</td><td>지갑 안에서 보고 그 자리에서 발행</td><td class="no">GIWA 월렛 임베드 규격</td></tr>
   </table>
-  <p class="lede eave">뒤의 둘은 <em>가설이다.</em> 규격을 모르는 채 만들면 추측이 코드가 된다. 그래서 지금은 만들지 않았다.</p>
+  <ul class="lede eave bullets">
+    <li>뒤의 둘은 <em>가설</em> — 규격 미확정</li>
+    <li>규격 없이 만들면 추측이 코드가 됨</li>
+    <li><strong>규격이 정해지면 만든다</strong></li>
+  </ul>
 </section>
 
 </main>
