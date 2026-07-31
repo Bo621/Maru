@@ -113,7 +113,7 @@ GIWA의 낮은 발행 비용과 월렛 환경에서 확인하려는 가설이 �
 
 | 문항 | 제출물 | 상태 |
 |---|---|---|
-| 7 | `docs/submission/pitch/` HTML 슬라이드 → PDF → Drive | **작성 중** |
+| 7 | `submit/pitch/` HTML 슬라이드 → PDF → Drive | **작성 중** |
 | 8 | `https://maru-web-production-0407.up.railway.app` | ✅ |
 | 9 | POI 와 공유하는 컨트랙트 4종 (전부 Pass - Verified) | ✅ |
 | 10 | GitBook — `gitbook/` GitHub 동기화 | **작성 중** |

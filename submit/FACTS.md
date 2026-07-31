@@ -57,7 +57,7 @@ https://maru-web-production-0407.up.railway.app     HTTP 200
 | | 값 | 출처 |
 |---|---|---|
 | 구성 | **1인** (대표·풀스택) | 컨트랙트·프론트·검증기 전부 |
-| 대표 경력 | 블록체인·디지털자산·결제·정산 **10년+** (2016.04~) | [`gitbook/team/team.md`](../../gitbook/team/team.md) |
+| 대표 경력 | 블록체인·디지털자산·결제·정산 **10년+** (2016.04~) | [`gitbook/team/team.md`](../gitbook/team/team.md) |
 
 ## 비용 — 마루 자체 실측이 아니다
 

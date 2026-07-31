@@ -23,7 +23,7 @@ GASOK 2차 제출 · **Track 02 CONSUMER / SOCIAL** · 2026-07
 ## 지금 살아 있는 것
 
 GIWA Sepolia(`91342`)에서 확인할 수 있다. 아래 수치의 유일한 출처는
-[`docs/submission/FACTS.md`](https://github.com/Bo621/Maru/blob/main/docs/submission/FACTS.md)다.
+[`submit/FACTS.md`](https://github.com/Bo621/Maru/blob/main/submit/FACTS.md)다.
 온체인 수치는 계속 바뀐다 — **2026-07-31 02:39 KST 기준.**
 
 | | |

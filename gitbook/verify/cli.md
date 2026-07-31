@@ -52,7 +52,7 @@ node --experimental-strip-types verifier/src/cli.ts "$DECISION_UID" --json
 다른 질문이다. 마루의 맞음·틀림 판정이 무엇을 계산하는지는
 [맞고 틀림: 업비트 재계산](../design/verdict.md)에 있다.
 
-`docs/submission/FACTS.md` 기준 등록된 정산 11건 전부 이 CLI로 재검증해
+`submit/FACTS.md` 기준 등록된 정산 11건 전부 이 CLI로 재검증해
 `MATCH`였다.
 
 ## 이유 원문 대조

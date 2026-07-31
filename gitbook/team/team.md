@@ -1,6 +1,6 @@
 # 팀
 
-마루와 POI는 같은 팀이 만든다. 인력 구성은 `docs/submission/FACTS.md`에
+마루와 POI는 같은 팀이 만든다. 인력 구성은 `submit/FACTS.md`에
 있는 값만 쓴다.
 
 | | 값 |

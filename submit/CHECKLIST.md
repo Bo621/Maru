@@ -24,7 +24,7 @@
 | 7 | 피치덱 | ⏳ | `pitch/index.html` → PDF → Drive **업로드 필요** |
 | 8 | 프로젝트 링크 | ✅ | `https://maru-web-production-0407.up.railway.app` |
 | 9 | 컨트랙트 링크 (Verified) | ✅ | POI 와 공유하는 4종 · 전부 `Pass - Verified` |
-| 10 | 기술 문서 / 원페이저 | ⏳ | `gitbook/` 23개 문서 — **GitBook 스페이스 연결 필요** |
+| 10 | 기술 문서 / 원페이저 | ✅ | `https://vestat.gitbook.io/maru/` — `gitbook/` GitHub 동기화, 공개됨 |
 | 11 | 추가 지원 요청 (500자) | ✅ | 497자 |
 | 12 | GIWA 팀에 전할 말 (500자) | ✅ | 495자 |
 
@@ -33,7 +33,6 @@
 | | 무엇을 |
 |---|---|
 | **문항 7** | `pitch/index.html` 을 16:9 로 한 장씩 캡처해 PDF 로 조립 → Drive 업로드 → 「링크가 있는 모든 사용자가 볼 수 있음」 |
-| **문항 10** | GitBook 스페이스 생성 → 이 저장소 `gitbook/` 를 GitHub 동기화 → 공개 설정 |
 | **문항 3** | Track 03 에서 쓴 Drive 링크를 그대로 재사용 |
 
 > **브라우저 인쇄로 PDF 를 만들면 깨진다.** POI 가 겪었다 — 슬라이드가 한 번에
@@ -63,7 +62,7 @@ https://sepolia-explorer.giwa.io/address/0x7eefdd7d89d434061cbdb22244d52e78c94e6
 | 03 실현 가능성 | **배포 완료 · 지갑 없이 확인 가능 · 새 컨트랙트 0개** | **강** |
 | 04 시장성 | 문제 가설까지. **사용자 근거는 없다** | 약 — 만들어내지 않는다 |
 | 05 팀 역량 | 1인 구현 + 정산·원장 정합성 10년 | 중 |
-| 06 월렛 내 탑재 가능성 | [`gitbook/giwa/wallet.md`](../../gitbook/giwa/wallet.md) — **미검증, 후보 구조** | 중 |
+| 06 월렛 내 탑재 가능성 | [`gitbook/giwa/wallet.md`](../gitbook/giwa/wallet.md) — **미검증, 후보 구조** | 중 |
 
 **Phase 2 추가**
 
