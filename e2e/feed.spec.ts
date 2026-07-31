@@ -407,13 +407,20 @@ test("S12 프로토콜 시연 기록에 구분 표시가 붙는다", async ({pag
     await page.goto("/#/feed");
     await expect(page.locator(DECISION_ROWS)).not.toHaveCount(0);
 
+    // 속성만 보면 사람이 읽는 표시가 통째로 사라져도 통과한다.
+    // 이 시나리오가 주장하는 것은 「보인다」이므로 눈에 띄는 두 가지를 함께 단언한다.
     for (const uid of FIXTURE_UIDS) {
-        await expect(page.locator(`[data-uid="${uid}"]`)).toHaveAttribute("data-fixture", "");
+        const row = page.locator(`[data-uid="${uid}"]`);
+        await expect(row).toHaveAttribute("data-fixture", "");
+        await expect(row.getByText("프로토콜 시연")).toBeVisible();
+        await expect(row.getByText("시세 판단이 아닙니다")).toBeVisible();
     }
     for (const uid of NON_FIXTURE_UIDS) {
         const row = page.locator(`[data-uid="${uid}"]`);
         await expect(row).toHaveCount(1);
         await expect(row).not.toHaveAttribute("data-fixture", "");
+        await expect(row.getByText("프로토콜 시연")).toHaveCount(0);
+        await expect(row.getByText("시세 판단이 아닙니다")).toHaveCount(0);
     }
 
     // 필터 없는 피드에서 시연 기록을 숨기지 않고 그대로 표시한다 — 7건 전부 렌더된다.

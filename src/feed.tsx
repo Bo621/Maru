@@ -35,11 +35,19 @@ function TabBar({filter, tab}: {filter: FeedFilter; tab: FeedTab}) {
     </nav>;
 }
 
-/** 팔로우는 브라우저 로컬 저장이다. 저장 실패(사파리 프라이빗 등)는 삼키고 화면 상태만 유지한다. */
+/** 읽기도 던진다. 저장소 접근이 막힌 브라우저에서는 getItem 자체가 SecurityError다.
+ *  이걸 안 감싸면 팔로우가 아니라 피드 전체가 렌더되지 않는다. */
+function readFollows(): Address[] {
+    try {
+        return parseFollows(window.localStorage.getItem(FOLLOW_STORAGE_KEY));
+    } catch {
+        return [];
+    }
+}
+
+/** 팔로우는 브라우저 로컬 저장이다. 읽기·쓰기 실패(사파리 프라이빗 등)는 삼키고 화면 상태만 유지한다. */
 function useFollows(): {follows: Address[]; toggle: (address: Address) => void} {
-    const [follows, setFollows] = useState<Address[]>(
-        () => parseFollows(window.localStorage.getItem(FOLLOW_STORAGE_KEY)),
-    );
+    const [follows, setFollows] = useState<Address[]>(readFollows);
     const toggle = (address: Address) => {
         setFollows((prev) => {
             const next = toggleFollow(prev, address);

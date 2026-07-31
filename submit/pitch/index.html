@@ -495,7 +495,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
       </div>
       <div class="mark" data-n="03">
         <h4>배지로 구분된다</h4>
-        <p>이 배지가 없는 카드만 실제 판단이다.</p>
+        <p>배지가 없는 카드는 시세 조건을 둔 데모 판단이다.</p>
       </div>
     </div>
   </div>
@@ -538,8 +538,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <tr><td>조건부 열람</td><td>온체인 정산 결과로 필터</td><td class="yes">불필요</td></tr>
     <tr><td>팔로우</td><td>브라우저 로컬 저장</td><td class="yes">불필요 — 온체인 아님</td></tr>
     <tr><td>코멘트 인증 · 온체인 팔로우</td><td>새 스키마·리졸버</td><td class="no">다음 범위</td></tr>
-    <tr><td>자격제 방</td><td>도장 Verified Balance 머클 증명</td><td class="yes">불필요 — 보자기 없이 됨</td></tr>
-    <tr><td>봉인 판단</td><td>보자기(GIWA 영지식) 술어</td><td class="no">보자기 이후</td></tr>
+    <tr><td>봉인 판단</td><td>보자기(GIWA 영지식) 술어</td><td class="no">미구현 — 개발자 문서 미공개</td></tr>
   </table></div>
 </section>
 
@@ -556,7 +555,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
   <ul class="lede eave bullets">
     <li>POI — 이 체인 위에서 증명 레이어 운영 중</li>
     <li>마루 — 그 위에 <strong>사람이 보는 표면</strong>만 추가</li>
-    <li>새 신뢰 가정 없음</li>
+    <li>새 <em>온체인</em> 신뢰 축 없음 — 판정 스냅샷은 배포자가 만든다</li>
   </ul>
 </section>
 
@@ -603,15 +602,15 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
   <table>
     <tr><th>단계</th><th>무엇을</th><th>선행 조건</th></tr>
     <tr><td>다음 범위</td><td>코멘트 인증 · 온체인 팔로우</td><td class="yes">새 EAS 스키마</td></tr>
-    <tr><td>다음 범위</td><td>자격제 방 — 보유·이력만 증명, 원장 비공개</td><td class="yes">도장 스냅샷 발급 주기</td></tr>
+    <tr><td>다음 범위</td><td>자격 배지 — 보유 증명 표시·필터 (열람 제한 아님)</td><td class="yes">도장 스냅샷 발급 주기</td></tr>
     <tr><td>다음 범위</td><td>순위·집계</td><td class="yes">편향 없는 집계 기준 확정</td></tr>
     <tr><td>오라클 이후</td><td>「활성 정산 있음」을 「독립 판정됨」으로</td><td class="no">POI 쪽 오라클 사양</td></tr>
     <tr><td>월렛 이후</td><td>지갑 안에서 보고 그 자리에서 발행</td><td class="no">GIWA 월렛 임베드 규격</td></tr>
-    <tr><td>보자기 이후</td><td><strong>봉인 판단</strong> — 조건은 가리고 「맞음」만 증명 · 「N건 중 k건」으로 분모까지</td><td class="no">보자기 술어·집계 사양</td></tr>
+    <tr><td>보자기 이후</td><td><strong>봉인 판단</strong> — 조건은 가리고 「맞음」만 증명 · 「N건 중 k건」으로 분모까지</td><td class="no">보자기 술어·집계 사양 — <strong>문서 미공개</strong></td></tr>
   </table>
   <ul class="lede eave bullets">
-    <li>봉인 판단이 <em>「편향 없는 집계 기준」을 푼다</em> — 분모가 증명되면 순위가 열림</li>
-    <li>뒤의 셋은 <em>외부 규격에 달려 있음</em></li>
+    <li>봉인 판단 — <em>유리한 것만 공개하는 편향</em>을 없앰. 안 올린 판단은 여전히 못 잡음</li>
+    <li>뒤의 셋은 <em>외부 규격에 달려 있음</em> · 전부 미구현</li>
     <li><strong>규격이 정해지면 만든다</strong></li>
   </ul>
 </section>

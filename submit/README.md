@@ -55,7 +55,7 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 ```
 
 심사 시나리오 **S1~S12 는 전부 지갑 없이** 된다. 각 시나리오와 자동·수동 확인 범위는
-[백서의 심사 시나리오](https://vestat.gitbook.io/maru/)에 있다.
+[백서의 심사 시나리오](https://vestat.gitbook.io/maru/verify/scenarios)에 있다.
 
 ## 숨기지 않는 것
 
