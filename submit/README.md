@@ -23,6 +23,7 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 ## 제출 링크
 
 ```
+문항 7  피치덱        https://drive.google.com/file/d/1N7saMljW_cKK60jVTa6X0A46GoP0DPGD/view?usp=sharing
 문항 8  프로젝트      https://maru-web-production-0407.up.railway.app
 문항 10 기술 문서     https://vestat.gitbook.io/maru/
 저장소                https://github.com/Bo621/Maru
@@ -33,9 +34,11 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 
 ## 지금 남은 일
 
+**12문항 전부 준비됐다.**
+
 | | 무엇을 |
 |---|---|
-| **문항 7** | `pitch/MARU_pitch.pdf` 를 Drive 에 업로드 → 「링크가 있는 모든 사용자가 볼 수 있음」 |
+| **문항 7** | Drive 공유 설정이 「링크가 있는 모든 사용자」인지 시크릿 창에서 확인 |
 | **문항 3** | Track 03 에서 쓴 팀 소개 Drive 링크를 그대로 재사용 |
 
 > **브라우저 인쇄로 PDF 를 만들면 깨진다.** 슬라이드가 한 번에 하나씩 보이는 구조라

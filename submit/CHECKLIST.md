@@ -21,23 +21,25 @@
 | 4 | 지원 동기 (500자) | ✅ | [FORM_ANSWERS.md](FORM_ANSWERS.md) · 475자 |
 | 5 | 트랙 선택 | ✅ | Track 02 |
 | 6 | 한 줄 요약 (50자) | ✅ | 34자 |
-| 7 | 피치덱 | ⏳ | `pitch/index.html` → PDF → Drive **업로드 필요** |
+| 7 | 피치덱 | ✅ | 15쪽 PDF · Drive 업로드 완료<br>`https://drive.google.com/file/d/1N7saMljW_cKK60jVTa6X0A46GoP0DPGD/view?usp=sharing` |
 | 8 | 프로젝트 링크 | ✅ | `https://maru-web-production-0407.up.railway.app` |
 | 9 | 컨트랙트 링크 (Verified) | ✅ | POI 와 공유하는 4종 · 전부 `Pass - Verified` |
 | 10 | 기술 문서 / 원페이저 | ✅ | `https://vestat.gitbook.io/maru/` — `gitbook/` GitHub 동기화, 공개됨 |
 | 11 | 추가 지원 요청 (500자) | ✅ | 497자 |
 | 12 | GIWA 팀에 전할 말 (500자) | ✅ | 495자 |
 
-## 남은 것 — 전부 사람 손이 필요하다
+## 남은 것
+
+**12문항 전부 준비됐다.** 양식에 붙여 넣기 전 확인할 것 둘.
 
 | | 무엇을 |
 |---|---|
-| **문항 7** | `pitch/index.html` 을 16:9 로 한 장씩 캡처해 PDF 로 조립 → Drive 업로드 → 「링크가 있는 모든 사용자가 볼 수 있음」 |
+| **문항 7** | Drive 공유 설정이 **「링크가 있는 모든 사용자」**인지 확인 (로그아웃 상태나 시크릿 창에서 열어 볼 것) |
 | **문항 3** | Track 03 에서 쓴 Drive 링크를 그대로 재사용 |
 
-> **브라우저 인쇄로 PDF 를 만들면 깨진다.** POI 가 겪었다 — 슬라이드가 한 번에
+> **브라우저 인쇄로 PDF 를 만들지 말 것.** POI 가 겪었다 — 슬라이드가 한 번에
 > 하나씩 보이는 구조라 인쇄 CSS 에서 우측 열이 한 글자씩 세로로 쌓인다.
-> 16:9 로 캡처해 조립할 것.
+> 지금 PDF 는 1600x900 iframe 으로 15장을 캡처해 조립한 것이다.
 
 ## 문항 9 에 함께 적을 것
 
