@@ -36,8 +36,7 @@ POI의 Phase 2(Upbit Oracle, `ORACLE_VERIFIED`, Verified Balance 배지)가
 ### 3단계: 월렛 탑재
 
 [월렛 탑재 가능성](../giwa/wallet.md)에 남은 질문 넷의 답을 받으면 manifest·SDK
-adapter를 만든다. 지금은 만들지 않는다. 규격을 모르는 채 만들면 추측이
-코드가 된다.
+adapter를 만든다. 규격을 모르는 채 만들면 추측이 코드가 된다.
 
 ## 그 위에 무엇이 올라갈 수 있나
 
