@@ -1,7 +1,7 @@
 # 용어
 
 이 문서에 나오는 말을 한 줄씩 풀었습니다. 정확한 정의보다 **처음 읽을 때 막히지 않는 것**을
-목표로 썼습니다. 프로토콜 쪽 정의가 더 필요하면 [POI 백서의 용어집](https://vestat.gitbook.io/poi)을 보세요.
+목표로 썼습니다. 프로토콜 쪽 정의가 더 필요하면 [POI 백서의 용어집](https://vestat.gitbook.io/poi/appendix/glossary)을 보세요.
 
 ## 이 화면에서 자주 보이는 말
 
