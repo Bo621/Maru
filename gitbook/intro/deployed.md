@@ -19,7 +19,11 @@
 | EAS | `0x4200000000000000000000000000000000000021` |
 | Decision Resolver | `0x0f25917176a405bb9022e5b417e0d57348b30f89` |
 | Settlement Resolver | `0x167cf06df663c5ddde9f20a748e724b4fb6c14fa` |
-| (기타 리졸버 2종 — Note · Challenge) | `0xef4422c035bcce0599e4c951a24059abf707595f`, `0x7eefdd7d89d434061cbdb22244d52e78c94e6008` |
+| POIChallengeResolver | `0xef4422c035bcce0599e4c951a24059abf707595f` |
+| POINoteResolver | `0x7eefdd7d89d434061cbdb22244d52e78c94e6008` |
+
+> 이름과 `Verified` 상태는 익스플로러 API(`/api/v2/smart-contracts/<주소>`)로 확인한 값이다.
+> **마루는 이 넷을 쓰기만 하고 배포하지 않았다.** 저장소에 `contracts/` 디렉터리 자체가 없다.
 
 ## 스키마
 

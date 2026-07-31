@@ -15,6 +15,10 @@
 * [무엇이 증명되고 무엇이 안 되나](problem/what-is-proven.md)
 * [일반 SNS · POI · 마루 비교](problem/comparison.md)
 
+## 사용
+
+* [사용자 시나리오](usage/journey.md)
+
 ## 설계
 
 * [화면 구조와 라우팅](design/screens.md)
