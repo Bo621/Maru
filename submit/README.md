@@ -16,8 +16,8 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 | [FACTS.md](FACTS.md) | **모든 수치의 유일한 출처.** 여기 없는 숫자는 어디에도 쓰지 않는다 |
 | [FORM_ANSWERS.md](FORM_ANSWERS.md) | 12문항 서술 답안. 글자 수 확인 완료 |
 | [CHECKLIST.md](CHECKLIST.md) | 문항별 보유 대조 · 심사 기준 대조 · 확정 전 확인 목록 |
-| [pitch/index.html](pitch/index.html) | 피치덱 15장 (16:9) |
-| [pitch/MARU_pitch.pdf](pitch/MARU_pitch.pdf) | 위를 그대로 조립한 PDF 15쪽 · 문항 7 제출본 |
+| [pitch/index.html](pitch/index.html) | 피치덱 16장 (16:9) |
+| [pitch/MARU_pitch.pdf](pitch/MARU_pitch.pdf) | 위를 그대로 조립한 PDF 16쪽 · 문항 7 제출본 |
 | [pitch/shots/](pitch/shots/) | 덱에 쓰는 실제 화면 캡처 4장 |
 
 ## 제출 링크

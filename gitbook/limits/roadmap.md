@@ -33,7 +33,7 @@ POI의 Phase 2(Upbit Oracle, `ORACLE_VERIFIED`, Verified Balance 배지)가
 | 항목 | 마루에서 무엇이 달라지나 |
 |---|---|
 | `ORACLE_VERIFIED` | 「활성 정산 있음」 필터가 「독립 판정됨」으로 강화될 수 있다 |
-| Verified Balance 배지 | 잔고를 밝히지 않고 포지션 보유를 증명하는 배지를 프로필에 붙일 수 있다 |
+| Verified Balance 배지 | 도장이 검증한 잔고 증명을 프로필에 표시할 수 있다. **본인 잔고 값은 공개된다** — 값을 감춘 채 조건만 증명하려면 영지식이 필요하다 |
 | Execution 경로 | 「말한 대로 했나」까지 화면에서 대조할 수 있다 |
 
 **이것은 가설이다.** 거래소가 읽기 권한을 열지, POI 쪽 오라클 사양이

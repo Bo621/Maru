@@ -21,7 +21,7 @@
 | 4 | 지원 동기 (500자) | ✅ | [FORM_ANSWERS.md](FORM_ANSWERS.md) · 475자 |
 | 5 | 트랙 선택 | ✅ | Track 02 |
 | 6 | 한 줄 요약 (50자) | ✅ | 34자 |
-| 7 | 피치덱 | ✅ | 15쪽 PDF · Drive 업로드 완료<br>`https://drive.google.com/file/d/1N7saMljW_cKK60jVTa6X0A46GoP0DPGD/view?usp=sharing` |
+| 7 | 피치덱 | ✅ | 16쪽 PDF · Drive 업로드 완료<br>`https://drive.google.com/file/d/1N7saMljW_cKK60jVTa6X0A46GoP0DPGD/view?usp=sharing` |
 | 8 | 프로젝트 링크 | ✅ | `https://maru-web-production-0407.up.railway.app` |
 | 9 | 컨트랙트 링크 (Verified) | ✅ | POI 와 공유하는 4종 · 전부 `Pass - Verified` |
 | 10 | 기술 문서 / 원페이저 | ✅ | `https://vestat.gitbook.io/maru/` — `gitbook/` GitHub 동기화, 공개됨 |
@@ -71,7 +71,7 @@ https://sepolia-explorer.giwa.io/address/0x7eefdd7d89d434061cbdb22244d52e78c94e6
 | | 근거 |
 |---|---|
 | 01 실제 구현 수준 | 심사 시나리오 S1~S12 를 지갑 없이 완주 가능 |
-| 02 기술 완성도 | 단위 171 · E2E 14 · 검증기 재계산 11건 전부 MATCH |
+| 02 기술 완성도 | 단위 171 · E2E 15 · 검증기 재계산 11건 전부 MATCH |
 
 ## 확정 전 확인할 것
 
