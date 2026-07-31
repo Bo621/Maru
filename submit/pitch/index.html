@@ -539,7 +539,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <tr><td>POI verifier CLI 재검증</td><td class="yes">11건 전부 MATCH</td></tr>
     <tr><td>단위 테스트 (vitest)</td><td>171개 / 20 파일</td></tr>
     <tr><td>E2E (Playwright, 실제 체인)</td><td>14개 — 기본 게이트 13 + 실서비스 스모크 1</td></tr>
-    <tr><td>심사 시나리오</td><td>S1~S12 — 전부 지갑 없이 확인 가능</td></tr>
+    <tr><td>공개 확인 경로</td><td>피드·프로필·결정 상세·검증까지 지갑 없이</td></tr>
   </table></div>
   <pre><a href="https://maru-web-production-0407.up.railway.app" target="_blank" rel="noopener"><b>https://maru-web-production-0407.up.railway.app</b></a>  <span style="color:var(--ink-faint)">← HTTP 200 · 지갑 없이 열립니다</span></pre>
 </section>
@@ -551,7 +551,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
   <p class="lede">데모 페르소나의 판단이 시간 역순으로 뜬다. 로그인도, 지갑 연결도 필요 없다.</p>
   <pre><a href="https://maru-web-production-0407.up.railway.app" target="_blank" rel="noopener"><b>https://maru-web-production-0407.up.railway.app</b></a></pre>
   <pre><a href="https://vestat.gitbook.io/maru/" target="_blank" rel="noopener"><b>https://vestat.gitbook.io/maru/</b></a>  <span style="color:var(--ink-faint)">← 백서</span></pre>
-  <p class="lede eave">시나리오 S1~S12는 전부 지갑 없이 확인된다. 순서는 백서에 정리돼 있다.</p>
+  <p class="lede eave">화면에서 누를 수 있는 것은 전부 지갑 없이 열린다. 발행만 지갑이 필요하다.</p>
 </section>
 
 <!-- 15 한계 ─────────────────────────────────── -->
@@ -569,14 +569,16 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 
 <!-- 16 다음 30일 ────────────────────────────── -->
 <section class="slide">
-  <div class="tag">// 15 <b>다음 30일</b></div>
-  <h2>성공 기준</h2>
-  <p class="lede">지금 없는 것은 기술이 아니라 사용자다. 증명 레이어는 이미 테스트넷에서 돈다. 남은 질문은 <strong>판단을 올리는 비용이 원 단위인 체인에서, 사람들이 틀릴 수도 있는 판단을 공개적으로 고정하는가</strong>다.</p>
-  <div class="stats">
-    <div class="stat"><span class="n">10명</span><span class="k">30일 안에 사용자 10명이<br>각 3건 이상 발행</span></div>
-    <div class="stat"><span class="n">50%+</span><span class="k">그중 절반 이상이 관측 구간<br>종료 후에도 지워지지 않고 남음</span></div>
-  </div>
-  <p class="lede eave">등록률이 낮으면 <em>미발행 노출이 사용자에게 위협으로 작동한다는 뜻</em>이고, 설계를 다시 봐야 한다.</p>
+  <div class="tag">// 15 <b>다음</b></div>
+  <h2>다음에 만들 것</h2>
+  <p class="lede">증명 레이어는 이미 돈다. 다음은 <strong>사람이 모이는 층</strong>이다. 아래 셋은 의존하는 것이 서로 다르다.</p>
+  <table>
+    <tr><th>단계</th><th>무엇을</th><th>무엇에 달려 있나</th></tr>
+    <tr><td>지금 할 수 있는 것</td><td>코멘트 인증 · 온체인 팔로우</td><td class="yes">새 EAS 스키마만 있으면 된다</td></tr>
+    <tr><td>오라클이 붙으면</td><td>「활성 정산 있음」을 「독립 판정됨」으로</td><td class="no">POI 쪽 오라클 사양</td></tr>
+    <tr><td>월렛 규격이 열리면</td><td>지갑 안에서 보고 그 자리에서 발행</td><td class="no">GIWA 월렛 임베드 규격</td></tr>
+  </table>
+  <p class="lede eave">뒤의 둘은 <em>가설이다.</em> 규격을 모르는 채 만들면 추측이 코드가 된다. 그래서 지금은 만들지 않았다.</p>
 </section>
 
 </main>
