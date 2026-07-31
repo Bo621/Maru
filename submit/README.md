@@ -16,8 +16,9 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 | [FACTS.md](FACTS.md) | **모든 수치의 유일한 출처.** 여기 없는 숫자는 어디에도 쓰지 않는다 |
 | [FORM_ANSWERS.md](FORM_ANSWERS.md) | 12문항 서술 답안. 글자 수 확인 완료 |
 | [CHECKLIST.md](CHECKLIST.md) | 문항별 보유 대조 · 심사 기준 대조 · 확정 전 확인 목록 |
-| [pitch/index.html](pitch/index.html) | 피치덱 16장 (16:9) |
-| [pitch/shots/](pitch/shots/) | 덱에 쓰는 실제 화면 캡처 3장 |
+| [pitch/index.html](pitch/index.html) | 피치덱 15장 (16:9) |
+| [pitch/MARU_pitch.pdf](pitch/MARU_pitch.pdf) | 위를 그대로 조립한 PDF 15쪽 · 문항 7 제출본 |
+| [pitch/shots/](pitch/shots/) | 덱에 쓰는 실제 화면 캡처 4장 |
 
 ## 제출 링크
 
@@ -34,7 +35,7 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 
 | | 무엇을 |
 |---|---|
-| **문항 7** | `pitch/index.html` 을 16:9 로 한 장씩 캡처해 PDF 로 조립 → Drive 업로드 → 「링크가 있는 모든 사용자가 볼 수 있음」 |
+| **문항 7** | `pitch/MARU_pitch.pdf` 를 Drive 에 업로드 → 「링크가 있는 모든 사용자가 볼 수 있음」 |
 | **문항 3** | Track 03 에서 쓴 팀 소개 Drive 링크를 그대로 재사용 |
 
 > **브라우저 인쇄로 PDF 를 만들면 깨진다.** 슬라이드가 한 번에 하나씩 보이는 구조라
@@ -59,7 +60,7 @@ GASOK 2차 제출 · **CONSUMER / SOCIAL** 트랙 · 2026-07
 - 팔로우는 **브라우저 로컬 저장**이고 온체인 기록이 아니다
 - 화면의 맞음·틀림은 **이 화면이 다시 계산한 것**이지 온체인 기록이 아니다
 - 검증기의 `MATCH` 는 「예측이 맞았다」가 아니라 **「등록된 관측값이 재계산과 같다」** 는 뜻이다
-- 순위·점수·리더보드·코멘트 인증은 **만들지 않았다**
+- 순위·점수·리더보드·코멘트 인증은 **MVP 범위 밖**이다. 로드맵에 선행 조건과 함께 적어 뒀다
 
 ## 수치를 고칠 때
 
