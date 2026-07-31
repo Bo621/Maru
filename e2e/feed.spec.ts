@@ -167,6 +167,44 @@ test("S7 검증을 통과한 이유 원문에만 해시 일치 표시가 붙는�
     await expect(reasons.locator("[data-reason-verified]")).toHaveCount(count);
 });
 
+test("S7-보강 커밋과 안 맞는 원문은 아예 안 보인다", async ({page}) => {
+    // 위 S7은 양성 경로만 본다 — 보이는 원문에 표시가 붙는지. 그것만으로는
+    // 「통과한 것에만」이 검증되지 않는다. 커밋과 어긋난 원문이 그대로 실려도
+    // 초록색이 되기 때문이다. 여기서 payload 를 변조해 부정 경로를 막는다.
+    let tampered = 0;
+    await page.route("**/reveals/*.REASON.json", async (route) => {
+        const response = await route.fetch();
+        // 커밋된 reveal 파일이 없는 UID 는 개발 서버가 SPA index.html 로 되돌려준다.
+        // 그걸 JSON 으로 읽으면 핸들러가 터지고 요청이 멈춰 피드가 통째로 비어 버린다.
+        let file: {payload?: unknown} | undefined;
+        try {
+            file = await response.json();
+        } catch {
+            await route.fulfill({response});
+            return;
+        }
+        if (typeof file?.payload !== "string") {
+            await route.fulfill({response});
+            return;
+        }
+        tampered += 1;
+        await route.fulfill({
+            json: {...file, payload: `${file.payload} (변조됨)`},
+            headers: {"content-type": "application/json"},
+        });
+    });
+
+    await page.goto("/#/feed");
+    await expect(page.locator("[data-feed-row]")).not.toHaveCount(0);
+
+    // 가로채기가 실제로 걸렸는지 먼저 확인한다. 0건이면 아래 단언은
+    // 「원문이 원래 없었다」와 구별되지 않아 무의미해진다.
+    await expect.poll(() => tampered, {timeout: 15_000}).toBeGreaterThan(0);
+
+    // 해시가 안 맞으면 표시만 빠지는 게 아니라 원문 자체가 렌더되지 않는다.
+    await expect(page.locator("[data-reason]")).toHaveCount(0);
+});
+
 test("S8 관측이 끝난 결정에 판정이 붙고 맞음과 틀림이 함께 나온다", async ({page}) => {
     // 모든 창에 같은 종가를 흘려보낸다. `to`(창 종료) 직전 1분에 닫히는 봉 하나만 돌려주면
     // 창 길이와 무관하게 pickObservedClose가 그 봉을 고른다.
