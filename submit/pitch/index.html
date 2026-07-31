@@ -21,14 +21,16 @@
   --mono:"IBM Plex Mono",ui-monospace,monospace;
   --body:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --display:"Gowun Batang","Batang",serif;
-  /* 간격 척도 — 임의값 대신 이 토큰만 쓴다 */
-  --space-3xs:.55rem;
-  --space-2xs:.95rem;
-  --space-xs:1.45rem;
-  --space-sm:2.5rem;
-  --space-md:4.1rem;
-  --space-lg:5.8rem;
-  --space-xl:7.6rem;
+  /* 간격 척도 — 임의값 대신 이 토큰만 쓴다.
+     16:9 기준 박스(1827×1028)에서 오른쪽 rem 값과 정확히 같도록 vh로 환산했다.
+     너비·높이가 같은 비율로 줄어드는 다른 크기의 16:9 박스에서도 늘 같은 비율을 유지한다. */
+  --space-3xs:clamp(.35rem,.856vh,.55rem);
+  --space-2xs:clamp(.6rem,1.478vh,.95rem);
+  --space-xs:clamp(.9rem,2.257vh,1.45rem);
+  --space-sm:clamp(1.6rem,3.891vh,2.5rem);
+  --space-md:clamp(2.6rem,6.381vh,4.1rem);
+  --space-lg:clamp(3.7rem,9.028vh,5.8rem);
+  --space-xl:clamp(4.8rem,11.829vh,7.6rem);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 /* 한국어 조판 — 어절 중간에서 끊지 않는다 */
@@ -36,7 +38,7 @@ h1,h2,h3,h4,p,td,th,figcaption,.lede,.claim,.note,.k{word-break:keep-all;overflo
 html,body{height:100%}
 body{
   background:var(--paper);color:var(--ink);
-  font:400 clamp(16px,1.15vw,19px)/1.68 var(--body);
+  font:400 clamp(16px,min(1.15vw,2.04vh),19px)/1.68 var(--body);
   font-variant-numeric:tabular-nums;
   overflow:hidden;
 }
@@ -47,7 +49,7 @@ body{
 .slide{
   position:absolute;inset:0;
   display:none;
-  padding:clamp(2.2rem,4vw,3.6rem) clamp(2rem,7vw,9rem) 5.5rem;
+  padding:clamp(2.2rem,min(2.76vw,4.9vh),3.15rem) clamp(2rem,min(7vw,12.44vh),9rem) clamp(3.6rem,7.63vh,4.9rem);
   overflow-y:auto;
   animation:rise .5s cubic-bezier(.16,1,.3,1);
 }
@@ -59,15 +61,15 @@ body{
 @media (prefers-reduced-motion:reduce){.slide{animation:none}}
 
 .tag{
-  font:500 clamp(.7rem,.82vw,.8rem)/1 var(--mono);
+  font:500 clamp(.7rem,min(.82vw,1.46vh),.8rem)/1 var(--mono);
   letter-spacing:.18em;text-transform:uppercase;
   color:var(--seal-dark);margin-bottom:var(--space-sm);
   display:flex;align-items:baseline;gap:.9em;
 }
 .tag b{color:var(--ink-faint);font-weight:500}
 
-h1{font:700 clamp(2.1rem,4.6vw,4rem)/1.12 var(--display);letter-spacing:-.02em}
-h2{font:700 clamp(2.2rem,4.3vw,3.6rem)/1.25 var(--display);letter-spacing:-.015em;max-width:26ch;text-wrap:balance}
+h1{font:700 clamp(2.1rem,min(4.6vw,8.18vh),4rem)/1.12 var(--display);letter-spacing:-.02em}
+h2{font:700 clamp(2.2rem,min(4.3vw,7.64vh),3.6rem)/1.25 var(--display);letter-spacing:-.015em;max-width:26ch;text-wrap:balance}
 .lede{margin-top:var(--space-sm);max-width:58ch;color:var(--ink-soft);font-size:1.38em;line-height:1.95;text-wrap:pretty}
 .lede strong{color:var(--ink);font-weight:600}
 .bullets{list-style:none}
@@ -78,7 +80,7 @@ em{color:var(--seal-dark);font-style:normal;font-weight:600}
 .quiet{color:var(--ink-faint);font-size:.85em;line-height:1.6}
 .mono{font-family:var(--mono);font-size:.9em}
 
-.eave{position:relative;padding-top:1.6rem}
+.eave{position:relative;padding-top:clamp(1rem,2.491vh,1.6rem)}
 .eave::before{content:"";position:absolute;top:0;left:0;width:4.5rem;height:2px;background:var(--seal);opacity:.75}
 
 /* ── 표 ─────────────────────────────────────── */
@@ -102,7 +104,7 @@ svg{width:100%;height:auto;max-width:min(100%,78rem);display:block}
 pre{
   margin-top:var(--space-md);padding:1.5rem 1.7rem;
   background:var(--paper-deep);border-left:2px solid var(--seal);
-  font:400 clamp(.92rem,1.15vw,1.08rem)/1.85 var(--mono);
+  font:400 clamp(.92rem,min(1.15vw,2.04vh),1.08rem)/1.85 var(--mono);
   overflow-x:auto;color:var(--ink-soft);max-width:min(100%,72rem);
 }
 pre b{color:var(--ink);font-weight:500}
@@ -115,7 +117,7 @@ pre i{color:var(--seal-dark);font-style:normal}
 .bar{
   position:fixed;left:0;right:0;bottom:0;height:3.4rem;
   display:flex;align-items:center;gap:1.4rem;
-  padding:0 clamp(2rem,7vw,9rem);
+  padding:0 clamp(2rem,min(7vw,12.44vh),9rem);
   border-top:1px solid var(--rule-strong);background:var(--paper-raised);
   font:500 .72rem/1 var(--mono);letter-spacing:.1em;color:var(--ink-faint);
 }
@@ -123,7 +125,7 @@ pre i{color:var(--seal-dark);font-style:normal}
 .bar .n{margin-left:auto;color:var(--ink);min-width:5ch;text-align:right}
 .bar .n .tot{color:var(--ink-faint)}
 .prog{position:fixed;left:0;bottom:0;height:2px;background:var(--seal);transition:width .45s cubic-bezier(.16,1,.3,1);z-index:2}
-.nav{position:fixed;bottom:.7rem;right:clamp(2rem,7vw,9rem);display:flex;gap:.4rem}
+.nav{position:fixed;bottom:.7rem;right:clamp(2rem,min(7vw,12.44vh),9rem);display:flex;gap:.4rem}
 .nav button{
   width:2rem;height:2rem;border:1px solid var(--rule-strong);background:transparent;
   color:var(--ink-faint);font:400 1rem/1 var(--mono);cursor:pointer;
@@ -138,17 +140,19 @@ pre i{color:var(--seal-dark);font-style:normal}
   border:2px solid var(--seal);color:var(--seal-dark);
   font:700 1.15rem/1 var(--display);transform:rotate(-3deg);margin-bottom:1.4rem;
 }
-.cover h1{font-size:clamp(3.8rem,10vw,8.6rem);line-height:.98}
-.cover .sub{font:400 clamp(1.2rem,2.2vw,1.85rem)/1.4 var(--display);color:var(--ink-soft);margin-top:.65rem}
-.cover .meta{margin-top:clamp(3.4rem,6.6vw,6.2rem);font:500 .95rem/2.1 var(--mono);letter-spacing:.12em;color:var(--ink-faint)}
-.cover .claim{margin-top:clamp(2.3rem,4.2vw,3.6rem);font:400 clamp(1.3rem,2.6vw,2.15rem)/1.6 var(--body);max-width:28ch;color:var(--ink)}
+.cover h1{font-size:clamp(3.8rem,min(10vw,17.78vh),8.6rem);line-height:.98}
+.cover .sub{font:400 clamp(1.2rem,min(2.2vw,3.91vh),1.85rem)/1.4 var(--display);color:var(--ink-soft);margin-top:.65rem}
+.cover .meta{margin-top:clamp(3.4rem,min(6.6vw,11.73vh),6.2rem);font:500 .95rem/2.1 var(--mono);letter-spacing:.12em;color:var(--ink-faint)}
+.cover .claim{margin-top:clamp(2.3rem,min(4.2vw,7.47vh),3.6rem);font:400 clamp(1.3rem,min(2.6vw,4.62vh),2.15rem)/1.6 var(--body);max-width:28ch;color:var(--ink)}
 
 a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px}
 .tblwrap{max-width:100%}
+.slide.dense{padding-top:clamp(1.8rem,min(2.67vw,4.75vh),3.05rem);padding-bottom:clamp(3.6rem,7.47vh,4.8rem)}
 .slide.dense table{font-size:.94em;margin-top:var(--space-xs)}
-.slide.dense th,.slide.dense td{padding:.5em .85em;line-height:1.35}
+.slide.dense th,.slide.dense td{padding:.42em .85em;line-height:1.25}
 .slide.dense .lede{font-size:1.06em;margin-top:var(--space-2xs)}
-.slide.dense .shots{margin-top:var(--space-sm);gap:var(--space-xs);max-width:min(100%,64rem)}
+.slide.dense .shots{margin-top:var(--space-sm);gap:var(--space-xs)}
+.slide.dense .shots .shot{max-width:min(100%,56vw);align-self:flex-start}
 .slide.dense figure{margin-top:var(--space-sm)}
 @media (max-width:900px){.tblwrap{overflow-x:auto}}
 
@@ -174,22 +178,22 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 .mark p b{color:var(--ink);font-weight:600}
 
 /* ── 지표 블록 ───────────── */
-.stats{display:grid;gap:clamp(.9rem,2vw,1.6rem);grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+.stats{display:grid;gap:clamp(.9rem,min(2vw,3.56vh),1.6rem);grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
   margin-top:var(--space-md);max-width:min(100%,74rem)}
 .stat{border-left:2px solid var(--seal);padding:.2rem 0 .2rem 1.1rem}
-.stat .n{display:block;font:700 clamp(2rem,3.8vw,3.2rem)/1.05 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.stat .n{display:block;font:700 clamp(2rem,min(3.8vw,6.76vh),3.2rem)/1.05 var(--display);letter-spacing:-.02em;color:var(--ink)}
 .stat .k{display:block;margin-top:.5rem;color:var(--ink-soft);font-size:.94em;line-height:1.55}
 .stat .s{display:block;margin-top:.3rem;color:var(--ink-faint);font:400 .7rem/1.4 var(--mono)}
 
 /* ── 출처 ───────────────────────────────── */
-.src{margin-top:clamp(1rem,2vw,1.5rem);padding-top:.7rem;border-top:1px solid var(--rule);
+.src{margin-top:clamp(1rem,min(2vw,3.56vh),1.5rem);padding-top:.7rem;border-top:1px solid var(--rule);
   color:var(--ink-faint);font:400 .72rem/1.7 var(--mono);max-width:min(100%,74rem)}
 .src b{color:var(--ink-soft);font-weight:500}
 
 /* ── 전/후 대조 ─────────────────── */
 .ba{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
   margin-top:var(--space-md);max-width:min(100%,74rem);border:1px solid var(--rule-strong)}
-.ba > div{padding:clamp(1.5rem,3vw,2.4rem)}
+.ba > div{padding:clamp(1.5rem,min(3vw,5.33vh),2.4rem)}
 .ba > div + div{border-left:1px solid var(--rule-strong)}
 .ba h4{font:500 .72rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8rem}
 .ba .b4 h4{color:var(--ink-faint)} .ba .af h4{color:var(--seal-dark)}
@@ -199,28 +203,28 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 .ba strong{color:var(--ink);font-weight:600}
 
 /* ── 3단계 ────────────────────── */
-.steps{display:grid;gap:clamp(1rem,2.2vw,2rem);grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
+.steps{display:grid;gap:clamp(1rem,min(2.2vw,3.91vh),2rem);grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
   margin-top:var(--space-md);max-width:min(100%,74rem)}
-.step{position:relative;padding-top:1.5rem;border-top:1px solid var(--rule-strong)}
+.step{position:relative;padding-top:clamp(1rem,2.335vh,1.5rem);border-top:1px solid var(--rule-strong)}
 .step::before{content:attr(data-n);position:absolute;top:-.72rem;left:0;
   background:var(--paper);padding-right:.6rem;
   font:500 .72rem/1 var(--mono);letter-spacing:.14em;color:var(--seal-dark)}
-.step h4{font:600 1.14em/1.4 var(--body);color:var(--ink);margin-bottom:.6rem}
+.step h4{font:600 1.14em/1.4 var(--body);color:var(--ink);margin-bottom:clamp(.4rem,.934vh,.6rem)}
 .step p{color:var(--ink-soft);font-size:.98em;line-height:1.7}
-.step .ex{margin-top:.7rem;padding:.6rem .75rem;background:var(--paper-deep);border-left:2px solid var(--rule-strong);
+.step .ex{margin-top:clamp(.45rem,1.089vh,.7rem);padding:.6rem .75rem;background:var(--paper-deep);border-left:2px solid var(--rule-strong);
   font:400 .76rem/1.6 var(--mono);color:var(--ink-soft)}
 .step .ex b{color:var(--ink);font-weight:500}
 
 /* ── S1~S12 시나리오 그리드 ─────────────── */
-.scen{display:grid;gap:clamp(.8rem,1.6vw,1.2rem);grid-template-columns:repeat(auto-fit,minmax(20rem,1fr));
-  margin-top:clamp(1rem,2vw,1.6rem);max-width:min(100%,78rem)}
-.scen div{padding:clamp(.7rem,1.4vw,1rem) 0 0;border-top:1px solid var(--rule)}
+.scen{display:grid;gap:clamp(.8rem,min(1.6vw,2.84vh),1.2rem);grid-template-columns:repeat(auto-fit,minmax(20rem,1fr));
+  margin-top:clamp(1rem,min(2vw,3.56vh),1.6rem);max-width:min(100%,78rem)}
+.scen div{padding:clamp(.7rem,min(1.4vw,2.49vh),1rem) 0 0;border-top:1px solid var(--rule)}
 .scen div b{display:block;color:var(--seal-dark);font:600 .78em/1.4 var(--mono);letter-spacing:.05em;margin-bottom:.3rem}
 .scen div span{color:var(--ink-soft);font-size:.88em;line-height:1.6}
 
 /* ── 신뢰 경계 3단 박스 ─────────────── */
 .trust{display:flex;flex-direction:column;gap:0;margin-top:var(--space-md);max-width:min(100%,78rem)}
-.trust > div{padding:clamp(1.1rem,2.2vw,1.6rem) clamp(1.3rem,2.4vw,1.8rem);border:1px solid var(--rule-strong)}
+.trust > div{padding:clamp(1.1rem,min(2.2vw,3.91vh),1.6rem) clamp(1.3rem,min(2.4vw,4.27vh),1.8rem);border:1px solid var(--rule-strong)}
 .trust > div + div{border-top:0}
 .trust .t1{background:color-mix(in oklch, var(--seal) 9%, var(--paper-raised));border-color:var(--seal)}
 .trust .t3{border-style:dashed}
@@ -415,15 +419,15 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
     <div class="marks">
       <div class="mark" data-n="01">
         <h4>이유는 해시로 잠긴다</h4>
-        <p>남긴 문장의 해시가 커밋과 일치할 때만 인용으로 뜬다.</p>
+        <p>해시가 커밋과 일치할 때만 인용된다.</p>
       </div>
       <div class="mark" data-n="02">
         <h4>재계산은 화면이 한다</h4>
-        <p>업비트 1분봉으로 다시 계산한다. 발행자는 못 바꾼다.</p>
+        <p>업비트 1분봉으로 재계산 — 발행자는 못 바꾼다.</p>
       </div>
       <div class="mark" data-n="03">
         <h4>등록완료인데 틀렸다</h4>
-        <p>정산은 끝났고, 판정은 틀림이다. 둘은 다른 정보다.</p>
+        <p>정산 완료, 판정은 틀림 — 서로 다른 정보다.</p>
       </div>
     </div>
   </div>
@@ -595,7 +599,7 @@ a{color:var(--seal-dark);text-decoration-thickness:1px;text-underline-offset:3px
 </section>
 
 <!-- 15 한계 ─────────────────────────────────── -->
-<section class="slide">
+<section class="slide dense">
   <div class="tag">// 14 <b>한계</b></div>
   <h2>실사용자 없음 · 데모 페르소나 · <em>로컬 팔로우</em></h2>
   <ul class="lede bullets">
